@@ -1,10 +1,13 @@
 <?php namespace App\Http\Controllers;
 
 use App\Department;
+use App\ModeOfPayment;
+use App\SubDepartment;
 use Session;
-	use Request;
-	use DB;
-	use CRUDBooster;
+use Illuminate\Http\Request;
+use DB;
+use CRUDBooster;
+use Illuminate\Support\Facades\Input;
 
 	class AdminPrePaymentController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -287,7 +290,7 @@ use Session;
 	    */
 	    public function hook_before_add(&$postdata) {        
 	        //Your code here
-
+			dd(Input::all());
 	    }
 
 	    /* 
@@ -360,27 +363,55 @@ use Session;
 				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
 			}
 
-
 			$data = [];
 			$data['page_title'] = 'Add Data';
 			//Please use view method instead view method from laravel
 			$this->cbView("pre_payment.pre_payment", $data);
 		}
 
+		// Department
 		public function department(Request $request){
 
 			$results = Department::
-			select('id', 'department_name')
-			->where(function($query) use ($request) {
-				$query->where('status', 'ACTIVE')
-					->where('department_name', 'LIKE', '%'. $request->get('q'). '%');
-			})
-			->orWhere('id', 'LIKE', '%'. $request->get('q'). '%')
-			->orderBy('department_name')
-			->get();
+				select('id', 'department_name')
+				->where('status', 'ACTIVE')
+				->where('department_name', 'LIKE', '%'. $request->input('q'). '%')
+				->orWhere('id', 'LIKE', '%'. $request->input('q'). '%')
+				->orderBy('department_name')
+				->get();
 						
 			return response()->json($results);
 
 		}
+
+		// Mode of Payment
+		public function mode_of_payment(Request $request){
+			
+			$results = ModeOfPayment::
+				select('id', 'mode_of_payment_name')
+				->where('status', 'ACTIVE')
+				->where('mode_of_payment_name', 'LIKE', '%'. $request->input('q'). '%')
+				->orWhere('id', 'LIKE', '%'. $request->input('q'). '%')
+				->orderBy('mode_of_payment_name')
+				->get();
+						
+			return response()->json($results);
+
+		}
+		// Mode of Payment
+		public function sub_department(Request $request){
+			
+			$results = SubDepartment::
+				select('id', 'sub_department_name')
+				->where('status', 'ACTIVE')
+				->where('sub_department_name', 'LIKE', '%'. $request->input('q'). '%')
+				->orWhere('id', 'LIKE', '%'. $request->input('q'). '%')
+				->orderBy('sub_department_name')
+				->get()->unique('sub_department_name');
+						
+			return response()->json($results);
+
+		}
+
 
 	}

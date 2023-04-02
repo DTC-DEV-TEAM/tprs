@@ -201,7 +201,9 @@ Route::group(['middleware' => ['web']], function() {
     Route::post('/admin/users/upload-useraccount','AdminCmsUsersController@userAccountUpload')->name('upload.useraccount');
     
     Route::get('/admin/pre_payment/request', [AdminPrePaymentController::class, 'getAdd']);
-    Route::post('/admin/pre_payment', 'AdminPrePaymentController@department')->name('department');
+    Route::post('/admin/department', 'AdminPrePaymentController@department')->name('department');
+    Route::post('/admin/mode_of_payment', 'AdminPrePaymentController@mode_of_payment')->name('payment');
+    Route::post('/admin/sub_department', 'AdminPrePaymentController@sub_department')->name('sub_department');
 
 
 

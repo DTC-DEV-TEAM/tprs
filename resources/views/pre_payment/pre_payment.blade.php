@@ -163,6 +163,7 @@
 
 @section('content')
   <!-- Your html goes here -->
+  <p class="noprint"><a title="Main Module" href="{{ CRUDBooster::mainpath() }}"><i class="fa fa-chevron-circle-left "></i> &nbsp; Back To List Data Pre Payment</a></p> 
   <div class='panel panel-default'>
     <div class='panel-heading'>Request Budget</div>
     <div class='panel-body'>
@@ -172,25 +173,23 @@
           <div class="request_content">
             <div class="flex">
               <div class="request_department">
-                <label for=""><span class="required">*</span> Department</label>
-                <select class="js-example-basic-single" name="state" class="department" id="req_department">
+                <label for="">Department <span class="required">*</span></label>
+                <select class="js-example-basic-single" name="state" class="department" id="req_department" required>
                 </select>   
                 </div>       
                 <div class="request_department">
-                  {{-- <label for=""><span class="required">*</span> Sub Department</label>
-                  <select class="js-example-basic-single" name="state" class="department">
-                  </select>                            --}}
+                  <label for="">Sub Department <span class="required">*</span></label>
+                  <select class="js-example-basic-single" name="state" class="department" id="sub_department" required>
+                  </select>                           
                 </div>   
             </div>
             <div class="requestor_name">
-              <label for="">Requestor Full Name</label>
-              <input type="text">
+              <label for="">Requestor Full Name <span class="required">*</span></label>
+              <input type="text" id="req_full_name" required>
             </div>
             <div class="requestor_name">
-              <label for="">Mode of Payment</label>
-              <select class="js-example-basic-single" name="state" id="mode_of_payment">
-                <option value="AL">Alabama</option>
-                <option value="WY">Wyoming</option>
+              <label for="">Mode of Payment <span class="required">*</span></label>
+              <select class="js-example-basic-single" name="state" id="mode_of_payment" required>
               </select>            
             </div>
             <hr>
@@ -202,26 +201,26 @@
                 <div class="budget">
                   <div class="budget_description">
                     <label for="">Project Name</label>
-                    <input type="text">
+                    <input type="text" required name="project_name[]">
                   </div>
                   <div class="budget_description">
                     <label for="">Budget Category</label>
-                    <input type="text">
+                    <input type="text" required name="budget_category[]">
                   </div>
                   <div class="budget_description">
                     <label for="">Budget Description</label>
-                    <input type="text">
+                    <input type="text" required name="budget_description[]">
                   </div>
                   <div class="budget_description">
                     <label for="">Budget Justification</label>
-                    <input type="text">
+                    <input type="text" required name="budget_justification[]">
                   </div>
                   <div class="budget_description">
                     <label for="">Location</label>
-                    <input type="text">
+                    <input type="text" required name="budget_location[]">
                   </div>
                   <div class="budget_description">
-                    <label for="">Amount</label>
+                    <label for="">Amount</label required>
                     <input type="number" name="amount[]" class="budget_amount">
                   </div>
                   <div class="budget_description" style="text-align: center;">
@@ -240,122 +239,166 @@
             </div>
             <div class="additional_notes">
               <label for="">Additional Notes: </label>
-              <textarea name="" id=""></textarea>
+              <textarea name="additional_notes" id="additional_notes"></textarea required>
             </div>
           </div>
         </div>        
-      </form>
+      {{-- </form> --}}
     </div>
     <div class='panel-footer'>
       <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
       <input type='submit' class='btn btn-primary' value='Request'/>
     </div>
+    </form>
   </div>
 
-  <script>
+<script>
 
-      function get_sum(){
-        var total = 0;
-        $('.budget_amount').each(function(){
-          var value = parseFloat($(this).val() || 0)
-          total += value;
-        })     
+  function get_sum(){
+    var total = 0;
+    $('.budget_amount').each(function(){
+      var value = parseFloat($(this).val() || 0)
+      total += value;
+    })     
 
-        $('#total_amount').val(total);   
-      }
+    $('#total_amount').val(total);   
+  }
 
-      $(document).on('click', '.add_row', function(){
-        $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
-        let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
-        clone_budget.find('input').val('');
-        clone_budget.find('.delete_row');
-        $(this).parents('.budget').after(clone_budget);
-      });
+  $('#req_full_name').on('keyup', function() {
+    var val = $(this).val().toLowerCase().replace(/\b[a-z]/g, function(letter) {
+          return letter.toUpperCase();
+        });
+        $(this).val(val);
+  });
 
-      $(document).on('click', '.delete_row', function(){
-        $(this).parents('.budget').remove();
+  $(document).on('click', '.add_row', function(){
+    $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
+    let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
+    clone_budget.find('input').val('');
+    clone_budget.find('.delete_row');
+    $(this).parents('.budget').after(clone_budget);
+  });
 
-        if($('.budget').length == 1){
-          $('.budget').find('.delete_row').eq(0).css('display', 'none');
-        }
-        get_sum();
-      })
+  $(document).on('click', '.delete_row', function(){
+    $(this).parents('.budget').remove();
 
-      $(document).on('click', '.budget', function(){
-        $('.budget').css('box-shadow', '');
-        $(this).css('box-shadow', 'rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset');
-      })
+    if($('.budget').length == 1){
+      $('.budget').find('.delete_row').eq(0).css('display', 'none');
+    }
+    get_sum();
+  })
 
-      $(document).on('click', function(event) {
-        if (!$(event.target).closest('.budget').length) {
-          $('.budget').css('box-shadow', '');
-        }
-      });
+  $(document).on('click', '.budget', function(){
+    $('.budget').css('box-shadow', '');
+    $(this).css('box-shadow', 'rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset');
+  })
 
-      $(document).on('keyup', '.budget_amount', function() {
-        var total = 0;
-        get_sum();
-      });
+  $(document).on('click', function(event) {
+    if (!$(event.target).closest('.budget').length) {
+      $('.budget').css('box-shadow', '');
+    }
+  });
 
-      // Select Department
-      // $('#req_department').select2({
-      //   placeholder: "Select a department",
-      //   dropdownAutoWidth: true,
-      //   width: '100%',
-      //   ajax: {
-      //       url: '{{ route('department') }}',
-      //       dataType: 'json',
-      //       delay: 250,
-      //       type: 'POST',
-      //       data: function (params) {
-      //       return {
-      //           q: params.term,
-      //           _token: '{!! csrf_token() !!}'
-      //       };
-      //       },
-      //       processResults: function (data) {
-      //       return {
-      //           results: $.map(data, function (item) {
-      //           console.log(item.department_name)
-      //           return {
-      //               text: item.department_name,
-      //               id: item.id
-      //           }
-      //           })
-      //       };
-      //       },
-      //       cache: true
-      //   },
-      //   id: 'id'
-      // });
-      // $('#req_department').select2({
-      //     placeholder: "Select a department",
-      //     dropdownAutoWidth: true,
-      //     width: '100%',
-      //     ajax: {
-      //         url: '{{ route('department') }}',
-      //         dataType: 'json',
-      //         delay: 250,
-      //         type: 'get',
-      //         data: function (params) {
-      //             return {
-      //                 q: params.term,
-      //                 _token: '{!! csrf_token() !!}'
-      //             };
-      //         },
-      //         processResults: function (data) {
-      //             return {
-      //                 results: data
-      //             };
-      //         },
-      //         cache: true,
-      //         success: function(response) {
-      //             console.log("success:", response);
-      //         }
-      //     },
-      //     id: 'id'
-      // });
+  $(document).on('keyup', '.budget_amount', function() {
+    var total = 0;
+    get_sum();
+  });
 
+  // Select Department
+  $('#req_department').select2({
+    placeholder: "Select a department",
+    dropdownAutoWidth: true,
+    width: '100%',
+    ajax: {
+        url: '{{ route('department') }}',
+        dataType: 'json',
+        // contentType: "application/json; charset=utf-8",
+        delay: 250,
+        type: 'POST',
+        data: function (params) {
+        return {
+            q: params.term,
+            _token: '{!! csrf_token() !!}'
+        };
+        },
+        processResults: function (data) {
+        return {
+            results: $.map(data, function (item) {
+            return {
+                text: item.department_name,
+                id: item.id
+            }
+            })
+        };
+        },
+        cache: true
+    },
+    id: 'id'
+  });
 
-  </script>
+  // Sub Department
+  $('#sub_department').select2({
+    placeholder: "Select sub department",
+    dropdownAutoWidth: true,
+    width: '100%',
+    ajax: {
+        url: '{{ route('sub_department') }}',
+        dataType: 'json',
+        // contentType: "application/json; charset=utf-8",
+        delay: 250,
+        type: 'POST',
+        data: function (params) {
+        return {
+            q: params.term,
+            _token: '{!! csrf_token() !!}'
+        };
+        },
+        processResults: function (data) {
+        return {
+            results: $.map(data, function (item) {
+            return {
+                text: item.sub_department_name,
+                id: item.id
+            }
+            })
+        };
+        },
+        cache: true
+    },
+    id: 'id'
+  });
+
+  // Mode Of Payment
+  $('#mode_of_payment').select2({
+    placeholder: "Select mode of payment",
+    dropdownAutoWidth: true,
+    width: '100%',
+    ajax: {
+        url: '{{ route('payment') }}',
+        dataType: 'json',
+        delay: 250,
+        type: 'POST',
+        data: function (params) {
+        return {
+            q: params.term,
+            _token: '{!! csrf_token() !!}'
+        };
+        },
+        processResults: function (data) {
+        return {
+            results: $.map(data, function (item) {
+            console.log(item.id)
+            return {
+                text: item.mode_of_payment_name,
+                id: item.id
+            }
+            })
+        };
+        },
+        cache: true
+    },
+    id: 'id'
+  });
+
+</script>
 @endsection
