@@ -167,78 +167,39 @@
   <div class='panel panel-default'>
     <div class='panel-heading'>Request Budget</div>
     <div class='panel-body'>
-      <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'>
+      {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
+        <form method="POST" action="{{ route('add_request') }}">
         {{ csrf_field() }}
         <div class='form-group'>
           <div class="request_content">
             <div class="flex">
               <div class="request_department">
                 <label for="">Department <span class="required">*</span></label>
-                <select class="js-example-basic-single" name="state" class="department" id="req_department" required>
+                <select class="js-example-basic-single" name="department" class="department" id="req_department" required>
                 </select>   
                 </div>       
                 <div class="request_department">
                   <label for="">Sub Department <span class="required">*</span></label>
-                  <select class="js-example-basic-single" name="state" class="department" id="sub_department" required>
+                  <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" required>
                   </select>                           
                 </div>   
             </div>
             <div class="requestor_name">
               <label for="">Requestor Full Name <span class="required">*</span></label>
-              <input type="text" id="req_full_name" required>
+              <input type="text" id="req_full_name" name="full_name" required>
             </div>
             <div class="requestor_name">
               <label for="">Mode of Payment <span class="required">*</span></label>
-              <select class="js-example-basic-single" name="state" id="mode_of_payment" required>
+              <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" required>
               </select>            
             </div>
             <hr>
-            <div class="budget_info">
-              <p>Budget Information</p>
-            </div>
-            <div class="budget_content">
-              <div class="budget_block">
-                <div class="budget">
-                  <div class="budget_description">
-                    <label for="">Project Name</label>
-                    <input type="text" required name="project_name[]">
-                  </div>
-                  <div class="budget_description">
-                    <label for="">Budget Category</label>
-                    <input type="text" required name="budget_category[]">
-                  </div>
-                  <div class="budget_description">
-                    <label for="">Budget Description</label>
-                    <input type="text" required name="budget_description[]">
-                  </div>
-                  <div class="budget_description">
-                    <label for="">Budget Justification</label>
-                    <input type="text" required name="budget_justification[]">
-                  </div>
-                  <div class="budget_description">
-                    <label for="">Location</label>
-                    <input type="text" required name="budget_location[]">
-                  </div>
-                  <div class="budget_description">
-                    <label for="">Amount</label required>
-                    <input type="number" name="amount[]" class="budget_amount">
-                  </div>
-                  <div class="budget_description" style="text-align: center;">
-                    <div class="budget_description_btns">
-                      <button type="button" class="add_row">Add New Row</button>
-                      <button type="button" class="delete_row" style="display: none;">Delete</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <hr>
             <div class="total_amount_content">
-              <label for="">Total Amount:</label>
-              <input type="number" id="total_amount" value="0" readonly>
+              <label for=""><span class="required">*</span> Request Amount:</label>
+              <input type="number" id="total_amount" name="requested_amount" value="0" required>
             </div>
             <div class="additional_notes">
-              <label for="">Additional Notes: </label>
+              <label for="">Budget Information: </label>
               <textarea name="additional_notes" id="additional_notes"></textarea required>
             </div>
           </div>
