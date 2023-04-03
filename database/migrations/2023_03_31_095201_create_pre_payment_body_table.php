@@ -17,7 +17,7 @@ class CreatePrePaymentBodyTable extends Migration
             $table->increments('id');
             $table->integer('pre_payment_id')->nullable();
             $table->string('project_name')->nullable();
-            $table->integer('budget-amount')->nullable();
+            $table->integer('budget_amount')->nullable();
             $table->string('budget_category')->nullable();
             $table->string('budget_description')->nullable();
             $table->string('budget_justification')->nullable();
