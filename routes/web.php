@@ -200,12 +200,14 @@ Route::group(['middleware' => ['web']], function() {
     Route::get('/admin/users/upload-useraccount-template','AdminCmsUsersController@uploadUserAccountTemplate');
     Route::post('/admin/users/upload-useraccount','AdminCmsUsersController@userAccountUpload')->name('upload.useraccount');
     
-    Route::get('/admin/pre_payment/request', [AdminPrePaymentController::class, 'getAdd']);
+    // Pre Payment Module
+    Route::get('/admin/pre_payment/request', 'AdminPrePaymentController@getAdd');
+    Route::post('/admin/pre_payment/request', 'AdminPrePaymentController@add_request')->name('add_request');
     Route::post('/admin/department', 'AdminPrePaymentController@department')->name('department');
     Route::post('/admin/mode_of_payment', 'AdminPrePaymentController@mode_of_payment')->name('payment');
     Route::post('/admin/sub_department', 'AdminPrePaymentController@sub_department')->name('sub_department');
-
-
+    Route::get('/admin/pre_payment/request', 'AdminPrePaymentController@getEdit');
+    Route::get('/admin/pre_payment/view', 'AdminPrePaymentController@getDetail');
 
     Route::get('/admin/clear-view', function() {
         Artisan::call('view:clear');
