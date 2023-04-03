@@ -42,12 +42,15 @@ use Illuminate\Support\Facades\Input;
 			$this->col = [];
 			$this->col[] = ["label"=>"Reference Number","name"=>"reference_number"];
 			$this->col[] = ["label"=>"Request Status","name"=>"status_id"];
-			$this->col[] = ["label"=>"Department","name"=>"approver_id"];
-			$this->col[] = ["label"=>"Category","name"=>"budget_category"];
-			$this->col[] = ["label"=>"Requested By","name"=>"created_by"];
+			$this->col[] = ["label"=>"Department","name"=>"department_id" , "join"=>"department,department_name"];
+			$this->col[] = ["label"=>"Requested By","name"=>"created_by" , "join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"Request Date","name"=>"created_at"];
-			$this->col[] = ["label"=>"Approved By","name"=>"approver_id"];
+			$this->col[] = ["label"=>"Approved By","name"=>"approver_id", "join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"Approved Date","name"=>"approver_date"];
+			$this->col[] = ["label"=>"Approved By Accounting","name"=>"accounting_id", "join"=>"cms_users,name"];
+			$this->col[] = ["label"=>"Budget Release Date","name"=>"accounting_date_release"];
+			// $this->col[] = ["label"=>"Menu Product Type","name"=>"menu_product_types_id","join"=>"menu_product_types,menu_product_type_description"];
+
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
@@ -268,7 +271,6 @@ use Illuminate\Support\Facades\Input;
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
-	            
 	    }
 
 	    /*
@@ -279,6 +281,24 @@ use Illuminate\Support\Facades\Input;
 	    */    
 	    public function hook_row_index($column_index,&$column_value) {	        
 	    	//Your code here
+
+			if($column_index == '3'){
+
+				if($column_value == '1'){
+					$column_value = '<span class="label" style="background-color: #428bca; color: white; font-size: 12px;">Requested</span>';
+				}else if($column_value == '2'){
+					$column_value = '<span class="label" style="background-color: #5cb85c; color: white; font-size: 12px;">Approved</span>';
+				}else if($column_value == '3'){
+					$column_value = '<span class="label" style="background-color: #f0ad4e; color: white; font-size: 12px;">Budget Approved</span>';
+				}else if($column_value == '4'){
+					$column_value = '<span class="label" style="background-color: #d9534f; color: white; font-size: 12px;">Budget Receipts</span>';
+				}else if($column_value == '5'){
+					$column_value = '<span class="label" style="background-color: #777; color: white; font-size: 12px;">Close</span>';
+				}else if($column_value == '6'){
+					$column_value = '<span class="label" style="background-color: #FF6347; color: white; font-size: 12px;">Rejected</span>';
+				}
+				
+			}
 	    }
 
 	    /*
@@ -289,8 +309,64 @@ use Illuminate\Support\Facades\Input;
 	    |
 	    */
 	    public function hook_before_add(&$postdata) {        
-	        //Your code here
-			dd(Input::all());
+
+	        // //Your code here
+			// $return_inputs = Input::all();
+			
+			// $department = $return_inputs['department'];
+			// $sub_department = $return_inputs['sub_department'];
+			// $full_name = $return_inputs['full_name'];
+			// $mode_of_payment = $return_inputs['mode_of_payment'];
+			// $project_name = $return_inputs['project_name'];
+			// $budget_category = $return_inputs['budget_category'];
+			// $budget_description = $return_inputs['budget_description'];
+			// $budget_justification = $return_inputs['budget_justification'];
+			// $budget_location = $return_inputs['budget_location'];
+			// $budget_amount = $return_inputs['amount'];
+			// $additional_notes = $return_inputs['additional_notes'];
+
+			// $id = DB::table('pre_payment')->insertGetId( ['department_id' => $department, 
+			// 	'sub_department_id' => $sub_department,
+			// 	'full_name' => $full_name,
+			// 	'accounting_mode_of_release' => $mode_of_payment,
+			// 	'additional_notes' => $additonal_notes]
+
+			// );
+
+			// // Update reference number
+			// DB::table('pre_payment')->where('id', $id)
+			// ->update(
+			// 	['reference_number' => 'PP'.str_pad($id,8,"0", STR_PAD_LEFT)]
+			// );
+
+			// $requested_project = [];
+
+			// for($i=0; $i<count($project_name); $i++){
+			// 	$requested_project[] = [
+			// 		'pre_payment_id' => $id,
+			// 		'project_name' => $project_name[$i],
+			// 		'budget_category' => $budget_category[$i],
+			// 		'budget_description' => $budget_description[$i],
+			// 		'budget_justification' => $budget_justification[$i],
+			// 		'budget_location' => $budget_location[$i],
+			// 		'budget_amount' => $budget_amount[$i],
+			// 		'created_by' => CRUDBooster::myId(),
+			// 		'created_at' => date('Y-m-d H:i:s')
+			// 	];
+			// }
+
+			// // Insert budget information
+			// foreach($requested_project as $projects){
+			// 	DB::table('pre_payment_body')->insert(
+			// 		$projects
+			// 	);
+			// }
+
+
+
+
+
+
 	    }
 
 	    /* 
@@ -302,7 +378,6 @@ use Illuminate\Support\Facades\Input;
 	    */
 	    public function hook_after_add($id) {        
 	        //Your code here
-
 	    }
 
 	    /* 
@@ -315,6 +390,47 @@ use Illuminate\Support\Facades\Input;
 	    */
 	    public function hook_before_edit(&$postdata,$id) {        
 	        //Your code here
+			$return_inputs = Input::all();
+
+			$status = DB::table('pre_payment')
+				->select('status_id')
+				->where('id', $id)
+				->value('id');
+			
+			// Approving Step 2
+			if($status == 1){
+
+				$submit_btn = $return_inputs['submit'];
+				$approver_note = $return_inputs['additional_notes'];
+
+				if($submit_btn == 'Approve'){
+					$postdata['status_id'] = 2;
+				}else{
+					$postdata['status_id'] = 6;
+				}
+
+				$postdata['approver_note'] = $approver_note;
+				$postdata['approver_id'] = CRUDBooster::myId();
+				$postdata['approver_date'] = date('Y-m-d H:i:s');
+				
+			}
+			// Releasing Step 3
+			if($status == 2){
+
+				$submit_btn = $return_inputs['submit'];
+				$accounting_note = $return_inputs['additional_notes'];
+
+				if($submit_btn == 'Release Budget'){
+					$postdata['status_id'] = 3;
+				}else{
+					$postdata['status_id'] = 6;
+				}
+
+				$postdata['accounting_note'] = $accounting_note;
+				$postdata['accounting_id'] = CRUDBooster::myId();
+				$postdata['accounting_date_release'] = date('Y-m-d H:i:s');
+				
+			}
 
 	    }
 
@@ -369,6 +485,102 @@ use Illuminate\Support\Facades\Input;
 			$this->cbView("pre_payment.pre_payment", $data);
 		}
 
+		public function add_request(Request $request){
+			//Your code here
+			$return_inputs = Input::all();
+
+			$department = $return_inputs['department'];
+			$sub_department = $return_inputs['sub_department'];
+			$full_name = $return_inputs['full_name'];
+			$mode_of_payment = $return_inputs['mode_of_payment'];
+			$budget_amount = $return_inputs['amount'];
+			$additional_notes = $return_inputs['additional_notes'];
+			$requested_amount = $return_inputs['requested_amount'];
+
+			$id = DB::table('pre_payment')->insertGetId( ['department_id' => $department, 
+				'status_id' => 1,
+				'sub_department_id' => $sub_department,
+				'full_name' => $full_name,
+				'accounting_mode_of_release' => $mode_of_payment,
+				'additional_notes' => $additional_notes,
+				'requested_amount' => $requested_amount,
+				'created_by' => CRUDBooster::myId(),
+				'created_at' => date('Y-m-d H:i:s')
+				]
+
+			);
+
+			// Update reference number
+			DB::table('pre_payment')->where('id', $id)
+			->update(
+				['reference_number' => 'PP'.str_pad($id,8,"0", STR_PAD_LEFT)]
+			);
+
+			CRUDBooster::redirect(CRUDBooster::mainpath(), 'Your request has been added',"success");
+
+		}
+
+		// public function add_request(Request $request){
+		// 	//Your code here
+		// 	$return_inputs = Input::all();
+
+		// 	$department = $return_inputs['department'];
+		// 	$sub_department = $return_inputs['sub_department'];
+		// 	$full_name = $return_inputs['full_name'];
+		// 	$mode_of_payment = $return_inputs['mode_of_payment'];
+		// 	$project_name = $return_inputs['project_name'];
+		// 	$budget_category = $return_inputs['budget_category'];
+		// 	$budget_description = $return_inputs['budget_description'];
+		// 	$budget_justification = $return_inputs['budget_justification'];
+		// 	$budget_location = $return_inputs['budget_location'];
+		// 	$budget_amount = $return_inputs['amount'];
+		// 	$additional_notes = $return_inputs['additional_notes'];
+
+		// 	$id = DB::table('pre_payment')->insertGetId( ['department_id' => $department, 
+		// 		'status_id' => 1,
+		// 		'sub_department_id' => $sub_department,
+		// 		'full_name' => $full_name,
+		// 		'accounting_mode_of_release' => $mode_of_payment,
+		// 		'additional_notes' => $additional_notes,
+		// 		'created_by' => CRUDBooster::myId(),
+		// 		'created_at' => date('Y-m-d H:i:s')
+		// 		]
+
+		// 	);
+
+		// 	// Update reference number
+		// 	DB::table('pre_payment')->where('id', $id)
+		// 	->update(
+		// 		['reference_number' => 'PP'.str_pad($id,8,"0", STR_PAD_LEFT)]
+		// 	);
+
+		// 	$requested_project = [];
+
+		// 	for($i=0; $i<count($project_name); $i++){
+		// 		$requested_project[] = [
+		// 			'pre_payment_id' => $id,
+		// 			'project_name' => $project_name[$i],
+		// 			'budget_category' => $budget_category[$i],
+		// 			'budget_description' => $budget_description[$i],
+		// 			'budget_justification' => $budget_justification[$i],
+		// 			'budget_location' => $budget_location[$i],
+		// 			'budget_amount' => $budget_amount[$i],
+		// 			'created_by' => CRUDBooster::myId(),
+		// 			'created_at' => date('Y-m-d H:i:s')
+		// 		];
+		// 	}
+
+		// 	// Insert budget information
+		// 	foreach($requested_project as $projects){
+		// 		DB::table('pre_payment_body')->insert(
+		// 			$projects
+		// 		);
+		// 	}
+
+		// 	CRUDBooster::redirect(CRUDBooster::mainpath(), 'Your request has been added',"success");
+
+		// }
+
 		// Department
 		public function department(Request $request){
 
@@ -413,5 +625,103 @@ use Illuminate\Support\Facades\Input;
 
 		}
 
+		// Edit
+		public function getEdit($id) {
+			//Create an Auth	
+			if(!CRUDBooster::isUpdate() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
+			  CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+			}
+			
+			$data = [];
+			$data['page_title'] = 'Edit Data';
+			$data['row'] = DB::table('pre_payment')
+				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
+				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
+				->select('cms_users.name as cms_users_name',
+					'approver.name as approver_name',
+					'pre_payment.status_id',
+					'pre_payment.id',
+					'pre_payment.department_id',
+					'pre_payment.sub_department_id',
+					'pre_payment.accounting_mode_of_release',
+					'pre_payment.full_name',
+					'pre_payment.additional_notes',
+					'pre_payment.requested_amount',
+					'pre_payment.created_at',
+					'pre_payment.approver_note',
+					'pre_payment.approver_date',
+					'pre_payment.reference_number',
+
+				)
+				->where('pre_payment.id',$id)
+				->first();
+			// Department
+			$data['department'] = DB::table('department')
+				->select('id', 'department_name')
+				->where('id', $data['row']->department_id)
+				->first();
+			// Sub Department
+			$data['sub_department'] = DB::table('sub_department')
+				->select('id', 'sub_department_name')
+				->where('id', $data['row']->sub_department_id)
+				->first();
+			// Mode of Payment
+			$data['mode_of_payment'] = DB::table('mode_of_payment')
+				->select('id','mode_of_payment_name')
+				->where('id', $data['row']->accounting_mode_of_release)
+				->first();
+
+			//Please use view method instead view method from laravel
+			$this->cbView("pre_payment.pre_payment_edit", $data);
+
+		}
+
+		public function getDetail($id) {
+			//Create an Auth
+			if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+			}
+			
+			$data = [];
+			$data['page_title'] = 'Detail Data';
+			$data['row'] = DB::table('pre_payment')
+				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
+				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
+				->select('cms_users.name as cms_users_name',
+					'approver.name as approver_name',
+					'pre_payment.status_id',
+					'pre_payment.id',
+					'pre_payment.department_id',
+					'pre_payment.sub_department_id',
+					'pre_payment.accounting_mode_of_release',
+					'pre_payment.full_name',
+					'pre_payment.additional_notes',
+					'pre_payment.requested_amount',
+					'pre_payment.created_at',
+					'pre_payment.approver_note',
+					'pre_payment.approver_date',
+					'pre_payment.reference_number',
+				)
+				->where('pre_payment.id',$id)
+				->first();
+			// Department
+			$data['department'] = DB::table('department')
+				->select('id', 'department_name')
+				->where('id', $data['row']->department_id)
+				->first();
+			// Sub Department
+			$data['sub_department'] = DB::table('sub_department')
+				->select('id', 'sub_department_name')
+				->where('id', $data['row']->sub_department_id)
+				->first();
+			// Mode of Payment
+			$data['mode_of_payment'] = DB::table('mode_of_payment')
+				->select('id','mode_of_payment_name')
+				->where('id', $data['row']->accounting_mode_of_release)
+				->first();
+			
+			//Please use view method instead view method from laravel
+			$this->cbView("pre_payment.pre_payment_view", $data);
+		}
 
 	}
