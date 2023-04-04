@@ -21,10 +21,9 @@
   }
 
   .request_department{
-    width: 35%;
     margin-bottom: 10px;
     margin-right: 30px;
-
+    width: 100%;
   }
 
   .flex{
@@ -68,7 +67,7 @@
   .additional_notes textarea{
     width: 100%;
     height: 100px;
-    padding: 10px 0;
+    padding: 10px 15px;
     font-size: 15px;
   }
 
@@ -87,11 +86,12 @@
   .budget{
     display: flex;
     justify-content: center;
-    height: 100px;
+    height: 100%;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
     align-items: center;
     overflow-x: auto;
     margin-top: 10px;
+
   }
 
   /* .budget:hover{
@@ -99,9 +99,9 @@
   } */
 
   .budget_description{
-    width: 14.4%;
-    margin: 0px 10px;
-
+    width: 100%;
+    margin: 10px 10px;
+    height: 100%;
   }
 
   .budget_description label{
@@ -151,6 +151,7 @@
 
   .total_amount_content label{
     font-size: 15px;
+    margin-right: 10px;
   }
 
   .total_amount_content input{
@@ -159,6 +160,7 @@
     outline: none;
     border: 1px solid #aaa;
     text-align: center;
+    margin-right: 10px;
   }
 
   .request_information label{
@@ -178,12 +180,26 @@
   #req_full_name{
     width: 100%;
     height: 35px;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+  }
+
+  #upload_img{
+    padding-top: 5px; 
+    border: none;
+  }
+
+  #budget_justification{
+    text-align: center;
   }
   
 </style>
 @endpush
 
 @extends('crudbooster::admin_template')
+
 
 
 @section('content')
@@ -255,18 +271,85 @@
                                 </span>
                             </div>
                         </div>
+                        <div class="request_department">
+                          <div class="request_information start">
+                              <label for="">Budget Date Released:</label>
+                              <span>{{ $row->accounting_date_release }}</span>
+                          </div>
+                          <div class="request_information">
+                              <label for="">Accounting Name:</label>
+                              <span>{{ $row->accounting_name }}</span>
+                          </div>
+                          <div class="request_information">
+                              <label for="">Accounting Note:</label>
+                              <span>
+                                  {{ $row->accounting_note }}
+                              </span>
+                          </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="budget_info">
+                      <p>Budget Information Breakdown</p>
+                    </div>
+                    <div class="budget_content">
+                      @foreach ($pre_payment_body as $budget)
+                        <div class="budget_block">
+                          <div class="budget">
+                            <div class="budget_description">
+                              <label for="">Project Name</label>
+                              <input type="text" value="{{ $budget->project_name }}" name="project_name[]">
+                            </div>
+                            <div class="budget_description">
+                              <label for="">Budget Category</label>
+                              <input type="text" value="{{ $budget->budget_category }}" name="budget_category[]">
+                            </div>
+                            <div class="budget_description">
+                              <label for="">Budget Description</label>
+                              <input type="text" value="{{ $budget->budget_description }}" name="budget_description[]">
+                            </div>
+                            <div class="budget_description">
+                              <label for="">Location</label>
+                              <input type="text" value="{{ $budget->budget_location }}" name="budget_location[]">
+                            </div>
+                            <div class="budget_description">
+                              <label for="">Amount</label>
+                              <input type="number" name="amount[]" value="{{ $budget->budget_amount }}" class="budget_amount">
+                            </div>
+                            <div class="budget_description" id="budget_justification">
+                              <label for="">Budget Justification</label>
+                              {{-- <input type="file" required name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img"> --}}
+                              <img src="{{ asset('pre_payment/img/'.$budget->budget_justification) }}" alt="No Image Inserted" style="height: 100%; width: 100%;" id="budget_image" class="modal-trigger">
+                              <div class="modal">
+                                <div class="modal-content">
+                                  <img src="" alt="">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      @endforeach
                     </div>
                     <hr>
                     <div class="total_amount_content">
                         <label for="">Reference Number:</label>
                         <span>{{ $row->reference_number }}</span>
                     </div>
-                    <div class="total_amount_content">
-                        <label for="">Total Amount: </label>
-                        <input type="number" id="total_amount" value="{{ $row->requested_amount }}" readonly>
+                    <div class="flex">
+                      <div class="total_amount_content">
+                        <label for="">Requested Amount:</label>
+                        <input type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
+                      </div>
+                      <div class="total_amount_content">
+                        <label for="">Total Amount:</label>
+                        <input type="number" id="total_amount" value="{{ $row->total_amount }}" readonly>
+                      </div>
                     </div>
                     <div class="total_amount_content">
                         <label for="">Status: 
+                            @if ($row->status_id == 1)
+                                <span style="color: green; font-style: bold;">Requesting</span>
+                            @endif
                             @if ($row->status_id == 2)
                                 <span style="color: green; font-style: bold;">Approved</span>
                             @endif

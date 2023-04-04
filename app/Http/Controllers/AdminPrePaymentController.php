@@ -2,12 +2,15 @@
 
 use App\Department;
 use App\ModeOfPayment;
+use App\PrePayment;
+use App\PrePaymentProcess;
 use App\SubDepartment;
 use Session;
 use Illuminate\Http\Request;
 use DB;
 use CRUDBooster;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 
 	class AdminPrePaymentController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -28,8 +31,10 @@ use Illuminate\Support\Facades\Input;
 			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
 			$this->button_add = true;
-			$this->button_edit = true;
-			$this->button_delete = true;
+			$this->button_edit = false;
+			if (CRUDBooster::myPrivilegeName() == "Super Administrator"){
+				$this->button_delete = true;
+			}
 			$this->button_detail = true;
 			$this->button_show = true;
 			$this->button_filter = true;
@@ -113,6 +118,21 @@ use Illuminate\Support\Facades\Input;
 	        | 
 	        */
 	        $this->addaction = array();
+			$requested = PrePaymentProcess::select('id')->where('id', '1')->value('id');
+			$approved = PrePaymentProcess::select('id')->where('id', '2')->value('id');
+			$budget_released = PrePaymentProcess::select('id')->where('id', '3')->value('id');
+			$validate_receipts = PrePaymentProcess::select('id')->where('id', '4')->value('id');
+			$close = PrePaymentProcess::select('id')->where('id', '5')->value('id');
+			$rejected = PrePaymentProcess::select('id')->where('id', '6')->value('id');
+			
+			if(CRUDBooster::myPrivilegeName() == 'Requestor'){
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $budget_released"];
+			}else if(CRUDBooster::myPrivilegeName() == 'Approver'){
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $approved"];
+			}
+			else{
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil'];
+			}
 
 
 	        /* 
@@ -271,6 +291,12 @@ use Illuminate\Support\Facades\Input;
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
+			$query->orderBy('pre_payment.reference_number');
+			if (CRUDBooster::myPrivilegeName() == 'Requestor'){
+				$query->where('pre_payment.created_by', CRUDBooster::myId());
+			}
+
+
 	    }
 
 	    /*
@@ -285,15 +311,15 @@ use Illuminate\Support\Facades\Input;
 			if($column_index == '3'){
 
 				if($column_value == '1'){
-					$column_value = '<span class="label" style="background-color: #428bca; color: white; font-size: 12px;">Requested</span>';
+					$column_value = '<span class="label" style="background-color: #2980B9; color: white; font-size: 12px;">For Approval</span>';
 				}else if($column_value == '2'){
-					$column_value = '<span class="label" style="background-color: #5cb85c; color: white; font-size: 12px;">Approved</span>';
+					$column_value = '<span class="label" style="background-color: #BDC581; color: white; font-size: 12px;">For Budget Released</span>';
 				}else if($column_value == '3'){
-					$column_value = '<span class="label" style="background-color: #f0ad4e; color: white; font-size: 12px;">Budget Approved</span>';
+					$column_value = '<span class="label" style="background-color: #f0ad4e; color: white; font-size: 12px;">For Receipts Validation</span>';
 				}else if($column_value == '4'){
-					$column_value = '<span class="label" style="background-color: #d9534f; color: white; font-size: 12px;">Budget Receipts</span>';
+					$column_value = '<span class="label" style="background-color: #2F4F4F; color: white; font-size: 12px;">For Closing</span>';
 				}else if($column_value == '5'){
-					$column_value = '<span class="label" style="background-color: #777; color: white; font-size: 12px;">Close</span>';
+					$column_value = '<span class="label" style="background-color: #5cb85c; color: white; font-size: 12px;">Closed</span>';
 				}else if($column_value == '6'){
 					$column_value = '<span class="label" style="background-color: #FF6347; color: white; font-size: 12px;">Rejected</span>';
 				}
@@ -309,63 +335,6 @@ use Illuminate\Support\Facades\Input;
 	    |
 	    */
 	    public function hook_before_add(&$postdata) {        
-
-	        // //Your code here
-			// $return_inputs = Input::all();
-			
-			// $department = $return_inputs['department'];
-			// $sub_department = $return_inputs['sub_department'];
-			// $full_name = $return_inputs['full_name'];
-			// $mode_of_payment = $return_inputs['mode_of_payment'];
-			// $project_name = $return_inputs['project_name'];
-			// $budget_category = $return_inputs['budget_category'];
-			// $budget_description = $return_inputs['budget_description'];
-			// $budget_justification = $return_inputs['budget_justification'];
-			// $budget_location = $return_inputs['budget_location'];
-			// $budget_amount = $return_inputs['amount'];
-			// $additional_notes = $return_inputs['additional_notes'];
-
-			// $id = DB::table('pre_payment')->insertGetId( ['department_id' => $department, 
-			// 	'sub_department_id' => $sub_department,
-			// 	'full_name' => $full_name,
-			// 	'accounting_mode_of_release' => $mode_of_payment,
-			// 	'additional_notes' => $additonal_notes]
-
-			// );
-
-			// // Update reference number
-			// DB::table('pre_payment')->where('id', $id)
-			// ->update(
-			// 	['reference_number' => 'PP'.str_pad($id,8,"0", STR_PAD_LEFT)]
-			// );
-
-			// $requested_project = [];
-
-			// for($i=0; $i<count($project_name); $i++){
-			// 	$requested_project[] = [
-			// 		'pre_payment_id' => $id,
-			// 		'project_name' => $project_name[$i],
-			// 		'budget_category' => $budget_category[$i],
-			// 		'budget_description' => $budget_description[$i],
-			// 		'budget_justification' => $budget_justification[$i],
-			// 		'budget_location' => $budget_location[$i],
-			// 		'budget_amount' => $budget_amount[$i],
-			// 		'created_by' => CRUDBooster::myId(),
-			// 		'created_at' => date('Y-m-d H:i:s')
-			// 	];
-			// }
-
-			// // Insert budget information
-			// foreach($requested_project as $projects){
-			// 	DB::table('pre_payment_body')->insert(
-			// 		$projects
-			// 	);
-			// }
-
-
-
-
-
 
 	    }
 
@@ -431,6 +400,103 @@ use Illuminate\Support\Facades\Input;
 				$postdata['accounting_date_release'] = date('Y-m-d H:i:s');
 				
 			}
+			// Upload Receipts Step 4
+			if($status == 3){
+
+				$submit_btn = $return_inputs['submit'];
+				$accounting_note = $return_inputs['additional_notes'];
+
+				if($submit_btn == 'Submit'){
+					$postdata['status_id'] = 4;
+				}else{
+					$postdata['status_id'] = 6;
+				}
+
+				$id = $return_inputs['returns_id'];
+				$project_name = $return_inputs['project_name'];
+				$budget_category = $return_inputs['budget_category'];
+				$budget_description = $return_inputs['budget_description'];
+				$budget_location = $return_inputs['budget_location'];
+				$budget_amount = $return_inputs['amount'];
+				$budget_justification = $return_inputs['budget_justification'];
+				$additional_notes = $return_inputs['additional_notes'];
+				
+				$requested_project = [];
+				
+				for($i=0; $i<count($project_name); $i++){
+					$file = $budget_justification[$i];
+					$filename = uniqid() . '.' . $file->getClientOriginalExtension();
+					$file->move(public_path('pre_payment/img'), $filename);
+					
+					$requested_project[] = [
+						'pre_payment_id' => $id,
+						'project_name' => $project_name[$i],
+						'budget_category' => $budget_category[$i],
+						'budget_description' => $budget_description[$i],
+						'budget_justification' => $filename,
+						'budget_location' => $budget_location[$i],
+						'budget_amount' => $budget_amount[$i],
+						'created_by' => CRUDBooster::myId(),
+						'created_at' => date('Y-m-d H:i:s')
+					];
+				}
+				
+				// Insert budget information
+				foreach($requested_project as $projects){
+					DB::table('pre_payment_body')->insert(
+						$projects
+					);
+				}
+
+			}
+			// Upload Receipts Step 5
+			if($status == 4){
+
+				$submit_btn = $return_inputs['submit'];
+				$accounting_note = $return_inputs['additional_notes'];
+
+				if($submit_btn == 'Close'){
+					$postdata['status_id'] = 5;
+				}else{
+					$postdata['status_id'] = 6;
+				}
+
+				$project_name = $return_inputs['project_name'];
+				$budget_category = $return_inputs['budget_category'];
+				$budget_description = $return_inputs['budget_description'];
+				$budget_location = $return_inputs['budget_location'];
+				$budget_amount = $return_inputs['amount'];
+				$budget_justification = $return_inputs['budget_justification'];
+				$additional_notes = $return_inputs['additional_notes'];
+				$project_id = $return_inputs['project_id'];
+				
+				$requested_project = [];
+				$requested_id = [];
+				
+				for($i=0; $i<count($project_name); $i++){
+					$requested_project[] = [
+						'pre_payment_id' => $id,
+						'project_name' => $project_name[$i],
+						'budget_category' => $budget_category[$i],
+						'budget_description' => $budget_description[$i],
+						'budget_location' => $budget_location[$i],
+						'budget_amount' => $budget_amount[$i],
+						'created_by' => CRUDBooster::myId(),
+						'created_at' => date('Y-m-d H:i:s')
+					];
+					
+					array_push($requested_id, $project_id[$i]);
+				}
+				
+				// Insert budget information
+				for($i=0; $i<count($requested_id); $i++){
+					DB::table('pre_payment_body')->updateOrInsert(['id'=>$requested_id[$i]],
+						$requested_project[$i]
+					);
+				}
+			}
+
+			
 
 	    }
 
@@ -513,73 +579,57 @@ use Illuminate\Support\Facades\Input;
 			// Update reference number
 			DB::table('pre_payment')->where('id', $id)
 			->update(
-				['reference_number' => 'PP'.str_pad($id,8,"0", STR_PAD_LEFT)]
+				['reference_number' => 'PPF-'.str_pad($id,6,"0", STR_PAD_LEFT)]
 			);
 
 			CRUDBooster::redirect(CRUDBooster::mainpath(), 'Your request has been added',"success");
 
 		}
 
-		// public function add_request(Request $request){
-		// 	//Your code here
-		// 	$return_inputs = Input::all();
+		public function verify_receipt(Request $request){
 
-		// 	$department = $return_inputs['department'];
-		// 	$sub_department = $return_inputs['sub_department'];
-		// 	$full_name = $return_inputs['full_name'];
-		// 	$mode_of_payment = $return_inputs['mode_of_payment'];
-		// 	$project_name = $return_inputs['project_name'];
-		// 	$budget_category = $return_inputs['budget_category'];
-		// 	$budget_description = $return_inputs['budget_description'];
-		// 	$budget_justification = $return_inputs['budget_justification'];
-		// 	$budget_location = $return_inputs['budget_location'];
-		// 	$budget_amount = $return_inputs['amount'];
-		// 	$additional_notes = $return_inputs['additional_notes'];
+			//Your code here
+			$return_inputs = Input::all();
 
-		// 	$id = DB::table('pre_payment')->insertGetId( ['department_id' => $department, 
-		// 		'status_id' => 1,
-		// 		'sub_department_id' => $sub_department,
-		// 		'full_name' => $full_name,
-		// 		'accounting_mode_of_release' => $mode_of_payment,
-		// 		'additional_notes' => $additional_notes,
-		// 		'created_by' => CRUDBooster::myId(),
-		// 		'created_at' => date('Y-m-d H:i:s')
-		// 		]
+			$id = $return_inputs['returns_id'];
+			$project_name = $return_inputs['project_name'];
+			$budget_category = $return_inputs['budget_category'];
+			$budget_description = $return_inputs['budget_description'];
+			$budget_location = $return_inputs['budget_location'];
+			$budget_amount = $return_inputs['amount'];
+			$budget_justification = $return_inputs['budget_justification'];
+			$additional_notes = $return_inputs['additional_notes'];
+			
+			$requested_project = [];
+			
+			for($i=0; $i<count($project_name); $i++){
+				$file = $budget_justification[$i];
+				$filename = uniqid() . '.' . $file->getClientOriginalExtension();
+				$file->move(public_path('pre_payment/img'), $filename);
+				$requested_project[] = [
+					'pre_payment_id' => $id,
+					'project_name' => $project_name[$i],
+					'budget_category' => $budget_category[$i],
+					'budget_description' => $budget_description[$i],
+					'budget_justification' => $filename,
+					'budget_location' => $budget_location[$i],
+					'budget_amount' => $budget_amount[$i],
+					'created_by' => CRUDBooster::myId(),
+					'created_at' => date('Y-m-d H:i:s')
+				];
+			}
+			
+			// Insert budget information
+			foreach($requested_project as $projects){
+				DB::table('pre_payment_body')->insert(
+					$projects
+				);
+			}
 
-		// 	);
+			CRUDBooster::redirect(CRUDBooster::mainpath(), 'Your form submitted succesfully.',"success");
 
-		// 	// Update reference number
-		// 	DB::table('pre_payment')->where('id', $id)
-		// 	->update(
-		// 		['reference_number' => 'PP'.str_pad($id,8,"0", STR_PAD_LEFT)]
-		// 	);
-
-		// 	$requested_project = [];
-
-		// 	for($i=0; $i<count($project_name); $i++){
-		// 		$requested_project[] = [
-		// 			'pre_payment_id' => $id,
-		// 			'project_name' => $project_name[$i],
-		// 			'budget_category' => $budget_category[$i],
-		// 			'budget_description' => $budget_description[$i],
-		// 			'budget_justification' => $budget_justification[$i],
-		// 			'budget_location' => $budget_location[$i],
-		// 			'budget_amount' => $budget_amount[$i],
-		// 			'created_by' => CRUDBooster::myId(),
-		// 			'created_at' => date('Y-m-d H:i:s')
-		// 		];
-		// 	}
-
-		// 	// Insert budget information
-		// 	foreach($requested_project as $projects){
-		// 		DB::table('pre_payment_body')->insert(
-		// 			$projects
-		// 		);
-		// 	}
-
-		// 	CRUDBooster::redirect(CRUDBooster::mainpath(), 'Your request has been added',"success");
-
-		// }
+		}
+		
 
 		// Department
 		public function department(Request $request){
@@ -629,7 +679,7 @@ use Illuminate\Support\Facades\Input;
 		public function getEdit($id) {
 			//Create an Auth	
 			if(!CRUDBooster::isUpdate() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
-			  CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
 			}
 			
 			$data = [];
@@ -637,8 +687,10 @@ use Illuminate\Support\Facades\Input;
 			$data['row'] = DB::table('pre_payment')
 				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
 				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
+				->leftJoin('cms_users as accounting', 'pre_payment.accounting_id', 'accounting.id')
 				->select('cms_users.name as cms_users_name',
 					'approver.name as approver_name',
+					'accounting.name as accounting_name',
 					'pre_payment.status_id',
 					'pre_payment.id',
 					'pre_payment.department_id',
@@ -651,9 +703,20 @@ use Illuminate\Support\Facades\Input;
 					'pre_payment.approver_note',
 					'pre_payment.approver_date',
 					'pre_payment.reference_number',
-
+					'pre_payment.accounting_date_release',
+					'pre_payment.accounting_note',
+					'pre_payment.total_amount',
+					'pre_payment.reference_number',
 				)
 				->where('pre_payment.id',$id)
+				->first();
+			// PrePaymentBody
+			$data['pre_payment_body'] = DB::table('pre_payment_body')
+				->where('pre_payment_id',$id)
+				->get();
+			// PrePaymentBodyDate
+			$data['pre_payment_body_date'] = DB::table('pre_payment_body')
+				->where('pre_payment_id',$id)
 				->first();
 			// Department
 			$data['department'] = DB::table('department')
@@ -687,8 +750,10 @@ use Illuminate\Support\Facades\Input;
 			$data['row'] = DB::table('pre_payment')
 				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
 				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
+				->leftJoin('cms_users as accounting', 'pre_payment.accounting_id', 'accounting.id')
 				->select('cms_users.name as cms_users_name',
 					'approver.name as approver_name',
+					'accounting.name as accounting_name',
 					'pre_payment.status_id',
 					'pre_payment.id',
 					'pre_payment.department_id',
@@ -701,8 +766,20 @@ use Illuminate\Support\Facades\Input;
 					'pre_payment.approver_note',
 					'pre_payment.approver_date',
 					'pre_payment.reference_number',
+					'pre_payment.accounting_date_release',
+					'pre_payment.accounting_note',
+					'pre_payment.total_amount',
+					'pre_payment.reference_number',
 				)
 				->where('pre_payment.id',$id)
+				->first();
+			// PrePaymentBody
+			$data['pre_payment_body'] = DB::table('pre_payment_body')
+				->where('pre_payment_id',$id)
+				->get();
+			// PrePaymentBodyDate
+			$data['pre_payment_body_date'] = DB::table('pre_payment_body')
+				->where('pre_payment_id',$id)
 				->first();
 			// Department
 			$data['department'] = DB::table('department')

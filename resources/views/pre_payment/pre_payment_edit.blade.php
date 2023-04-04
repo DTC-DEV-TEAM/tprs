@@ -21,10 +21,9 @@
   }
 
   .request_department{
-    width: 35%;
     margin-bottom: 10px;
     margin-right: 30px;
-
+    width: 100%;
   }
 
   .flex{
@@ -87,11 +86,12 @@
   .budget{
     display: flex;
     justify-content: center;
-    height: 100px;
+    height: 100%;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
     align-items: center;
     overflow-x: auto;
     margin-top: 10px;
+
   }
 
   /* .budget:hover{
@@ -99,9 +99,9 @@
   } */
 
   .budget_description{
-    width: 14.4%;
-    margin: 0px 10px;
-
+    width: 100%;
+    margin: 10px 10px;
+    height: 100%;
   }
 
   .budget_description label{
@@ -120,6 +120,14 @@
   }
 
   .add_row{
+    padding: 8px 15px;
+    background-color: rgb(32, 120, 208);
+    color: white;
+    border-radius: 5px;
+    border: none;
+  }
+
+  .add_row_receipt{
     padding: 8px 15px;
     background-color: rgb(32, 120, 208);
     color: white;
@@ -151,6 +159,7 @@
 
   .total_amount_content label{
     font-size: 15px;
+    margin-right: 10px;
   }
 
   .total_amount_content input{
@@ -159,6 +168,7 @@
     outline: none;
     border: 1px solid #aaa;
     text-align: center;
+    margin-right: 10px;
   }
 
   .request_information label{
@@ -178,7 +188,57 @@
   #req_full_name{
     width: 100%;
     height: 35px;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #aaa;
+    border-radius: 5px;
   }
+
+  #upload_img{
+    padding-top: 5px; 
+    border: none;
+  }
+
+  #budget_image:hover{
+    /* opacity: 0.9; */
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  }
+
+  /* image display center */
+  .modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.5); 
+  }
+
+  .modal-content {
+    display: block;
+    max-width: 400px;
+    max-height: 400px;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .modal-content img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .modal-trigger {
+    cursor: pointer;
+  }
+
   
 </style>
 @endpush
@@ -189,13 +249,14 @@
 @section('content')
   <!-- Your html goes here -->
     <p class="noprint"><a title="Main Module" href="{{ CRUDBooster::mainpath() }}"><i class="fa fa-chevron-circle-left "></i> &nbsp; Back To List Data Pre Payment</a></p> 
+    
+    {{-- Approver Privilege --}}
     @if ($row->status_id == 1) 
         <form method='post' action='{{CRUDBooster::mainpath('edit-save/'.$row->id)}}'>
             <div class='panel panel-default'>
                 <div class='panel-heading'>Request Budget</div>
                 <div class='panel-body'>
                     {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
-                    
                     {{ csrf_field() }}
                     <div class='form-group'>
                     <div class="request_content">
@@ -263,6 +324,8 @@
         </form>
     @endif
 
+    {{-- Accounting Approval --}}
+    {{-- Accounting Budget Releasing --}}
     @if ($row->status_id == 2)
         <form method='post' action='{{CRUDBooster::mainpath('edit-save/'.$row->id)}}'>
             <div class='panel panel-default'>
@@ -357,8 +420,307 @@
         </form>
     @endif
 
+    {{-- Budget Information Breakdown --}}
+    {{-- Requester Privilege --}}
+    @if ($row->status_id == 3)
+      <div class='panel panel-default'>
+        <div class='panel-heading'>Request Budget</div>
+        <div class='panel-body'>
+          {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
+            <form method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
+            {{ csrf_field() }}
+            <div class='form-group'>
+              <div class="request_content">
+                <div class="flex">
+                  <div class="request_department">
+                      <label for="">Department <span class="required">*</span></label>
+                      <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
+                          <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
+                      </select>   
+                  </div>       
+                  <div class="request_department">
+                      <label for="">Sub Department <span class="required">*</span></label>
+                      <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
+                          <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
+                      </select>                           
+                  </div>   
+                  <div class="request_department r_full_name">
+                      <label for="">Requestor Full Name <span class="required">*</span></label>
+                      <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
+                  </div>
+                  <div class="request_department">
+                      <label for="">Mode of Payment <span class="required">*</span></label>
+                      <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" disabled required>
+                          <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
+                      </select>            
+                  </div>
+              </div>
+              <div class="flex">
+                  <div class="request_department">
+                      <div class="request_information start">
+                          <label for="">Requested Date:</label>
+                          <span>{{ $row->created_at }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Created by:</label>
+                          <span>{{ $row->cms_users_name }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Budget Information:</label>
+                          <span>
+                              {{ $row->additional_notes }}
+                          </span>
+                      </div>
+                  </div>
+                  <div class="request_department">
+                      <div class="request_information start">
+                          <label for="">Approved Date:</label>
+                          <span>{{ $row->approver_date }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Approved by:</label>
+                          <span>{{ $row->approver_name }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Approver Note:</label>
+                          <span>
+                              {{ $row->approver_note }}
+                          </span>
+                      </div>
+                  </div>
+                  <div class="request_department">
+                      <div class="request_information start">
+                          <label for="">Budget Date Released:</label>
+                          <span>{{ $row->accounting_date_release }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Accounting Name:</label>
+                          <span>{{ $row->accounting_name }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Accounting Note:</label>
+                          <span>
+                              {{ $row->accounting_note }}
+                          </span>
+                      </div>
+                  </div>
+                </div>
+                <hr>
+                <div class="budget_info">
+                  <p>Budget Information Breakdown</p>
+                </div>
+                <div class="budget_content">
+                  <div class="budget_block">
+                    <div class="budget">
+                      <div class="budget_description">
+                        <label for="">Project Name</label>
+                        <input type="text" required name="project_name[]">
+                      </div>
+                      <div class="budget_description">
+                        <label for="">Budget Category</label>
+                        <input type="text" required name="budget_category[]">
+                      </div>
+                      <div class="budget_description">
+                        <label for="">Budget Description</label>
+                        <input type="text" required name="budget_description[]">
+                      </div>
+                      <div class="budget_description">
+                        <label for="">Location</label>
+                        <input type="text" required name="budget_location[]">
+                      </div>
+                      <div class="budget_description">
+                        <label for="">Amount</label required>
+                        <input type="number" name="amount[]" class="budget_amount">
+                      </div>
+                      <div class="budget_description">
+                        <label for="">Budget Justification</label>
+                        <input type="file" required name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img">
+                      </div>
+                      <div class="budget_description" style="text-align: center;">
+                        <div class="budget_description_btns">
+                          <button type="button" class="add_row">Add New Row</button>
+                          <button type="button" class="delete_row" style="display: none;">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr>
+                <div class="total_amount_content">
+                  <label for="">Total Amount:</label>
+                  <input type="number" id="total_amount" value="0" readonly>
+                </div>
+                <div class="additional_notes">
+                  <label for="">Additional Notes: </label>
+                  <textarea name="additional_notes" id="additional_notes"></textarea required>
+                </div>
+              </div>
+            </div>        
+          {{-- </form> --}}
+        </div>
+        <div class='panel-footer'>
+          <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
+          <input type='submit' class='btn btn-primary' name="submit" value='Submit'/>
+          <input type="id" name="returns_id" value="{{ $row->id }}" style="visibility: hidden;">
+        </div>
+        </form>
+      </div>
+    @endif
 
-
+    {{-- Accounting Validating Budget Information --}}
+    @if ($row->status_id == 4)
+      <div class='panel panel-default'>
+        <div class='panel-heading'>Validate Budget Information</div>
+        <div class='panel-body'>
+          {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
+            <form method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
+            {{ csrf_field() }}
+            <div class='form-group'>
+              <div class="request_content">
+                <div class="flex">
+                  <div class="request_department">
+                      <label for="">Department <span class="required">*</span></label>
+                      <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
+                          <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
+                      </select>   
+                  </div>       
+                  <div class="request_department">
+                      <label for="">Sub Department <span class="required">*</span></label>
+                      <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
+                          <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
+                      </select>                           
+                  </div>   
+                  <div class="request_department r_full_name">
+                      <label for="">Requestor Full Name <span class="required">*</span></label>
+                      <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
+                  </div>
+                  <div class="request_department">
+                      <label for="">Mode of Payment <span class="required">*</span></label>
+                      <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" disabled required>
+                          <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
+                      </select>            
+                  </div>
+              </div>
+              <div class="flex">
+                  <div class="request_department">
+                      <div class="request_information start">
+                          <label for="">Requested Date:</label>
+                          <span>{{ $row->created_at }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Created by:</label>
+                          <span>{{ $row->cms_users_name }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Budget Information:</label>
+                          <span>
+                              {{ $row->additional_notes }}
+                          </span>
+                      </div>
+                  </div>
+                  <div class="request_department">
+                      <div class="request_information start">
+                          <label for="">Approved Date:</label>
+                          <span>{{ $row->approver_date }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Approved by:</label>
+                          <span>{{ $row->approver_name }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Approver Note:</label>
+                          <span>
+                              {{ $row->approver_note }}
+                          </span>
+                      </div>
+                  </div>
+                  <div class="request_department">
+                    <div class="request_information start">
+                        <label for="">Budget Information Date Created:</label>
+                        <span>{{ $pre_payment_body_date->created_at }}</span>
+                    </div>
+                  </div>            
+                </div>
+                <hr>
+                <div class="budget_info">
+                  <p>Budget Information Breakdown</p>
+                </div>
+                <div class="budget_content">
+                  @foreach ($pre_payment_body as $budget)
+                    <div class="budget_block">
+                      <div class="budget">
+                        <div class="budget_description">
+                          <label for="">Project Name</label>
+                          <input type="text" value="{{ $budget->project_name }}" name="project_name[]">
+                          <input type="text" value="{{ $budget->id }}" name="project_id[]" style="display: none;">
+                        </div>
+                        <div class="budget_description">
+                          <label for="">Budget Category</label>
+                          <input type="text" value="{{ $budget->budget_category }}" name="budget_category[]">
+                        </div>
+                        <div class="budget_description">
+                          <label for="">Budget Description</label>
+                          <input type="text" value="{{ $budget->budget_description }}" name="budget_description[]">
+                        </div>
+                        <div class="budget_description">
+                          <label for="">Location</label>
+                          <input type="text" value="{{ $budget->budget_location }}" name="budget_location[]">
+                        </div>
+                        <div class="budget_description">
+                          <label for="">Amount</label required>
+                          <input type="number" name="amount[]" value="{{ $budget->budget_amount }}" class="budget_amount">
+                        </div>
+                        <div class="budget_description" id="budget_justification">
+                          <label for="">Budget Justification</label>
+                          {{-- <input type="file" required name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img"> --}}
+                          <img src="{{ asset('pre_payment/img/'.$budget->budget_justification) }}" alt="" style="height: 100%; width: 100%;" id="budget_image" class="modal-trigger">
+                          <div class="modal">
+                            <div class="modal-content">
+                              <img src="" alt="">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="budget_description" style="text-align: center;">
+                          <div class="budget_description_btns">
+                            <button type="button" class="add_row_receipt">Add New Row</button>
+                            <button type="button" class="delete_row">Delete</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  @endforeach
+                </div>
+                <hr>
+                <div class="total_amount_content">
+                  <label for="">Reference Number:</label>
+                  <span>{{ $row->reference_number }}</span>
+                </div>
+                <div class="flex">
+                  <div class="total_amount_content">
+                    <label for="">Requested Amount:</label>
+                    <input type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
+                  </div>
+                  <div class="total_amount_content">
+                    <label for="">Total Amount:</label>
+                    <input type="number" id="total_amount" value="{{ $row->total_amount }}" readonly>
+                  </div>
+                </div>
+                <div class="additional_notes">
+                  <label for="">Additional Notes: </label>
+                  <textarea name="additional_notes" id="additional_notes"></textarea required>
+                </div>
+              </div>
+            </div>        
+          {{-- </form> --}}
+        </div>
+        <div class='panel-footer'>
+          <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
+          <input type='submit' class='btn btn-primary' name="submit" value='Close'/>
+          <input type="id" name="returns_id" value="{{ $row->id }}" style="visibility: hidden;">
+        </div>
+        </form>
+      </div>
+    @endif
 
 <script>
 
@@ -384,7 +746,20 @@
     let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
     clone_budget.find('input').val('');
     clone_budget.find('.delete_row');
+    clone_budget.find('#budget_justification').remove();
     $(this).parents('.budget').after(clone_budget);
+    // $('.budget').last().after(clone_budget)
+  });
+
+  // Budget Receipt Step 4
+  $(document).on('click', '.add_row_receipt', function(){
+    $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
+    let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
+    clone_budget.find('input').val('');
+    clone_budget.find('.delete_row');
+    clone_budget.find('#budget_justification').remove();
+    // $(this).parents('.budget').after(clone_budget);
+    $('.budget').last().after(clone_budget)
   });
 
   $(document).on('click', '.delete_row', function(){
@@ -506,6 +881,18 @@
         cache: true
     },
     id: 'id'
+  });
+
+  $(".modal-trigger").click(function(){
+    var imgSrc = $(this).attr('src');
+    $(".modal").fadeIn();
+    $(".modal-content img").attr("src", imgSrc);
+  });
+  
+  $(document).click(function(e) {
+    if ($(e.target).is('.modal')) {
+      $(".modal").fadeOut();
+    }
   });
 
 </script>

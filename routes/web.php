@@ -202,7 +202,8 @@ Route::group(['middleware' => ['web']], function() {
     
     // Pre Payment Module
     Route::get('/admin/pre_payment/request', 'AdminPrePaymentController@getAdd');
-    Route::post('/admin/pre_payment/request', 'AdminPrePaymentController@add_request')->name('add_request');
+    Route::post('/admin/pre_payment/add_request', 'AdminPrePaymentController@add_request')->name('add_request');
+    Route::post('/admin/pre_payment/request', 'AdminPrePaymentController@verify_receipt')->name('verify_receipt');
     Route::post('/admin/department', 'AdminPrePaymentController@department')->name('department');
     Route::post('/admin/mode_of_payment', 'AdminPrePaymentController@mode_of_payment')->name('payment');
     Route::post('/admin/sub_department', 'AdminPrePaymentController@sub_department')->name('sub_department');
