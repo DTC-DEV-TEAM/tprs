@@ -178,7 +178,7 @@
                 <select class="js-example-basic-single" name="department" class="department" id="req_department" required>
                 </select>   
                 </div>       
-                <div class="request_department">
+                <div class="request_department sub_dpt" style="display: none;">
                   <label for="">Sub Department <span class="required">*</span></label>
                   <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" required>
                   </select>                           
@@ -196,11 +196,11 @@
             <hr>
             <div class="total_amount_content">
               <label for=""><span class="required">*</span> Request Amount:</label>
-              <input type="number" id="total_amount" name="requested_amount" value="0" required>
+              <input type="number" id="total_amount" name="requested_amount" value="0" min="0" required>
             </div>
             <div class="additional_notes">
               <label for="">Budget Information: </label>
-              <textarea name="additional_notes" id="additional_notes"></textarea required>
+              <textarea name="additional_notes" id="additional_notes" required></textarea>
             </div>
           </div>
         </div>        
@@ -267,67 +267,138 @@
 
   // Select Department
   $('#req_department').select2({
-    placeholder: "Select a department",
-    dropdownAutoWidth: true,
-    width: '100%',
-    ajax: {
-        url: '{{ route('department') }}',
-        dataType: 'json',
-        // contentType: "application/json; charset=utf-8",
-        delay: 250,
-        type: 'POST',
-        data: function (params) {
-        return {
-            q: params.term,
-            _token: '{!! csrf_token() !!}'
-        };
-        },
-        processResults: function (data) {
-        return {
-            results: $.map(data, function (item) {
-            return {
-                text: item.department_name,
-                id: item.id
-            }
-            })
-        };
-        },
-        cache: true
-    },
-    id: 'id'
+      placeholder: "Select a department",
+      dropdownAutoWidth: true,
+      width: '100%',
+      ajax: {
+          url: '{{ route('department') }}',
+          dataType: 'json',
+          delay: 250,
+          type: 'POST',
+          data: function (params) {
+              return {
+                  q: params.term,
+                  _token: '{!! csrf_token() !!}'
+              };
+          },
+          processResults: function (data) {
+              return {
+                  results: $.map(data, function (item) {
+                      return {
+                          text: item.department_name,
+                          id: item.id
+                      }
+                  })
+              };
+          },
+          cache: true
+      },
+      id: 'id'
+  }).on('change', function (e) {
+
+      $('.sub_dpt').show();
+      var departmentId = e.target.value;
+      if (!departmentId) {
+          $('#sub_department').empty().trigger('change');
+          return;
+      }
+      // load the sub_department select2 options based on the selected department
+      $('#sub_department').empty().select2({
+          placeholder: "Select sub department",
+          dropdownAutoWidth: true,
+          width: '100%',
+          ajax: {
+              url: '{{ route('sub_department') }}',
+              dataType: 'json',
+              delay: 250,
+              type: 'POST',
+              data: function (params) {
+                  return {
+                      q: params.term,
+                      department_id: departmentId,
+                      _token: '{!! csrf_token() !!}'
+                  };
+              },
+              processResults: function (data) {
+                  return {
+                      results: $.map(data, function (item) {
+                          return {
+                              text: item.sub_department_name,
+                              id: item.id
+                          }
+                      })
+                  };
+              },
+              cache: true
+          },
+          id: 'id'
+      });
   });
 
-  // Sub Department
-  $('#sub_department').select2({
-    placeholder: "Select sub department",
-    dropdownAutoWidth: true,
-    width: '100%',
-    ajax: {
-        url: '{{ route('sub_department') }}',
-        dataType: 'json',
-        // contentType: "application/json; charset=utf-8",
-        delay: 250,
-        type: 'POST',
-        data: function (params) {
-        return {
-            q: params.term,
-            _token: '{!! csrf_token() !!}'
-        };
-        },
-        processResults: function (data) {
-        return {
-            results: $.map(data, function (item) {
-            return {
-                text: item.sub_department_name,
-                id: item.id
-            }
-            })
-        };
-        },
-        cache: true
-    },
-    id: 'id'
-  });
+
+  // // Select Department
+  // $('#req_department').select2({
+  //   placeholder: "Select a department",
+  //   dropdownAutoWidth: true,
+  //   width: '100%',
+  //   ajax: {
+  //       url: '{{ route('department') }}',
+  //       dataType: 'json',
+  //       // contentType: "application/json; charset=utf-8",
+  //       delay: 250,
+  //       type: 'POST',
+  //       data: function (params) {
+  //       return {
+  //           q: params.term,
+  //           _token: '{!! csrf_token() !!}'
+  //       };
+  //       },
+  //       processResults: function (data) {
+  //       return {
+  //           results: $.map(data, function (item) {
+  //           return {
+  //               text: item.department_name,
+  //               id: item.id
+  //           }
+  //           })
+  //       };
+  //       },
+  //       cache: true
+  //   },
+  //   id: 'id'
+  // });
+
+  // // Sub Department
+  // $('#sub_department').select2({
+  //   placeholder: "Select sub department",
+  //   dropdownAutoWidth: true,
+  //   width: '100%',
+  //   ajax: {
+  //       url: '{{ route('sub_department') }}',
+  //       dataType: 'json',
+  //       // contentType: "application/json; charset=utf-8",
+  //       delay: 250,
+  //       type: 'POST',
+  //       data: function (params) {
+  //       return {
+  //           q: params.term,
+  //           _token: '{!! csrf_token() !!}'
+  //       };
+  //       },
+  //       processResults: function (data) {
+  //       return {
+  //           results: $.map(data, function (item) {
+  //           return {
+  //               text: item.sub_department_name,
+  //               id: item.id
+  //           }
+  //           })
+  //       };
+  //       },
+  //       cache: true
+  //   },
+  //   id: 'id'
+  // });
 
   // Mode Of Payment
   $('#mode_of_payment').select2({

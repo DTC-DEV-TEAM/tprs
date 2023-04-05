@@ -53,7 +53,7 @@ use Illuminate\Support\Facades\Storage;
 			$this->col[] = ["label"=>"Approved By","name"=>"approver_id", "join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"Approved Date","name"=>"approver_date"];
 			$this->col[] = ["label"=>"Approved By Accounting","name"=>"accounting_id", "join"=>"cms_users,name"];
-			$this->col[] = ["label"=>"Budget Release Date","name"=>"accounting_date_release"];
+			$this->col[] = ["label"=>"Budget Date Released ","name"=>"accounting_date_release"];
 			// $this->col[] = ["label"=>"Menu Product Type","name"=>"menu_product_types_id","join"=>"menu_product_types,menu_product_type_description"];
 
 			# END COLUMNS DO NOT REMOVE THIS LINE
@@ -124,15 +124,21 @@ use Illuminate\Support\Facades\Storage;
 			$validate_receipts = PrePaymentProcess::select('id')->where('id', '4')->value('id');
 			$close = PrePaymentProcess::select('id')->where('id', '5')->value('id');
 			$rejected = PrePaymentProcess::select('id')->where('id', '6')->value('id');
-			
+
 			if(CRUDBooster::myPrivilegeName() == 'Requestor'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $budget_released"];
 			}else if(CRUDBooster::myPrivilegeName() == 'Approver'){
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $requested"];
+			}else if(CRUDBooster::myPrivilegeName() == 'Treasury' || CRUDBooster::myPrivilegeName() == 'Cashier'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $approved"];
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $validate_receipts"];
+			}else{
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $requested"];
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $approved"];
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $budget_released"];
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $validate_receipts"];
 			}
-			else{
-				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil'];
-			}
+
 
 
 	        /* 
@@ -291,9 +297,20 @@ use Illuminate\Support\Facades\Storage;
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
-			$query->orderBy('pre_payment.reference_number');
+			$requested = PrePaymentProcess::select('id')->where('id', '1')->value('id');
+			$approved = PrePaymentProcess::select('id')->where('id', '2')->value('id');
+			$budget_released = PrePaymentProcess::select('id')->where('id', '3')->value('id');
+			$validate_receipts = PrePaymentProcess::select('id')->where('id', '4')->value('id');
+			$close = PrePaymentProcess::select('id')->where('id', '5')->value('id');
+			$rejected = PrePaymentProcess::select('id')->where('id', '6')->value('id');
+
+
 			if (CRUDBooster::myPrivilegeName() == 'Requestor'){
-				$query->where('pre_payment.created_by', CRUDBooster::myId());
+				$query->where('pre_payment.created_by', CRUDBooster::myId())->orderByDesc('pre_payment.reference_number');
+			}else if (CRUDBooster::myPrivilegeName() == 'Approver'){
+				$query->where('status_id', $requested);
+			}else{
+				$query->orderByDesc('pre_payment.reference_number')->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
 			}
 
 
@@ -313,7 +330,7 @@ use Illuminate\Support\Facades\Storage;
 				if($column_value == '1'){
 					$column_value = '<span class="label" style="background-color: #2980B9; color: white; font-size: 12px;">For Approval</span>';
 				}else if($column_value == '2'){
-					$column_value = '<span class="label" style="background-color: #BDC581; color: white; font-size: 12px;">For Budget Released</span>';
+					$column_value = '<span class="label" style="background-color: #BDC581; color: white; font-size: 12px;">For Budget Release</span>';
 				}else if($column_value == '3'){
 					$column_value = '<span class="label" style="background-color: #f0ad4e; color: white; font-size: 12px;">For Receipts Validation</span>';
 				}else if($column_value == '4'){
@@ -371,9 +388,11 @@ use Illuminate\Support\Facades\Storage;
 
 				$submit_btn = $return_inputs['submit'];
 				$approver_note = $return_inputs['additional_notes'];
+				$accounting_mode_of_release = $return_inputs['mode_of_payment'];
 
 				if($submit_btn == 'Approve'){
 					$postdata['status_id'] = 2;
+					$postdata['accounting_mode_of_release'] = $accounting_mode_of_release;
 				}else{
 					$postdata['status_id'] = 6;
 				}
@@ -388,9 +407,11 @@ use Illuminate\Support\Facades\Storage;
 
 				$submit_btn = $return_inputs['submit'];
 				$accounting_note = $return_inputs['additional_notes'];
+				$accounting_mode_of_release = $return_inputs['mode_of_payment'];
 
-				if($submit_btn == 'Release Budget'){
+				if($submit_btn == 'Budget Released'){
 					$postdata['status_id'] = 3;
+					$postdata['accounting_mode_of_release'] = $accounting_mode_of_release;
 				}else{
 					$postdata['status_id'] = 6;
 				}
@@ -404,10 +425,15 @@ use Illuminate\Support\Facades\Storage;
 			if($status == 3){
 
 				$submit_btn = $return_inputs['submit'];
-				$accounting_note = $return_inputs['additional_notes'];
+				$total_amount = $return_inputs['total_amount'];
+				$balance_amount = $return_inputs['balance_amount'];
+				$budget_information_notes = $return_inputs['additional_notes'];
 
 				if($submit_btn == 'Submit'){
 					$postdata['status_id'] = 4;
+					$postdata['total_amount'] = $total_amount;
+					$postdata['balance_amount'] = abs($balance_amount);
+					$postdata['budget_information_notes'] = $budget_information_notes;
 				}else{
 					$postdata['status_id'] = 6;
 				}
@@ -419,7 +445,6 @@ use Illuminate\Support\Facades\Storage;
 				$budget_location = $return_inputs['budget_location'];
 				$budget_amount = $return_inputs['amount'];
 				$budget_justification = $return_inputs['budget_justification'];
-				$additional_notes = $return_inputs['additional_notes'];
 				
 				$requested_project = [];
 				
@@ -449,14 +474,22 @@ use Illuminate\Support\Facades\Storage;
 				}
 
 			}
-			// Upload Receipts Step 5
+			// Closing Step 5
 			if($status == 4){
 
 				$submit_btn = $return_inputs['submit'];
 				$accounting_note = $return_inputs['additional_notes'];
+				$total_amount = $return_inputs['total_amount'];
+				$balance_amount = $return_inputs['balance_amount'];
+				$accounting_closed_note = $return_inputs['additional_notes'];
 
 				if($submit_btn == 'Close'){
 					$postdata['status_id'] = 5;
+					$postdata['total_amount'] = $total_amount;
+					$postdata['balance_amount'] = abs($balance_amount);
+					$postdata['accounting_closed_note'] = $accounting_closed_note;
+					$postdata['accounting_closed_by'] = CRUDBooster::myId();
+					$postdata['accounting_closed_date'] = date('Y-m-d H:i:s');
 				}else{
 					$postdata['status_id'] = 6;
 				}
@@ -660,19 +693,34 @@ use Illuminate\Support\Facades\Storage;
 			return response()->json($results);
 
 		}
-		// Mode of Payment
+		// Sub Department
+		// public function sub_department(Request $request){
+			
+		// 	$results = SubDepartment::
+		// 		select('id', 'sub_department_name')
+		// 		->where('status', 'ACTIVE')
+		// 		->where('sub_department_name', 'LIKE', '%'. $request->input('q'). '%')
+		// 		->orWhere('id', 'LIKE', '%'. $request->input('q'). '%')
+		// 		->orderBy('sub_department_name')
+		// 		->get()->unique('sub_department_name');
+						
+		// 	return response()->json($results);
+
+		// }
+
+		// Sub Department
 		public function sub_department(Request $request){
 			
 			$results = SubDepartment::
 				select('id', 'sub_department_name')
 				->where('status', 'ACTIVE')
 				->where('sub_department_name', 'LIKE', '%'. $request->input('q'). '%')
-				->orWhere('id', 'LIKE', '%'. $request->input('q'). '%')
+				->where('department_id', 'LIKE', '%'. $request->input('department_id'). '%')
 				->orderBy('sub_department_name')
 				->get()->unique('sub_department_name');
 						
 			return response()->json($results);
-
+			// department_id
 		}
 
 		// Edit
@@ -707,6 +755,9 @@ use Illuminate\Support\Facades\Storage;
 					'pre_payment.accounting_note',
 					'pre_payment.total_amount',
 					'pre_payment.reference_number',
+					'pre_payment.requested_amount',
+					'pre_payment.balance_amount',
+					'pre_payment.budget_information_notes',
 				)
 				->where('pre_payment.id',$id)
 				->first();
@@ -751,9 +802,11 @@ use Illuminate\Support\Facades\Storage;
 				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
 				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
 				->leftJoin('cms_users as accounting', 'pre_payment.accounting_id', 'accounting.id')
+				->leftJoin('cms_users as accounting_closed', 'pre_payment.accounting_closed_by', 'accounting_closed.id')
 				->select('cms_users.name as cms_users_name',
 					'approver.name as approver_name',
 					'accounting.name as accounting_name',
+					'accounting_closed.name as accounting_closed_by',
 					'pre_payment.status_id',
 					'pre_payment.id',
 					'pre_payment.department_id',
@@ -770,9 +823,16 @@ use Illuminate\Support\Facades\Storage;
 					'pre_payment.accounting_note',
 					'pre_payment.total_amount',
 					'pre_payment.reference_number',
+					'pre_payment.requested_amount',
+					'pre_payment.balance_amount',
+					'pre_payment.budget_information_notes',
+					'pre_payment.reference_number',
+					'pre_payment.accounting_closed_date',
+					'pre_payment.accounting_closed_note',
 				)
 				->where('pre_payment.id',$id)
 				->first();
+			// dd($data['row']);
 			// PrePaymentBody
 			$data['pre_payment_body'] = DB::table('pre_payment_body')
 				->where('pre_payment_id',$id)

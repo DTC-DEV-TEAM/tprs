@@ -238,57 +238,6 @@
                         </div> 
                     </div>
                     <hr>
-                    <div class="flex">
-                        <div class="request_department">
-                            <div class="request_information start">
-                                <label for="">Requested Date:</label>
-                                <span>{{ $row->created_at }}</span>
-                            </div>
-                            <div class="request_information">
-                                <label for="">Created by:</label>
-                                <span>{{ $row->cms_users_name }}</span>
-                            </div>
-                            <div class="request_information">
-                                <label for="">Budget Information:</label>
-                                <span>
-                                    {{ $row->additional_notes }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="request_department">
-                            <div class="request_information start">
-                                <label for="">Approved Date:</label>
-                                <span>{{ $row->approver_date }}</span>
-                            </div>
-                            <div class="request_information">
-                                <label for="">Approved by:</label>
-                                <span>{{ $row->approver_name }}</span>
-                            </div>
-                            <div class="request_information">
-                                <label for="">Approver Note:</label>
-                                <span>
-                                    {{ $row->approver_note }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="request_department">
-                          <div class="request_information start">
-                              <label for="">Budget Date Released:</label>
-                              <span>{{ $row->accounting_date_release }}</span>
-                          </div>
-                          <div class="request_information">
-                              <label for="">Accounting Name:</label>
-                              <span>{{ $row->accounting_name }}</span>
-                          </div>
-                          <div class="request_information">
-                              <label for="">Accounting Note:</label>
-                              <span>
-                                  {{ $row->accounting_note }}
-                              </span>
-                          </div>
-                        </div>
-                    </div>
-                    <hr>
                     <div class="budget_info">
                       <p>Budget Information Breakdown</p>
                     </div>
@@ -298,23 +247,23 @@
                           <div class="budget">
                             <div class="budget_description">
                               <label for="">Project Name</label>
-                              <input type="text" value="{{ $budget->project_name }}" name="project_name[]">
+                              <input type="text" value="{{ $budget->project_name }}" name="project_name[]" readonly>
                             </div>
                             <div class="budget_description">
                               <label for="">Budget Category</label>
-                              <input type="text" value="{{ $budget->budget_category }}" name="budget_category[]">
+                              <input type="text" value="{{ $budget->budget_category }}" name="budget_category[]" readonly>
                             </div>
                             <div class="budget_description">
                               <label for="">Budget Description</label>
-                              <input type="text" value="{{ $budget->budget_description }}" name="budget_description[]">
+                              <input type="text" value="{{ $budget->budget_description }}" name="budget_description[]" readonly>
                             </div>
                             <div class="budget_description">
                               <label for="">Location</label>
-                              <input type="text" value="{{ $budget->budget_location }}" name="budget_location[]">
+                              <input type="text" value="{{ $budget->budget_location }}" name="budget_location[]" readonly>
                             </div>
                             <div class="budget_description">
                               <label for="">Amount</label>
-                              <input type="number" name="amount[]" value="{{ $budget->budget_amount }}" class="budget_amount">
+                              <input type="number" name="amount[]" value="{{ $budget->budget_amount }}" class="budget_amount" readonly>
                             </div>
                             <div class="budget_description" id="budget_justification">
                               <label for="">Budget Justification</label>
@@ -344,6 +293,10 @@
                         <label for="">Total Amount:</label>
                         <input type="number" id="total_amount" value="{{ $row->total_amount }}" readonly>
                       </div>
+                      <div class="total_amount_content">
+                        <label for="">Balance:</label>
+                        <input type="number" id="balance_amount" value="{{ $row->balance_amount }}" readonly>
+                      </div>
                     </div>
                     <div class="total_amount_content">
                         <label for="">Status: 
@@ -354,13 +307,88 @@
                                 <span style="color: green; font-style: bold;">Approved</span>
                             @endif
                             @if ($row->status_id == 3)
-                                <span style="color: green; font-style: bold;">Budget Releasing</span>
+                                <span style="color: green; font-style: bold;">Budget Justification</span>
+                            @endif
+                            @if ($row->status_id == 4)
+                                <span style="color: green; font-style: bold;">Receipt Validation</span>
+                            @endif
+                            @if ($row->status_id == 5)
+                                <span style="color: green; font-style: bold;">Transaction closed</span>
                             @endif
                             @if ($row->status_id == 6)
                                 <span style="color: red; font-style: bold;">Rejected</span>
                             @endif
                         </label>
                     </div>
+                    <hr>
+                    <div class="flex">
+                      <div class="request_department">
+                          <div class="request_information start">
+                              <label for="">Requested Date:</label>
+                              <span>{{ $row->created_at }}</span>
+                          </div>
+                          <div class="request_information">
+                              <label for="">Created by:</label>
+                              <span>{{ $row->cms_users_name }}</span>
+                          </div>
+                          <div class="request_information">
+                              <label for="">Budget Information:</label>
+                              <span>
+                                  {{ $row->additional_notes }}
+                              </span>
+                          </div>
+                      </div>
+                      <div class="request_department">
+                          <div class="request_information start">
+                              <label for="">Approved Date:</label>
+                              <span>{{ $row->approver_date }}</span>
+                          </div>
+                          <div class="request_information">
+                              <label for="">Approved by:</label>
+                              <span>{{ $row->approver_name }}</span>
+                          </div>
+                          <div class="request_information">
+                              <label for="">Approver Note:</label>
+                              <span>
+                                  {{ $row->approver_note }}
+                              </span>
+                          </div>
+                      </div>
+                      <div class="request_department">
+                        <div class="request_information start">
+                            <label for="">Budget Approval Date:</label>
+                            <span>{{ $row->accounting_date_release }}</span>
+                        </div>
+                        <div class="request_information">
+                            <label for="">Accounting Name:</label>
+                            <span>{{ $row->accounting_name }}</span>
+                        </div>
+                        <div class="request_information">
+                            <label for="">Accounting Note:</label>
+                            <span>
+                                {{ $row->accounting_note }}
+                            </span>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="flex">
+                    <div class="request_department">
+                      <div class="request_information start">
+                          <label for="">Date Closed:</label>
+                          <span>{{ $row->accounting_closed_date }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Closed By:</label>
+                          <span>{{ $row->accounting_closed_by }}</span>
+                      </div>
+                      <div class="request_information">
+                          <label for="">Closed Note:</label>
+                          <span>
+                              {{ $row->accounting_closed_note }}
+                          </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
             </div>        
         </div>
