@@ -11,6 +11,8 @@ use DB;
 use CRUDBooster;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Arr;
+
 
 	class AdminPrePaymentController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -73,23 +75,6 @@ use Illuminate\Support\Facades\Storage;
 			$this->form[] = ['label'=>'Created By','name'=>'created_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Updated By','name'=>'updated_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
-
-			# OLD START FORM
-			//$this->form = [];
-			//$this->form[] = ['label'=>'Reference Number','name'=>'reference_number','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Status Id','name'=>'status_id','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'status,id'];
-			//$this->form[] = ['label'=>'Approver Id','name'=>'approver_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'approver,id'];
-			//$this->form[] = ['label'=>'Aprrover Note','name'=>'aprrover_note','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Approver Date','name'=>'approver_date','type'=>'datetime','validation'=>'required|date_format:Y-m-d H:i:s','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Accounting Id','name'=>'accounting_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'accounting,id'];
-			//$this->form[] = ['label'=>'Accounting Note','name'=>'accounting_note','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Accounting Date','name'=>'accounting_date','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Accounting Mode Of Release','name'=>'accounting_mode_of_release','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Requestor Receipts','name'=>'requestor_receipts','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Budget Approval','name'=>'budget_approval','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Created By','name'=>'created_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Updated By','name'=>'updated_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-			# OLD END FORM
 
 			/* 
 	        | ---------------------------------------------------------------------- 
@@ -444,21 +429,37 @@ use Illuminate\Support\Facades\Storage;
 				$budget_description = $return_inputs['budget_description'];
 				$budget_location = $return_inputs['budget_location'];
 				$budget_amount = $return_inputs['amount'];
-				$budget_justification = $return_inputs['budget_justification'];
-				
+				$budget_justification = [$return_inputs['budget_justification1']];
 				$requested_project = [];
-				
-				for($i=0; $i<count($project_name); $i++){
-					$file = $budget_justification[$i];
-					$filename = uniqid() . '.' . $file->getClientOriginalExtension();
-					$file->move(public_path('pre_payment/img'), $filename);
+				$insert_pre_payment_body = [];
+
+				$filteredArray = array_filter(
+					$return_inputs,
+					function($key) {
+						return strpos($key, 'budget_justification') !== false;
+					},
+					ARRAY_FILTER_USE_KEY
+				);
+
+				for($i=0;$i<count($filteredArray);$i++){
+					$array_file = array_values($filteredArray)[$i];
 					
-					$requested_project[] = [
+					foreach($array_file as $key=>$value){
+						$filename = uniqid().'.'.$value->getClientOriginalExtension();
+						$array_file[$key] = $filename;
+						$value->move(public_path('pre_payment/img'), $filename);
+					}
+					array_push($requested_project, $array_file);
+				}
+
+				for($i=0; $i<count($requested_project); $i++){
+					
+					$insert_pre_payment_body[] = [
 						'pre_payment_id' => $id,
 						'project_name' => $project_name[$i],
 						'budget_category' => $budget_category[$i],
 						'budget_description' => $budget_description[$i],
-						'budget_justification' => $filename,
+						'budget_justification' => implode(", ",$requested_project[$i]),
 						'budget_location' => $budget_location[$i],
 						'budget_amount' => $budget_amount[$i],
 						'created_by' => CRUDBooster::myId(),
@@ -467,9 +468,9 @@ use Illuminate\Support\Facades\Storage;
 				}
 				
 				// Insert budget information
-				foreach($requested_project as $projects){
+				foreach($insert_pre_payment_body  as $budget_information){
 					DB::table('pre_payment_body')->insert(
-						$projects
+						$budget_information
 					);
 				}
 
