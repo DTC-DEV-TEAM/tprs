@@ -88,6 +88,7 @@
   .budget{
     display: flex;
     justify-content: center;
+    align-items: center;
     height: 100%;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
     align-items: center;
@@ -196,10 +197,6 @@
     border-radius: 5px;
   }
 
-  #upload_img{
-    padding-top: 5px; 
-    border: none;
-  }
 
   #budget_image:hover{
     /* opacity: 0.9; */
@@ -263,6 +260,10 @@
     transform: translateY(-50%) !important;
 }
   
+#budget_justification {
+ text-align: center;
+}
+
 </style>
 @endpush
 
@@ -541,27 +542,27 @@
                     <div class="budget">
                       <div class="budget_description">
                         <label for="">Items</label>
-                        <input type="text" required name="project_name[]">
+                        <input type="text"  name="project_name[]">
                       </div>
                       <div class="budget_description">
                         <label for="">Budget Category</label>
-                        <input type="text" required name="budget_category[]">
+                        <input type="text"  name="budget_category[]">
                       </div>
                       <div class="budget_description">
                         <label for="">Budget Description</label>
-                        <input type="text" required name="budget_description[]">
+                        <input type="text"  name="budget_description[]">
                       </div>
                       <div class="budget_description">
                         <label for="">Location</label>
-                        <input type="text" required name="budget_location[]">
+                        <input type="text"  name="budget_location[]">
                       </div>
                       <div class="budget_description">
-                        <label for="">Amount</label required>
+                        <label for="">Amount</label >
                         <input type="number" name="amount[]" min="0" class="budget_amount">
                       </div>
                       <div class="budget_description">
                         <label for="">Budget Justification</label>
-                        <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" required>
+                        <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple >
                       </div>
                       <div class="budget_description" style="text-align: center;">
                         <div class="budget_description_btns">
@@ -593,7 +594,7 @@
                 </div>
                 <div class="additional_notes">
                   <label for="">Additional Notes: </label>
-                  <textarea name="additional_notes" id="additional_notes" required></textarea>
+                  <textarea name="additional_notes" id="additional_notes" ></textarea>
                 </div>
                 <br>
                 <div>
@@ -677,12 +678,18 @@
                           <input type="number" name="amount[]" value="{{ $budget->budget_amount }}" class="budget_amount">
                         </div>
                         <div class="budget_description" id="budget_justification">
-                          <label for="">Budget Justification</label>
-                          {{-- <input type="file" required name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img"> --}}
-                          <img src="{{ asset('pre_payment/img/'.$budget->budget_justification) }}" alt="" style="height: 100%; width: 100%;" id="budget_image" class="modal-trigger">
-                          <div class="modal">
-                            <div class="modal-content">
-                              <img src="" alt="">
+                          <div>
+                            <label for="">Budget Justification</label>
+                            @php
+                              $img = explode(", ",$budget->budget_justification);
+                            @endphp
+                            @foreach ($img as $receipts_img)
+                              <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="" style="height: 100px; width: 100px;" id="budget_image" class="modal-trigger">            
+                            @endforeach
+                            <div class="modal">
+                              <div class="modal-content">
+                                <img src="" alt="">
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -799,14 +806,31 @@
         $(this).val(val);
   });
 
-  $(document).on('click', '.add_row', function(){
-    $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
-    let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
-    clone_budget.find('input').val('');
-    clone_budget.find('.delete_row');
-    clone_budget.find('#budget_justification').remove();
-    $(this).parents('.budget').after(clone_budget);
-  });
+  // $(document).on('click', '.add_row', function(){
+  //   $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
+  //   let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
+  //   clone_budget.find('input').val('');
+  //   clone_budget.find('.delete_row');
+  //   clone_budget.find('#budget_justification').remove();
+  //   $(this).parents('.budget').after(clone_budget);
+  // });
+$(document).on('click', '.add_row', function(){
+  $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
+  let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
+  clone_budget.find('input').val('');
+  clone_budget.find('.delete_row');
+  clone_budget.find('#budget_justification').remove();
+
+  // Get the number of existing budget justifications
+  var count = $('.budget').length;
+
+  // Add the current count to the name attribute of the file input
+  clone_budget.find('#upload_img').attr('name', 'budget_justification' + count + '[]');
+
+  $(this).parents('.budget').after(clone_budget);
+});
+
+
 
   // Budget Receipt Step 4
   // $(document).on('click', '.add_row_receipt', function(){
