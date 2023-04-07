@@ -240,31 +240,39 @@
   }
 
   .swal2-popup {
-    font-size: 1.5rem !important;
-}
+      font-size: 1.5rem !important;
+  }
 
-.swal2-popup .swal2-title {
+  .swal2-popup .swal2-title {
     font-size: 2.5rem !important;
-}
+  }
 
-.swal2-popup .swal2-content {
+  .swal2-popup .swal2-content {
     font-size: 1.8rem !important;
-}
+  }
 
-.swal2-popup {
+  .swal2-popup {
     margin: auto !important;
     position: absolute !important;
     left: 0 !important;
     right: 0 !important;
     top: 10 !important;
     transform: translateY(-50%) !important;
-}
-  
-#budget_justification {
- text-align: center;
-}
+  }
+    
+  #budget_justification {
+    text-align: center;
+  }
+
+  #upload_img{
+    border: none;
+    text-align: center;
+    padding-top: 5px;
+  }
+
 
 </style>
+
 @endpush
 
 @extends('crudbooster::admin_template')
@@ -343,6 +351,7 @@
                     <input type='submit' class='btn btn-danger' name="submit" value='Reject'/>
                     <input type='submit' class='btn btn-primary' name="submit" value='Approve'/>
                     <input type="id" name="returns_id" value="{{ $row->id }}" style="visibility: hidden;">
+                    <input type="status_id" name="status_id" value="{{ $row->status_id }}" style="visibility: hidden;">
                 </div>
             </div>
         </form>
@@ -443,6 +452,7 @@
                     <input type='submit' class='btn btn-danger' name="submit" value='Reject'/>
                     <input type='submit' class='btn btn-primary' name="submit" value='Budget Released'/>
                     <input type="id" name="returns_id" value="{{ $row->id }}" style="visibility: hidden;">
+                    <input type="status_id" name="status_id" value="{{ $row->status_id }}" style="visibility: hidden;">
                 </div>
             </div>
         </form>
@@ -542,27 +552,29 @@
                     <div class="budget">
                       <div class="budget_description">
                         <label for="">Items</label>
-                        <input type="text"  name="project_name[]">
+                        <input type="text"  name="project_name[]" required>
                       </div>
                       <div class="budget_description">
                         <label for="">Budget Category</label>
-                        <input type="text"  name="budget_category[]">
+                        <input type="text"  name="budget_category[]" required>
                       </div>
                       <div class="budget_description">
                         <label for="">Budget Description</label>
-                        <input type="text"  name="budget_description[]">
+                        <input type="text"  name="budget_description[]" required>
                       </div>
                       <div class="budget_description">
                         <label for="">Location</label>
-                        <input type="text"  name="budget_location[]">
+                        <input type="text"  name="budget_location[]" required>
                       </div>
                       <div class="budget_description">
                         <label for="">Amount</label >
-                        <input type="number" name="amount[]" min="0" class="budget_amount">
+                        <input type="number" name="amount[]" min="0" class="budget_amount" required>
                       </div>
-                      <div class="budget_description">
+                      <div class="budget_description" id="step3_budget_justification">
                         <label for="">Budget Justification</label>
-                        <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple >
+                        <div class="upload_img_parent">
+                          <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple required>
+                        </div>
                       </div>
                       <div class="budget_description" style="text-align: center;">
                         <div class="budget_description_btns">
@@ -594,7 +606,7 @@
                 </div>
                 <div class="additional_notes">
                   <label for="">Additional Notes: </label>
-                  <textarea name="additional_notes" id="additional_notes" ></textarea>
+                  <textarea name="additional_notes" id="additional_notes" required></textarea>
                 </div>
                 <br>
                 <div>
@@ -608,6 +620,7 @@
           <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
           <input type='submit' class='btn btn-primary' name="submit" value='Submit'/>
           <input type="id" name="returns_id" value="{{ $row->id }}" style="visibility: hidden;">
+          <input type="status_id" name="status_id" value="{{ $row->status_id }}" style="visibility: hidden;">
         </div>
         </form>
       </div>
@@ -779,6 +792,7 @@
           <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
           <input id="close_transaction" type='submit' class='btn btn-primary' name="submit" value='Close'/>
           <input type="id" name="returns_id" value="{{ $row->id }}" style="visibility: hidden;">
+          <input type="status_id" name="status_id" value="{{ $row->status_id }}" style="visibility: hidden;">
         </div>
         </form>
       </div>
