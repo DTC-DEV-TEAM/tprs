@@ -18,7 +18,6 @@ use Illuminate\Support\Arr;
 
         public function __construct() {
 			// Register ENUM type
-			//$this->request = $request;
 			DB::getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping("enum", "string");
 		}
 
@@ -288,8 +287,7 @@ use Illuminate\Support\Arr;
 			$validate_receipts = PrePaymentProcess::select('id')->where('id', '4')->value('id');
 			$close = PrePaymentProcess::select('id')->where('id', '5')->value('id');
 			$rejected = PrePaymentProcess::select('id')->where('id', '6')->value('id');
-
-
+			
 			if (CRUDBooster::myPrivilegeName() == 'Requestor'){
 				$query->where('pre_payment.created_by', CRUDBooster::myId())->orderByDesc('pre_payment.reference_number');
 			}else if (CRUDBooster::myPrivilegeName() == 'Approver'){
@@ -543,7 +541,25 @@ use Illuminate\Support\Arr;
 	    */
 	    public function hook_after_edit($id) {
 	        //Your code here 
+			$return_inputs = Input::all();
+			$status_id = $return_inputs['status_id'];
 
+			$approval = DB::table('pre_payment_process')->where('id', '1')->value('id');
+			$for_budget_released = DB::table('pre_payment_process')->where('id', '1')->value('id');
+			$for_receipts_validation = DB::table('pre_payment_process')->where('id', '1')->value('id');
+			$for_closing = DB::table('pre_payment_process')->where('id', '1')->value('id');
+			$closed = DB::table('pre_payment_process')->where('id', '1')->value('id');
+			$rejected = DB::table('pre_payment_process')->where('id', '1')->value('id');
+
+			if($status_id == '1'){
+				CRUDBooster::redirect(CRUDBooster::mainpath(), 'The form has been updated.',"success");
+			}else if($status_id == '2'){
+				CRUDBooster::redirect(CRUDBooster::mainpath(), 'The form has been updated.',"success");
+			}else if($status_id == '3'){
+				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Request budget justification',"success");
+			}else if($status_id == '4'){
+				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction Closed',"success");
+			}
 	    }
 
 	    /* 
@@ -833,7 +849,7 @@ use Illuminate\Support\Arr;
 				)
 				->where('pre_payment.id',$id)
 				->first();
-			// dd($data['row']);
+
 			// PrePaymentBody
 			$data['pre_payment_body'] = DB::table('pre_payment_body')
 				->where('pre_payment_id',$id)
