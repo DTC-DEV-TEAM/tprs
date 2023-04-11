@@ -284,7 +284,7 @@
     
     {{-- Approver Privilege --}}
     @if ($row->status_id == 1) 
-        <form method='post' action='{{CRUDBooster::mainpath('edit-save/'.$row->id)}}'>
+        <form method='post' action='{{CRUDBooster::mainpath('edit-save/'.$row->id)}}' id="approve_budget">
             <div class='panel panel-default'>
                 <div class='panel-heading'>Request Budget</div>
                 <div class='panel-body'>
@@ -462,10 +462,10 @@
     {{-- Requestor Privilege --}}
     @if ($row->status_id == 3)
       <div class='panel panel-default'>
+        <form method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
         <div class='panel-heading'>Request Budget</div>
         <div class='panel-body'>
           {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
-            <form method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
             {{ csrf_field() }}
             <div class='form-group'>
               <div class="request_content">
@@ -610,7 +610,9 @@
                 </div>
                 <br>
                 <div>
-                  <span style="font-size: 15px;"><span style="color: red; font-weight: bold;">Note: </span>"If you have a balance, you can now return it along with your reference number after submitting the form."</span>
+                  <span style="font-size: 15px;"><span style="color: red; font-weight: bold;">Notes: </span>"If you have a balance, you can now return it along with your reference number after submitting the form."</span>
+                  <br>
+                  <span style="font-size: 15px;"><span style="color: rgb(255, 255, 255); font-weight: bold; visibility: hidden;">Notes: </span>"For uploading of multiple receipts press <span style="color: green;">ctrl left click to the image</span>."</span>
                 </div>
               </div>
             </div>        
@@ -618,7 +620,7 @@
         </div>
         <div class='panel-footer'>
           <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
-          <input type='submit' class='btn btn-primary' name="submit" value='Submit'/>
+          <input type='submit' class='btn btn-primary' name="submit" id="submit_approve" value='Submit'/>
           <input type="id" name="returns_id" value="{{ $row->id }}" style="visibility: hidden;">
           <input type="status_id" name="status_id" value="{{ $row->status_id }}" style="visibility: hidden;">
         </div>
@@ -629,10 +631,10 @@
     {{-- Accounting Validating Budget Information --}}
     @if ($row->status_id == 4)
       <div class='panel panel-default'>
+        <form id="close" method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
         <div class='panel-heading'>Validate Budget Information</div>
         <div class='panel-body'>
           {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
-            <form id="close" method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
             {{ csrf_field() }}
             <div class='form-group'>
               <div class="request_content">
@@ -697,7 +699,7 @@
                               $img = explode(", ",$budget->budget_justification);
                             @endphp
                             @foreach ($img as $receipts_img)
-                              <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="" style="height: 100px; width: 100px;" id="budget_image" class="modal-trigger">            
+                              <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No image" style="height: auto; max-width: 100px;" id="budget_image" class="modal-trigger"> 
                             @endforeach
                             <div class="modal">
                               <div class="modal-content">
@@ -799,7 +801,8 @@
     @endif
 
 <script>
-
+  
+  // Total Amount and Balance
   function get_sum(){
     var requested_amount = $('#requested_amount').val();
     var total = 0;
@@ -813,6 +816,12 @@
 
   }
 
+  $(document).on('keyup', '.budget_amount', function() {
+    var total = 0;
+    get_sum();
+  });
+
+  // Name first letter uppercase
   $('#req_full_name').on('keyup', function() {
     var val = $(this).val().toLowerCase().replace(/\b[a-z]/g, function(letter) {
           return letter.toUpperCase();
@@ -820,41 +829,23 @@
         $(this).val(val);
   });
 
-  // $(document).on('click', '.add_row', function(){
-  //   $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
-  //   let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
-  //   clone_budget.find('input').val('');
-  //   clone_budget.find('.delete_row');
-  //   clone_budget.find('#budget_justification').remove();
-  //   $(this).parents('.budget').after(clone_budget);
-  // });
-$(document).on('click', '.add_row', function(){
-  $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
-  let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
-  clone_budget.find('input').val('');
-  clone_budget.find('.delete_row');
-  clone_budget.find('#budget_justification').remove();
+  // Add Row
+  $(document).on('click', '.add_row', function(){
+    $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
+    let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
+    clone_budget.find('input').val('');
+    clone_budget.find('.delete_row');
+    clone_budget.find('#budget_justification').remove();
 
-  // Get the number of existing budget justifications
-  var count = $('.budget').length;
+    // Get the number of existing budget justifications
+    var count = $('.budget').length;
 
-  // Add the current count to the name attribute of the file input
-  clone_budget.find('#upload_img').attr('name', 'budget_justification' + count + '[]');
+    // Add the current count to the name attribute of the file input
+    clone_budget.find('#upload_img').attr('name', 'budget_justification' + count + '[]');
 
-  $(this).parents('.budget').after(clone_budget);
-});
+    $(this).parents('.budget').after(clone_budget);
+  });
 
-
-
-  // Budget Receipt Step 4
-  // $(document).on('click', '.add_row_receipt', function(){
-  //   $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
-  //   let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
-  //   clone_budget.find('input').val('');
-  //   clone_budget.find('.delete_row');
-  //   clone_budget.find('#budget_justification').remove();
-  //   $('.budget').last().after(clone_budget);
-  // });
 
   // Budget Receipt Step 4
   $(document).on('click', '.add_row_receipt', function(){
@@ -866,6 +857,7 @@ $(document).on('click', '.add_row', function(){
     clone_budget.find('.delete_row').show(); // show delete button for cloned row
   });
 
+  // Delete Row
   $(document).on('click', '.delete_row', function(){
     $(this).parents('.budget').remove();
 
@@ -875,6 +867,7 @@ $(document).on('click', '.add_row', function(){
     get_sum();
   })
 
+  // Hover budget row
   $(document).on('click', '.budget', function(){
     $('.budget').css('box-shadow', '');
     $(this).css('box-shadow', 'rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset');
@@ -886,10 +879,12 @@ $(document).on('click', '.add_row', function(){
     }
   });
 
-  $(document).on('keyup', '.budget_amount', function() {
-    var total = 0;
-    get_sum();
-  });
+
+  // Budget Justification
+  let budget_image = $('#budget_justification').find('.budget_image');
+  if (budget_image.length == 1) {
+      budget_image.css('max-width', '100%');
+  }
 
   // Select Department
   $('#req_department').select2({
@@ -987,6 +982,7 @@ $(document).on('click', '.add_row', function(){
     id: 'id'
   });
 
+  // Image modal
   $(".modal-trigger").click(function(){
     var imgSrc = $(this).attr('src');
     $(".modal").fadeIn();
@@ -998,31 +994,6 @@ $(document).on('click', '.add_row', function(){
       $(".modal").fadeOut();
     }
   });
-
-  // $('#close_transaction').click(function(e){
-  //   e.preventDefault();
-
-  //   Swal.fire({
-  //     title: 'Are you sure?',
-  //     text: "You won't be able to revert this!",
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#3085d6',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Yes, submit it!'
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       $('#close').submit();
-  //       Swal.fire(
-  //         'Success!',
-  //         'Transaction has been closed.',
-  //         'success'
-  //       );
-  //     }
-  //   });
-  // });
-
-
-
+  
 </script>
 @endsection

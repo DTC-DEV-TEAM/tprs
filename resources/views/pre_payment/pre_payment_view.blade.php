@@ -268,7 +268,13 @@
                             <div class="budget_description" id="budget_justification">
                               <label for="">Budget Justification</label>
                               {{-- <input type="file" required name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img"> --}}
-                              <img src="{{ asset('pre_payment/img/'.$budget->budget_justification) }}" alt="No Image Inserted" style="height: 100%; width: 100%;" id="budget_image" class="modal-trigger">
+                              @php
+                              $img = explode(", ",$budget->budget_justification);
+                              @endphp
+                              @foreach ($img as $receipts_img)
+                                <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No image" style="height: auto; max-width: 100px;" id="budget_image" class="modal-trigger"> 
+                              @endforeach
+                              {{-- <img src="{{ asset('pre_payment/img/'.$budget->budget_justification) }}" alt="No Image Inserted" style="height: 100%; width: 100%;" id="budget_image" class="modal-trigger"> --}}
                               <div class="modal">
                                 <div class="modal-content">
                                   <img src="" alt="">
