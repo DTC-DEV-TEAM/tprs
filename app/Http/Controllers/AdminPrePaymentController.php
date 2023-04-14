@@ -1,9 +1,14 @@
 <?php namespace App\Http\Controllers;
 
+use App\Account;
+use App\Brand;
+use App\Category;
+use App\Currency;
 use App\Department;
 use App\ModeOfPayment;
 use App\PrePayment;
 use App\PrePaymentProcess;
+use App\Store;
 use App\SubDepartment;
 use Session;
 use Illuminate\Http\Request;
@@ -407,6 +412,7 @@ use Illuminate\Support\Arr;
 			// Upload Receipts Step 4
 			if($status == 3){
 
+				dd($return_inputs);
 				$submit_btn = $return_inputs['submit'];
 				$total_amount = $return_inputs['total_amount'];
 				$balance_amount = $return_inputs['balance_amount'];
@@ -710,20 +716,6 @@ use Illuminate\Support\Arr;
 			return response()->json($results);
 
 		}
-		// Sub Department
-		// public function sub_department(Request $request){
-			
-		// 	$results = SubDepartment::
-		// 		select('id', 'sub_department_name')
-		// 		->where('status', 'ACTIVE')
-		// 		->where('sub_department_name', 'LIKE', '%'. $request->input('q'). '%')
-		// 		->orWhere('id', 'LIKE', '%'. $request->input('q'). '%')
-		// 		->orderBy('sub_department_name')
-		// 		->get()->unique('sub_department_name');
-						
-		// 	return response()->json($results);
-
-		// }
 
 		// Sub Department
 		public function sub_department(Request $request){
@@ -737,7 +729,20 @@ use Illuminate\Support\Arr;
 				->get()->unique('sub_department_name');
 						
 			return response()->json($results);
-			// department_id
+		}
+
+		// Account
+		public function account(Request $request){
+			
+			$results = Account::
+				select('id', 'account_name')
+				->where('status', 'ACTIVE')
+				->where('account_name', 'LIKE', '%'. $request->input('q'). '%')
+				->where('category_id', 'LIKE', '%'. $request->input('category_id'). '%')
+				->orderBy('account_name')
+				->get()->unique('account_name');
+						
+			return response()->json($results);
 		}
 
 		// Edit
@@ -801,6 +806,22 @@ use Illuminate\Support\Arr;
 				->select('id','mode_of_payment_name')
 				->where('id', $data['row']->accounting_mode_of_release)
 				->first();
+			$data['brands'] = Brand
+				::where('status', 'ACTIVE')
+				->orderBy('brand_name')
+				->get();
+			$data['locations'] = Store
+				::where('store_status', 'ACTIVE')
+				->orderBy('store_name')
+				->get();
+			$data['categories'] = Category
+				::where('status', 'Active')
+				->orderBy('category_name')
+				->get();
+			$data['currencies'] = Currency
+				::where('status', 'Active')
+				->orderBy('currency_name')
+				->get();
 
 			//Please use view method instead view method from laravel
 			$this->cbView("pre_payment.pre_payment_edit", $data);

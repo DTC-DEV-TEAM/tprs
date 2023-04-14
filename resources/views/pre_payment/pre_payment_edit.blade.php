@@ -54,6 +54,7 @@
   .select2-container--default .select2-selection--single {
     height: 35px;
     text-align: center;
+    
   }
   /* End of Select2 */
 
@@ -85,26 +86,42 @@
     font-size: 20px;
   }
 
-  .budget{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    align-items: center;
-    overflow-x: auto;
-    margin-top: 10px;
-
+  .budget_block{
+    width: 100%;
   }
 
-  /* .budget:hover{
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
-  } */
+  .budget {
+    display: flex;
+    height: 100%;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    align-items: center; 
+    overflow: auto;
+    margin-top: 10px; 
+    width: 100%;
+  }
+
+  .budget::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .budget::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .budget::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  .budget::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
   .budget_description{
     width: 100%;
     margin: 10px 10px;
     height: 100%;
+    align-items: center;
   }
 
   .budget_description label{
@@ -114,12 +131,16 @@
   }
 
   .budget_description input{
-    width: 100%;
     height: 35px;
     text-align: center;
     border-radius: 5px;
     border: 1px solid #aaa;
     outline-color: #007bff;
+    
+  }
+
+  .input_description{
+    width: 250px;
   }
 
   .add_row{
@@ -146,11 +167,11 @@
     border: none;
   }
 
-  .budget_description_btns{
+  /* .budget_description_btns{
     position: relative;
     top: 13px;
     border-left: 1px solid #aaa;
-  }
+  } */
 
   .add_row:hover, .delete_row:hover{
     opacity: 0.8;
@@ -270,7 +291,6 @@
     padding-top: 5px;
   }
 
-
 </style>
 
 @endpush
@@ -336,7 +356,7 @@
                             <span>{{ $row->reference_number }}</span>
                         </div>
                         <div class="total_amount_content">
-                            <label for="">Total Amount:</label>
+                            <label for="">Used Amount:</label>
                             <input type="number" id="total_amount" value="{{ $row->requested_amount }}" readonly>
                         </div>
                         <div class="additional_notes">
@@ -433,7 +453,7 @@
                             <span>{{ $row->reference_number }}</span>
                         </div>
                         <div class="total_amount_content">
-                            <label for="">Total Amount:</label>
+                            <label for="">Used Amount:</label>
                             <input type="number" id="total_amount" value="{{ $row->requested_amount }}" readonly>
                         </div>
                         <div class="additional_notes">
@@ -461,6 +481,78 @@
     {{-- Budget Information Breakdown --}}
     {{-- Requestor Privilege --}}
     @if ($row->status_id == 3)
+      <div class="budget" style="display: none;">
+        <div class="budget_description">
+          <label for="">Description</label>
+          <input class="input_description" type="text"  name="description[]" required>
+        </div>
+        <div class="budget_description">
+          <label for="">Brand</label>
+          <select class="js-example-basic-single brand" name="brand[]" required>
+            <option value="" selected disabled>Select Brand</option>
+            @foreach ($brands as $brand)
+              <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
+            @endforeach
+          </select>       
+        </div>
+        <div class="budget_description">
+          <label for="">Location</label>
+          <select class="js-example-basic-single location" name="location[]" required>
+            <option value="" selected disabled>Select Category</option>
+            @foreach ($locations as $location)
+              <option value="{{ $location->id }}">{{ $location->store_name }}</option>
+            @endforeach
+          </select>   
+        </div>
+        <div class="budget_description">
+          <label for="">Category</label>
+          <select class="js-example-basic-single category" name="category[]" required>
+            <option value="" selected disabled>Select Category</option>
+            @foreach ($categories as $category)
+              <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+            @endforeach
+          </select> 
+        </div>
+        <div class="budget_description" id="select_account">
+          <label for="">Account</label>
+          <select class="js-example-basic-single account" name="account[]" required>
+            <option value="">Account</option>
+          </select>
+        </div>
+        <div class="budget_description">
+          <label for="">Currency</label >
+          <select class="js-example-basic-single currency" name="currency[]" required>
+            <option value="" selected disabled>Select Currency</option>
+            @foreach ($currencies as $currency)
+              <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="budget_description">
+          <label for="">Qty</label >
+          <input type="number" name="qty[]" min="0" class="budget_qty" required>
+        </div>
+        <div class="budget_description">
+          <label for="">Value</label >
+          <input type="number" name="value[]" min="0" class="budget_value" required>
+        </div>
+        <div class="budget_description">
+          <label for="">Total Value</label >
+          <input type="number" name="amount[]" min="0" class="budget_amount" readonly>
+        </div>
+        <div class="budget_description" id="step3_budget_justification">
+          <label for="">Receipts</label>
+          <div class="upload_img_parent">
+            <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple required>
+          </div>
+        </div>
+        <div class="budget_description" style="text-align: center;">
+          <div class="budget_description_btns">
+            <button type="button" class="add_row">Add New Row</button>
+            <button type="button" class="delete_row" style="display: none;">Delete</button>
+          </div>
+        </div>
+      </div>
       <div class='panel panel-default'>
         <form method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
         <div class='panel-heading'>Request Budget</div>
@@ -551,27 +643,65 @@
                   <div class="budget_block">
                     <div class="budget">
                       <div class="budget_description">
-                        <label for="">Items</label>
-                        <input type="text"  name="project_name[]" required>
+                        <label for="">Description</label>
+                        <input class="input_description" type="text"  name="description[]" required>
                       </div>
                       <div class="budget_description">
-                        <label for="">Budget Category</label>
-                        <input type="text"  name="budget_category[]" required>
-                      </div>
-                      <div class="budget_description">
-                        <label for="">Budget Description</label>
-                        <input type="text"  name="budget_description[]" required>
+                        <label for="">Brand</label>
+                        <select class="js-example-basic-single brand" name="brand[]" required>
+                          <option value="" selected disabled>Select Brand</option>
+                          @foreach ($brands as $brand)
+                            <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
+                          @endforeach
+                        </select>       
                       </div>
                       <div class="budget_description">
                         <label for="">Location</label>
-                        <input type="text"  name="budget_location[]" required>
+                        <select class="js-example-basic-single location" name="location[]" required>
+                          <option value="" selected disabled>Select Category</option>
+                          @foreach ($locations as $location)
+                            <option value="{{ $location->id }}">{{ $location->store_name }}</option>
+                          @endforeach
+                        </select>   
                       </div>
                       <div class="budget_description">
-                        <label for="">Amount</label >
-                        <input type="number" name="amount[]" min="0" class="budget_amount" required>
+                        <label for="">Category</label>
+                        <select class="js-example-basic-single category" name="category[]" required>
+                          <option value="" selected disabled>Select Category</option>
+                          @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                          @endforeach
+                        </select> 
+                      </div>
+                      <div class="budget_description" id="select_account">
+                        <label for="">Account</label>
+                        <select class="js-example-basic-single account" name="account[]" required>
+                          <option value="">Account</option>
+                        </select>
+                      </div>
+                      <div class="budget_description">
+                        <label for="">Currency</label >
+                        <select class="js-example-basic-single currency" name="currency[]" required>
+                          <option value="" selected disabled>Select Currency</option>
+                          @foreach ($currencies as $currency)
+                            <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                      <div class="budget_description">
+                        <label for="">Qty</label >
+                        <input type="number" name="qty[]" min="0" class="budget_qty" required>
+                      </div>
+                      <div class="budget_description">
+                        <label for="">Value</label >
+                        <input type="number" name="value[]" min="0" class="budget_value" required>
+                      </div>
+                      <div class="budget_description">
+                        <label for="">Total Value</label >
+                        <input type="number" name="amount[]" min="0" class="budget_amount" readonly>
                       </div>
                       <div class="budget_description" id="step3_budget_justification">
-                        <label for="">Budget Justification</label>
+                        <label for="">Receipts</label>
                         <div class="upload_img_parent">
                           <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple required>
                         </div>
@@ -596,11 +726,11 @@
                     <input type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
                   </div>
                   <div class="total_amount_content">
-                    <label for="">Total Amount:</label>
+                    <label for="">Used Amount:</label>
                     <input type="number" id="total_amount" value="0" name="total_amount" readonly>
                   </div>
                   <div class="total_amount_content">
-                    <label for="">Balance:</label>
+                    <label for="">To be returned:</label>
                     <input type="number" id="balance_amount" value="0" name="balance_amount" readonly>
                   </div>
                 </div>
@@ -699,7 +829,7 @@
                               $img = explode(", ",$budget->budget_justification);
                             @endphp
                             @foreach ($img as $receipts_img)
-                              <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No image" style="height: auto; max-width: 100px;" id="budget_image" class="modal-trigger"> 
+                              <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No Image Inserted" style="height: 100%; width: 49%; display: inline-block; margin-top: 5px;" id="budget_image" class="modal-trigger">
                             @endforeach
                             <div class="modal">
                               <div class="modal-content">
@@ -729,11 +859,11 @@
                     <input type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
                   </div>
                   <div class="total_amount_content">
-                    <label for="">Total Amount:</label>
+                    <label for="">Used Amount:</label>
                     <input type="number" id="total_amount" value="{{ $row->total_amount }}" name="total_amount" readonly>
                   </div>
                   <div class="total_amount_content">
-                    <label for="">Balance:</label>
+                    <label for="">Returned Balance:</label>
                     <input type="number" id="balance_amount" value="{{ $row->balance_amount }}" name="balance_amount" readonly>
                   </div>
                 </div>
@@ -802,24 +932,44 @@
 
 <script>
   
-  // Total Amount and Balance
-  function get_sum(){
-    var requested_amount = $('#requested_amount').val();
-    var total = 0;
+  // Budget Information Breakdown Computation
+  function get_all_sum(){
+    let total = 0;
+
     $('.budget_amount').each(function(){
-      var value = parseFloat($(this).val() || 0)
-      total += value;
-    })     
+      total += parseFloat($(this).val() || 0);
+    });
 
-    $('#total_amount').val(total);   
-    $('#balance_amount').val(requested_amount-total);   
+    const requested_amount = $('#requested_amount').val();
+    const to_be_returned = requested_amount - total;
 
+    $('#total_amount').val(Math.abs(total));
+    $('#balance_amount').val(to_be_returned);
   }
 
-  $(document).on('keyup', '.budget_amount', function() {
-    var total = 0;
-    get_sum();
+  function get_sum(row){
+
+    const qty = row.find('.budget_qty').val();
+    const value = row.find('.budget_value').val();
+    const total = qty * value;
+    row.find('.budget_amount').val(total);
+    get_all_sum();
+  }
+
+  $(document).on('keyup', '.budget_qty', function() {
+
+    let b_description = $(this).parents('.budget');
+    get_sum(b_description);
   });
+
+  $(document).on('keyup', '.budget_value', function() {
+
+    let b_description = $(this).parents('.budget');
+    get_sum(b_description);
+  });
+
+  get_all_sum();
+  // End of Budget Information Breakdown
 
   // Name first letter uppercase
   $('#req_full_name').on('keyup', function() {
@@ -830,12 +980,32 @@
   });
 
   // Add Row
+  // $(document).on('click', '.add_row', function(){
+  //   $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
+  //   let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
+  //   clone_budget.find('input').val('');
+  //   clone_budget.find('.delete_row');
+  //   clone_budget.find("span").remove();
+  //   clone_budget.find("select").select2();
+  //   clone_budget.find('#budget_justification').remove();
+
+  //   // Get the number of existing budget justifications
+  //   var count = $('.budget').length;
+
+  //   // Add the current count to the name attribute of the file input
+  //   clone_budget.find('#upload_img').attr('name', 'budget_justification' + count + '[]');
+
+  //   $(this).parents('.budget').after(clone_budget);
+  // });
+
+  // Add Row
   $(document).on('click', '.add_row', function(){
     $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
-    let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
+    let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '').css('display', '');
     clone_budget.find('input').val('');
     clone_budget.find('.delete_row');
     clone_budget.find('#budget_justification').remove();
+    add_select2(clone_budget);
 
     // Get the number of existing budget justifications
     var count = $('.budget').length;
@@ -845,6 +1015,8 @@
 
     $(this).parents('.budget').after(clone_budget);
   });
+
+
 
 
   // Budget Receipt Step 4
@@ -879,7 +1051,6 @@
     }
   });
 
-
   // Budget Justification
   let budget_image = $('#budget_justification').find('.budget_image');
   if (budget_image.length == 1) {
@@ -894,7 +1065,6 @@
     ajax: {
         url: '{{ route('department') }}',
         dataType: 'json',
-        // contentType: "application/json; charset=utf-8",
         delay: 250,
         type: 'POST',
         data: function (params) {
@@ -926,7 +1096,6 @@
     ajax: {
         url: '{{ route('sub_department') }}',
         dataType: 'json',
-        // contentType: "application/json; charset=utf-8",
         delay: 250,
         type: 'POST',
         data: function (params) {
@@ -988,12 +1157,79 @@
     $(".modal").fadeIn();
     $(".modal-content img").attr("src", imgSrc);
   });
-  
+
+  function add_select2(row){
+    row.find(".brand").select2({
+      placeholder: "Select Brand",
+      width: '150px',
+    })
+
+    row.find(".location").select2({
+      placeholder: "Select Location",
+      width: '250px',
+    })
+
+    row.find(".category").select2({
+      placeholder: "Select Category",
+      width: '150px',
+    });
+
+    row.find(".currency").select2({
+      placeholder: "Select Currency",
+      width: '100px',
+    })
+    
+    
+    row.find(".account").select2({
+      placeholder: "Select an account",
+      width: '200px',
+      ajax: {
+        url: "{{ route('account') }}",
+        dataType: "json",
+        delay: 250,
+        type: "POST",
+        data: function (params) {
+          console.log($("#category").val());
+          return {
+            q: params.term,
+            category_id: $("#category").val(),
+            _token: '{!! csrf_token() !!}',
+          };
+        },
+        error: function (error){
+          console.log(error);
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function (item) {
+              return {
+                text: item.account_name,
+                id: item.id,
+              };
+            }),
+          };
+        },
+        cache: true,
+      },
+      id: "id",
+    });
+    
+    row.find(".account").prop('disabled', true);
+    row.find(".category").on("change", function () {
+      $(".account").val(null).trigger("change"); // reset account dropdown
+      $(".account").empty();
+      $(".account").prop('disabled', false);
+    });
+  }
+
+  add_select2($('.budget').eq(1));
+
   $(document).click(function(e) {
     if ($(e.target).is('.modal')) {
       $(".modal").fadeOut();
     }
   });
+  // End of Image modal
   
 </script>
 @endsection

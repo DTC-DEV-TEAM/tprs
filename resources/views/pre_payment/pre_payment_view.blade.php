@@ -272,7 +272,7 @@
                               $img = explode(", ",$budget->budget_justification);
                               @endphp
                               @foreach ($img as $receipts_img)
-                                <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No image" style="height: auto; max-width: 100px;" id="budget_image" class="modal-trigger"> 
+                                <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No Image Inserted" style="height: 100%; width: 49%; display: inline-block; margin-top: 5px;" id="budget_image" class="modal-trigger">
                               @endforeach
                               {{-- <img src="{{ asset('pre_payment/img/'.$budget->budget_justification) }}" alt="No Image Inserted" style="height: 100%; width: 100%;" id="budget_image" class="modal-trigger"> --}}
                               <div class="modal">

@@ -207,6 +207,7 @@ Route::group(['middleware' => ['web']], function() {
     Route::post('/admin/department', 'AdminPrePaymentController@department')->name('department');
     Route::post('/admin/mode_of_payment', 'AdminPrePaymentController@mode_of_payment')->name('payment');
     Route::post('/admin/sub_department', 'AdminPrePaymentController@sub_department')->name('sub_department');
+    Route::post('/admin/account', 'AdminPrePaymentController@account')->name('account');
     Route::get('/admin/pre_payment/request', 'AdminPrePaymentController@getEdit');
     Route::get('/admin/pre_payment/view', 'AdminPrePaymentController@getDetail');
 
