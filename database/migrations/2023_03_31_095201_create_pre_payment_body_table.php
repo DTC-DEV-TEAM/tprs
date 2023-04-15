@@ -16,12 +16,16 @@ class CreatePrePaymentBodyTable extends Migration
         Schema::create('pre_payment_body', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('pre_payment_id')->nullable();
-            $table->string('project_name')->nullable();
-            $table->integer('budget_amount')->nullable();
-            $table->string('budget_category')->nullable();
-            $table->string('budget_description')->nullable();
-            $table->string('budget_justification')->nullable();
-            $table->string('budget_location')->nullable();
+            $table->string('description')->nullable();
+            $table->integer('brand')->nullable();
+            $table->integer('location')->nullable();
+            $table->integer('category')->nullable();
+            $table->integer('account')->nullable();
+            $table->integer('currency')->nullable();
+            $table->integer('qty')->nullable();
+            $table->integer('value')->nullable();
+            $table->integer('amount')->nullable();
+            $table->integer('budget_justification')->nullable();
             $table->enum('status', array('ACTIVE', 'INACTIVE'))->default('ACTIVE')->nullable();
             $table->integer('created_by')->length(10)->unsigned()->nullable();
             $table->integer('updated_by')->length(10)->unsigned()->nullable();

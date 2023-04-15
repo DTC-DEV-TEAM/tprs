@@ -412,7 +412,6 @@ use Illuminate\Support\Arr;
 			// Upload Receipts Step 4
 			if($status == 3){
 
-				dd($return_inputs);
 				$submit_btn = $return_inputs['submit'];
 				$total_amount = $return_inputs['total_amount'];
 				$balance_amount = $return_inputs['balance_amount'];
@@ -428,12 +427,16 @@ use Illuminate\Support\Arr;
 				}
 
 				$id = $return_inputs['returns_id'];
-				$project_name = $return_inputs['project_name'];
-				$budget_category = $return_inputs['budget_category'];
-				$budget_description = $return_inputs['budget_description'];
-				$budget_location = $return_inputs['budget_location'];
-				$budget_amount = $return_inputs['amount'];
-				$budget_justification = [$return_inputs['budget_justification1']];
+				$description = $return_inputs['description'];
+				$brand = $return_inputs['brand'];
+				$location = $return_inputs['location'];
+				$category = $return_inputs['category'];
+				$account = $return_inputs['account'];
+				$currency = $return_inputs['currency'];
+				$qty = $return_inputs['qty'];
+				$receipt_value = $return_inputs['value'];
+				$amount = $return_inputs['amount'];
+				$budget_justification = [$return_inputs['budget_justification']];
 				$requested_project = [];
 				$insert_pre_payment_body = [];
 
@@ -460,12 +463,16 @@ use Illuminate\Support\Arr;
 					
 					$insert_pre_payment_body[] = [
 						'pre_payment_id' => $id,
-						'project_name' => $project_name[$i],
-						'budget_category' => $budget_category[$i],
-						'budget_description' => $budget_description[$i],
+						'description' => $description[$i],
+						'brand' => $brand[$i],
+						'location' => $location[$i],
+						'category' => $category[$i],
+						'account' => $account[$i],
+						'currency' => $currency[$i],
+						'qty' => $qty[$i],
+						'value' => $receipt_value[$i],
+						'amount' => $amount[$i],
 						'budget_justification' => implode(", ",$requested_project[$i]),
-						'budget_location' => $budget_location[$i],
-						'budget_amount' => $budget_amount[$i],
 						'created_by' => CRUDBooster::myId(),
 						'created_at' => date('Y-m-d H:i:s')
 					];
@@ -499,36 +506,44 @@ use Illuminate\Support\Arr;
 					$postdata['status_id'] = 6;
 				}
 
-				$project_name = $return_inputs['project_name'];
-				$budget_category = $return_inputs['budget_category'];
-				$budget_description = $return_inputs['budget_description'];
-				$budget_location = $return_inputs['budget_location'];
-				$budget_amount = $return_inputs['amount'];
-				$budget_justification = $return_inputs['budget_justification'];
-				$additional_notes = $return_inputs['additional_notes'];
+				$id = $return_inputs['returns_id'];
+				$description = $return_inputs['description'];
+				$brand = $return_inputs['brand'];
+				$location = $return_inputs['location'];
+				$category = $return_inputs['category'];
+				$account = $return_inputs['account'];
+				$currency = $return_inputs['currency'];
+				$qty = $return_inputs['qty'];
+				$receipt_value = $return_inputs['value'];
+				$amount = $return_inputs['amount'];
+				$budget_justification = [$return_inputs['budget_justification']];
 				$project_id = $return_inputs['project_id'];
-				
+
 				$requested_project = [];
 				$requested_id = [];
 				
-				for($i=0; $i<count($project_name); $i++){
+				for($i=0; $i<count($description); $i++){
 					$requested_project[] = [
 						'pre_payment_id' => $id,
-						'project_name' => $project_name[$i],
-						'budget_category' => $budget_category[$i],
-						'budget_description' => $budget_description[$i],
-						'budget_location' => $budget_location[$i],
-						'budget_amount' => $budget_amount[$i],
+						'description' => $description[$i],
+						'brand' => $brand[$i],
+						'location' => $location[$i],
+						'category' => $category[$i],
+						'account' => $account[$i],
+						'currency' => $currency[$i],
+						'qty' => $qty[$i],
+						'value' => $receipt_value[$i],
+						'amount' => $amount[$i],
 						'created_by' => CRUDBooster::myId(),
 						'created_at' => date('Y-m-d H:i:s')
 					];
 					
-					array_push($requested_id, $project_id[$i]);
+					array_push($requested_id, $id[$i]);
 				}
-				
+				dd($requested_id);
 				// Insert budget information
 				for($i=0; $i<count($requested_id); $i++){
-					DB::table('pre_payment_body')->updateOrInsert(['id'=>$requested_id[$i]],
+					DB::table('pre_payment_body')->updateOrInsert(['pre_payment_id'=>$requested_id[$i]],
 						$requested_project[$i]
 					);
 				}
@@ -562,7 +577,7 @@ use Illuminate\Support\Arr;
 			}else if($status_id == '2'){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'The form has been updated.',"success");
 			}else if($status_id == '3'){
-				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Request budget justification',"success");
+				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Treasury/Cashier budget justification',"success");
 			}else if($status_id == '4'){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction Closed',"success");
 			}
@@ -779,14 +794,26 @@ use Illuminate\Support\Arr;
 					'pre_payment.reference_number',
 					'pre_payment.requested_amount',
 					'pre_payment.balance_amount',
-					'pre_payment.budget_information_notes',
-				)
+					'pre_payment.budget_information_notes',)
 				->where('pre_payment.id',$id)
 				->first();
 			// PrePaymentBody
 			$data['pre_payment_body'] = DB::table('pre_payment_body')
+				->leftJoin('brand as brands' , 'pre_payment_body.brand', 'brands.id')
+				->leftJoin('stores as store', 'pre_payment_body.location', 'store.id')
+				->leftJoin('category as categories', 'pre_payment_body.category', 'categories.id')
+				->leftJoin('account as accounts', 'pre_payment_body.account', 'accounts.id')
+				->leftJoin('currency as currencies', 'pre_payment_body.currency', 'currencies.id')
+				->select('pre_payment_body.*', 
+					'brands.brand_name',
+					'store.store_name',
+					'categories.category_name',
+					'accounts.account_name',
+					'accounts.id as account_id',
+					'currencies.currency_name')
 				->where('pre_payment_id',$id)
 				->get();
+			// dd($data['pre_payment_body']);
 			// PrePaymentBodyDate
 			$data['pre_payment_body_date'] = DB::table('pre_payment_body')
 				->where('pre_payment_id',$id)
@@ -870,7 +897,7 @@ use Illuminate\Support\Arr;
 				)
 				->where('pre_payment.id',$id)
 				->first();
-
+			
 			// PrePaymentBody
 			$data['pre_payment_body'] = DB::table('pre_payment_body')
 				->where('pre_payment_id',$id)
