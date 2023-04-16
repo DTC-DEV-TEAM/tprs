@@ -52,6 +52,7 @@
   .select2-container--default .select2-selection--single {
     height: 35px;
     text-align: center;
+    
   }
   /* End of Select2 */
 
@@ -83,25 +84,42 @@
     font-size: 20px;
   }
 
-  .budget{
-    display: flex;
-    justify-content: center;
-    height: 100%;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    align-items: center;
-    overflow-x: auto;
-    margin-top: 10px;
-
+  .budget_block{
+    width: 100%;
   }
 
-  /* .budget:hover{
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
-  } */
+  .budget {
+    display: flex;
+    height: 100%;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    align-items: center; 
+    overflow: auto;
+    margin-top: 10px; 
+    width: 100%;
+  }
+
+  .budget::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .budget::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .budget::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  .budget::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
   .budget_description{
     width: 100%;
     margin: 10px 10px;
     height: 100%;
+    align-items: center;
   }
 
   .budget_description label{
@@ -111,15 +129,27 @@
   }
 
   .budget_description input{
-    width: 100%;
     height: 35px;
     text-align: center;
     border-radius: 5px;
     border: 1px solid #aaa;
     outline-color: #007bff;
+    
+  }
+
+  .input_description{
+    width: 250px;
   }
 
   .add_row{
+    padding: 8px 15px;
+    background-color: rgb(32, 120, 208);
+    color: white;
+    border-radius: 5px;
+    border: none;
+  }
+
+  .add_row_receipt{
     padding: 8px 15px;
     background-color: rgb(32, 120, 208);
     color: white;
@@ -135,11 +165,11 @@
     border: none;
   }
 
-  .budget_description_btns{
+  /* .budget_description_btns{
     position: relative;
     top: 13px;
     border-left: 1px solid #aaa;
-  }
+  } */
 
   .add_row:hover, .delete_row:hover{
     opacity: 0.8;
@@ -186,13 +216,80 @@
     border-radius: 5px;
   }
 
-  #upload_img{
-    padding-top: 5px; 
-    border: none;
+
+  #budget_image:hover{
+    /* opacity: 0.9; */
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
   }
 
-  #budget_justification{
+  /* image display center */
+  .modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  background-color: rgba(0,0,0,0.5); 
+  }
+
+  .modal-content {
+    display: block;
+    max-width: 600px;
+    max-height: 600px;
+    padding: 10px;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .modal-content img {
+    display: block;
+    width: 100%;
+    height: 300px;
+  }
+
+  .modal-trigger {
+    cursor: pointer;
+  }
+
+  .swal2-popup {
+      font-size: 1.5rem !important;
+  }
+
+  .swal2-popup .swal2-title {
+    font-size: 2.5rem !important;
+  }
+
+  .swal2-popup .swal2-content {
+    font-size: 1.8rem !important;
+  }
+
+  .swal2-popup {
+    margin: auto !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 10 !important;
+    transform: translateY(-50%) !important;
+  }
+    
+  #budget_justification {
     text-align: center;
+  }
+
+  #upload_img{
+    padding-top: 5px;
+    border: none;
+
+  }
+
+  .upload_img_parent {
+  text-align-last: center;
   }
   
 </style>
@@ -216,23 +313,22 @@
                     <div class="flex">
                     <div class="request_department">
                         <label for="">Department <span class="required">*</span></label>
-                        <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
+                        <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled>
                             <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
-                        </select>   
-                        </div>       
+                        </select>          </div>       
                         <div class="request_department">
                             <label for="">Sub Department <span class="required">*</span></label>
-                            <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
+                            <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled>
                                 <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
                             </select>                           
                         </div> 
                         <div class="request_department r_full_name">
                             <label for="">Requestor Full Name <span class="required">*</span></label>
-                            <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
+                            <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}">
                         </div>
                         <div class="request_department">
                             <label for="">Mode of Payment <span class="required">*</span></label>
-                            <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" disabled required>
+                            <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" disabled>
                                 <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
                             </select>            
                         </div> 
@@ -246,38 +342,88 @@
                         <div class="budget_block">
                           <div class="budget">
                             <div class="budget_description">
-                              <label for="">Project Name</label>
-                              <input type="text" value="{{ $budget->project_name }}" name="project_name[]" readonly>
+                              <label for="">Description</label>
+                              <input class="input_description" type="text"  value="{{ $budget->description }}" name="description[]" disabled>
                             </div>
                             <div class="budget_description">
-                              <label for="">Budget Category</label>
-                              <input type="text" value="{{ $budget->budget_category }}" name="budget_category[]" readonly>
-                            </div>
-                            <div class="budget_description">
-                              <label for="">Budget Description</label>
-                              <input type="text" value="{{ $budget->budget_description }}" name="budget_description[]" readonly>
+                              <label for="">Brand</label>
+                              <select class="js-example-basic-single brand" name="brand[]" disabled>
+                                <option value="" selected disabled>Select Brand</option>
+                                @foreach ($brands as $brand)
+                                  @if ($budget->brand_name == $brand->brand_name)
+                                    <option value="{{ $brand->id }}" selected>{{ $brand->brand_name }}</option>
+                                  @endif
+                                  <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
+                                @endforeach
+                              </select>       
                             </div>
                             <div class="budget_description">
                               <label for="">Location</label>
-                              <input type="text" value="{{ $budget->budget_location }}" name="budget_location[]" readonly>
+                              <select class="js-example-basic-single location" name="location[]" disabled>
+                                <option value="" selected disabled>Select Location</option>
+                                @foreach ($locations as $location)
+                                  @if ($budget->store_name == $location->store_name)
+                                    <option value="{{ $location->id }}" selected>{{ $location->store_name }}</option>
+                                  @endif
+                                  <option value="{{ $location->id }}">{{ $location->store_name }}</option>
+                                @endforeach
+                              </select>   
                             </div>
                             <div class="budget_description">
-                              <label for="">Amount</label>
-                              <input type="number" name="amount[]" value="{{ $budget->budget_amount }}" class="budget_amount" readonly>
+                              <label for="">Category</label>
+                              <select class="js-example-basic-single category" name="category[]" disabled>
+                                <option value="" selected disabled>Select Category</option>
+                                @foreach ($categories as $category)
+                                  @if ($budget->category_name == $category->category_name)
+                                    <option value="{{ $category->id }}" selected>{{ $category->category_name }}</option>
+                                  @endif
+                                  <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                @endforeach
+                              </select> 
                             </div>
-                            <div class="budget_description" id="budget_justification">
-                              <label for="">Budget Justification</label>
-                              {{-- <input type="file" required name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img"> --}}
-                              @php
-                              $img = explode(", ",$budget->budget_justification);
-                              @endphp
-                              @foreach ($img as $receipts_img)
-                                <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No Image Inserted" style="height: 100%; width: 49%; display: inline-block; margin-top: 5px;" id="budget_image" class="modal-trigger">
-                              @endforeach
-                              {{-- <img src="{{ asset('pre_payment/img/'.$budget->budget_justification) }}" alt="No Image Inserted" style="height: 100%; width: 100%;" id="budget_image" class="modal-trigger"> --}}
-                              <div class="modal">
-                                <div class="modal-content">
-                                  <img src="" alt="">
+                            <div class="budget_description" id="select_account">
+                              <label for="">Account</label>
+                              <select class="js-example-basic-single account" name="account[]" disabled>
+                                    <option value="{{ $budget->account_id }}" selected="selected">{{ $budget->account_name }}</option>
+                              </select>
+                            </div>
+                            <div class="budget_description">
+                              <label for="">Currency</label >
+                              <select class="js-example-basic-single currency" name="currency[]" disabled>
+                                <option value="" selected disabled>Select Currency</option>
+                                @foreach ($currencies as $currency)
+                                  @if ($budget->currency_name == $currency->currency_name)
+                                  <option value="{{ $currency->id }}" selected>{{ $currency->currency_name }}</option>
+                                  @endif
+                                  <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                                @endforeach
+                              </select>
+                            </div>
+                            <div class="budget_description">
+                              <label for="">Qty</label >
+                              <input type="number" name="qty[]" min="0" class="budget_qty" value="{{ $budget->qty }}" disabled>
+                            </div>
+                            <div class="budget_description">
+                              <label for="">Value</label >
+                              <input type="number" name="value[]" min="0" class="budget_value" value="{{ $budget->value }}" disabled>
+                            </div>
+                            <div class="budget_description">
+                              <label for="">Total Value</label >
+                              <input type="number" name="amount[]" min="0" class="budget_amount" value="{{ $budget->amount }}" disabled>
+                            </div>
+                            <div class="budget_description" id="budget_justification" style="width: 200px;">
+                              <div style="width: 200px;">
+                                <label for="">Budget Justification</label>
+                                @php
+                                  $img = explode(", ",$budget->budget_justification);
+                                @endphp
+                                @foreach ($img as $receipts_img)
+                                  <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No Image Inserted" style="height: 75px; width: 49%; display: inline-block; margin-top: 2px;" id="budget_image" class="modal-trigger">
+                                @endforeach
+                                <div class="modal">
+                                  <div class="modal-content">
+                                    <img src="" alt="">
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -555,6 +701,73 @@
     },
     id: 'id'
   });
+
+    function add_select2(row){
+    row.find(".brand").select2({
+      placeholder: "Select Brand",
+      width: '150px',
+    })
+
+    row.find(".location").select2({
+      placeholder: "Select Location",
+      width: '250px',
+    })
+
+    row.find(".category").select2({
+      placeholder: "Select Category",
+      width: '150px',
+    });
+
+    row.find(".currency").select2({
+      placeholder: "Currency",
+      width: '120px',
+    })
+    
+    row.find(".account").select2({
+      placeholder: "Select an account",
+      width: '200px',
+      ajax: {
+        url: "{{ route('account') }}",
+        dataType: "json",
+        delay: 250,
+        type: "POST",
+        data: function (params) {
+          return {
+            q: params.term,
+            category_id: row.find(".category").val(),
+            _token: '{!! csrf_token() !!}',
+          };
+        },
+        error: function (error){
+          console.log(error);
+        },
+        processResults: function (data) {
+          return {
+            results: $.map(data, function (item) {
+              
+              return {
+                text: item.account_name,
+                id: item.id,
+              };
+            }),
+          };
+        },
+        cache: true,
+      },
+      id: "id",
+    });
+    
+    // Reset account dropdown
+    row.find(".category").on("change", function () {
+      $(".account").val(null).trigger("change"); 
+      $(".account").empty();
+    });
+  }
+
+  let budget_length = $('.budget').length;
+  for(i=0; i<budget_length; i++){
+    add_select2($('.budget').eq(i));
+  }
 
 </script>
 @endsection

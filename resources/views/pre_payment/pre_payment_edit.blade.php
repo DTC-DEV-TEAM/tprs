@@ -144,11 +144,12 @@
   }
 
   .add_row{
-    padding: 8px 15px;
+    padding: 8px 12px;
     background-color: rgb(32, 120, 208);
     color: white;
     border-radius: 5px;
     border: none;
+    width: 100px;
   }
 
   .add_row_receipt{
@@ -167,11 +168,9 @@
     border: none;
   }
 
-  /* .budget_description_btns{
-    position: relative;
-    top: 13px;
-    border-left: 1px solid #aaa;
-  } */
+  .budget_description_btns{
+
+  }
 
   .add_row:hover, .delete_row:hover{
     opacity: 0.8;
@@ -292,7 +291,7 @@
 
   .upload_img_parent {
   text-align-last: center;
-}
+  }
 
 
 </style>
@@ -552,7 +551,7 @@
         </div>
         <div class="budget_description" style="text-align: center;">
           <div class="budget_description_btns">
-            <button type="button" class="add_row">Add New Row</button>
+            <button type="button" class="add_row">Add Row</button>
             <button type="button" class="delete_row" style="display: none;">Delete</button>
           </div>
         </div>
@@ -712,7 +711,7 @@
                       </div>
                       <div class="budget_description" style="text-align: center;">
                         <div class="budget_description_btns">
-                          <button type="button" class="add_row">Add New Row</button>
+                          <button type="button" class="add_row">Add Row</button>
                           <button type="button" class="delete_row" style="display: none;">Delete</button>
                         </div>
                       </div>
@@ -826,14 +825,15 @@
         <div class="budget_description" id="step3_budget_justification">
           <label for="">Receipts</label>
           <div class="upload_img_parent">
-            <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple required>
+            <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple>
           </div>
         </div>
-        <div class="budget_description" style="text-align: center;">
+        <div class="budget_description">
           <div class="budget_description_btns">
-            <button type="button" class="add_row_receipt">Add New Row</button>
+            <button type="button" class="add_row_receipt">Add Row</button>
             <button type="button" class="delete_row" style="display: none;">Delete</button>
-            <input type="id" name="returns_id[]" value="{{ $row->id }}" style="visibility: hidden;">
+            <input type="id" name="returns_id[]" value="" style="display: none;">
+            <input type="id" name="project_id[]" value="{{ $row->id }}" style="display: none;">
           </div>
         </div>
       </div>
@@ -966,9 +966,10 @@
                         </div>
                         <div class="budget_description" style="text-align: center;">
                           <div class="budget_description_btns">
-                            <button type="button" class="add_row_receipt">Add New Row</button>
+                            <button type="button" class="add_row_receipt" style="width: 100px;">Add Row</button>
                             <button type="button" class="delete_row" style="display: none;">Delete</button>
-                            <input type="id" name="returns_id[]" value="{{ $row->id }}" style="visibility: hidden;">
+                            <input type="id" name="returns_id[]" value="{{ $budget->id }}" style="display: none;">
+                            <input type="id" name="project_id[]" value="{{ $row->id }}" style="display: none;">
                           </div>
                         </div>
                       </div>
@@ -1126,13 +1127,12 @@
     $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
     let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '').css('display','');
     console.log(clone_budget.find('input[name="returns_id[]"]').val());
-    // console.log(clone_budget.find('#step3_budget_justification').remove());
     clone_budget.find('.delete_row').hide(); // hide delete button for cloned row
     clone_budget.find('.delete_row').show(); // show delete button for cloned row
-    clone_budget.find('input[name="budget_justification[]"]').prop('required', false);
+    clone_budget.find('input[name="budget_justification[]"]').parents().remove();
     add_select2(clone_budget);
-    // $(this).parents('.budget').after(clone_budget);
-    $(this).parents('.budget').after(clone_budget);
+
+    $('.budget').last().after(clone_budget);
   });
 
   // // Budget Receipt Step 4

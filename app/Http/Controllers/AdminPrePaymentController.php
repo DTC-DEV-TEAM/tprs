@@ -517,14 +517,14 @@ use Illuminate\Support\Arr;
 				$receipt_value = $return_inputs['value'];
 				$amount = $return_inputs['amount'];
 				$budget_justification = [$return_inputs['budget_justification']];
-				$project_id = $return_inputs['project_id'];
+				$pre_payment_id = $return_inputs['project_id'];
 
 				$requested_project = [];
 				$requested_id = [];
-				
+
 				for($i=0; $i<count($description); $i++){
 					$requested_project[] = [
-						'pre_payment_id' => $id,
+						'pre_payment_id' => $pre_payment_id[$i],
 						'description' => $description[$i],
 						'brand' => $brand[$i],
 						'location' => $location[$i],
@@ -540,10 +540,10 @@ use Illuminate\Support\Arr;
 					
 					array_push($requested_id, $id[$i]);
 				}
-				dd($requested_id);
+
 				// Insert budget information
 				for($i=0; $i<count($requested_id); $i++){
-					DB::table('pre_payment_body')->updateOrInsert(['pre_payment_id'=>$requested_id[$i]],
+					DB::table('pre_payment_body')->updateOrInsert(['id'=>$requested_id[$i]],
 						$requested_project[$i]
 					);
 				}
@@ -813,7 +813,6 @@ use Illuminate\Support\Arr;
 					'currencies.currency_name')
 				->where('pre_payment_id',$id)
 				->get();
-			// dd($data['pre_payment_body']);
 			// PrePaymentBodyDate
 			$data['pre_payment_body_date'] = DB::table('pre_payment_body')
 				->where('pre_payment_id',$id)
@@ -900,6 +899,18 @@ use Illuminate\Support\Arr;
 			
 			// PrePaymentBody
 			$data['pre_payment_body'] = DB::table('pre_payment_body')
+				->leftJoin('brand as brands' , 'pre_payment_body.brand', 'brands.id')
+				->leftJoin('stores as store', 'pre_payment_body.location', 'store.id')
+				->leftJoin('category as categories', 'pre_payment_body.category', 'categories.id')
+				->leftJoin('account as accounts', 'pre_payment_body.account', 'accounts.id')
+				->leftJoin('currency as currencies', 'pre_payment_body.currency', 'currencies.id')
+				->select('pre_payment_body.*', 
+					'brands.brand_name',
+					'store.store_name',
+					'categories.category_name',
+					'accounts.account_name',
+					'accounts.id as account_id',
+					'currencies.currency_name')
 				->where('pre_payment_id',$id)
 				->get();
 			// PrePaymentBodyDate
@@ -921,6 +932,22 @@ use Illuminate\Support\Arr;
 				->select('id','mode_of_payment_name')
 				->where('id', $data['row']->accounting_mode_of_release)
 				->first();
+			$data['brands'] = Brand
+				::where('status', 'ACTIVE')
+				->orderBy('brand_name')
+				->get();
+			$data['locations'] = Store
+				::where('store_status', 'ACTIVE')
+				->orderBy('store_name')
+				->get();
+			$data['categories'] = Category
+				::where('status', 'Active')
+				->orderBy('category_name')
+				->get();
+			$data['currencies'] = Currency
+				::where('status', 'Active')
+				->orderBy('currency_name')
+				->get();
 			
 			//Please use view method instead view method from laravel
 			$this->cbView("pre_payment.pre_payment_view", $data);
