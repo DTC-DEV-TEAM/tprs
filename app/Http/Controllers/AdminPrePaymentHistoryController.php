@@ -1,6 +1,10 @@
 <?php namespace App\Http\Controllers;
 
-	use Session;
+use App\Account;
+use App\Brand;
+use App\Category;
+use App\Currency;
+use Session;
 	use Request;
 	use DB;
 	use CRUDBooster;
@@ -8,6 +12,7 @@
 	use App\ModeOfPayment;
 	use App\PrePayment;
 	use App\PrePaymentProcess;
+use App\Store;
 
 	class AdminPrePaymentHistoryController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -423,9 +428,21 @@
 				)
 				->where('pre_payment.id',$id)
 				->first();
-			// dd($data['row']);
+			
 			// PrePaymentBody
 			$data['pre_payment_body'] = DB::table('pre_payment_body')
+				->leftJoin('brand as brands' , 'pre_payment_body.brand', 'brands.id')
+				->leftJoin('stores as store', 'pre_payment_body.location', 'store.id')
+				->leftJoin('category as categories', 'pre_payment_body.category', 'categories.id')
+				->leftJoin('account as accounts', 'pre_payment_body.account', 'accounts.id')
+				->leftJoin('currency as currencies', 'pre_payment_body.currency', 'currencies.id')
+				->select('pre_payment_body.*', 
+					'brands.brand_name',
+					'store.store_name',
+					'categories.category_name',
+					'accounts.account_name',
+					'accounts.id as account_id',
+					'currencies.currency_name')
 				->where('pre_payment_id',$id)
 				->get();
 			// PrePaymentBodyDate
@@ -447,6 +464,22 @@
 				->select('id','mode_of_payment_name')
 				->where('id', $data['row']->accounting_mode_of_release)
 				->first();
+			$data['brands'] = Brand
+				::where('status', 'ACTIVE')
+				->orderBy('brand_name')
+				->get();
+			$data['locations'] = Store
+				::where('store_status', 'ACTIVE')
+				->orderBy('store_name')
+				->get();
+			$data['categories'] = Category
+				::where('status', 'Active')
+				->orderBy('category_name')
+				->get();
+			$data['currencies'] = Currency
+				::where('status', 'Active')
+				->orderBy('currency_name')
+				->get();
 			
 			//Please use view method instead view method from laravel
 			$this->cbView("pre_payment.pre_payment_view", $data);
