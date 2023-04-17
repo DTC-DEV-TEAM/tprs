@@ -144,16 +144,18 @@
   }
 
   .add_row{
-    padding: 8px 12px;
+    /* padding: 8px 45px; */
+    width: 100px;
+    height: 35px;
     background-color: rgb(32, 120, 208);
     color: white;
     border-radius: 5px;
     border: none;
-    width: 100px;
   }
 
   .add_row_receipt{
-    padding: 8px 15px;
+    width: 100px;
+    height: 35px;
     background-color: rgb(32, 120, 208);
     color: white;
     border-radius: 5px;
@@ -161,7 +163,8 @@
   }
 
   .delete_row{
-    padding: 8px 15px;
+    width: 100px;
+    height: 35px;
     background-color: rgb(226, 71, 71);
     color: white;
     border-radius: 5px;
@@ -743,9 +746,9 @@
                 </div>
                 <br>
                 <div>
-                  <span style="font-size: 15px;"><span style="color: red; font-weight: bold;">Notes: </span>"If you have a balance, you can now return it along with your reference number after submitting the form."</span>
+                  <span style="font-size: 15px;"><span style="color: red; font-weight: bold;">Notes: </span>"After submitting the form", you can now return the receipts along with your reference number."</span>
                   <br>
-                  <span style="font-size: 15px;"><span style="color: rgb(255, 255, 255); font-weight: bold; visibility: hidden;">Notes: </span>"For uploading of multiple receipts press <span style="color: green;">ctrl left click to the image</span>."</span>
+                  <span style="font-size: 15px;"><span style="color: rgb(255, 255, 255); font-weight: bold; visibility: hidden;">Notes: </span>"For uploading of multiple receipts press <span style="color: green;">ctrl left click to the image</span>. <span style="color: green;">Accepts Image only</span>"</span>
                 </div>
               </div>
             </div>        
@@ -884,7 +887,7 @@
                         </div>
                         <div class="budget_description">
                           <label for="">Brand</label>
-                          <select class="js-example-basic-single brand" name="brand[]" required>
+                          <select class="js-example-basic-single brand" name="brand[]">
                             <option value="" selected disabled>Select Brand</option>
                             @foreach ($brands as $brand)
                               @if ($budget->brand_name == $brand->brand_name)
@@ -896,7 +899,7 @@
                         </div>
                         <div class="budget_description">
                           <label for="">Location</label>
-                          <select class="js-example-basic-single location" name="location[]" required>
+                          <select class="js-example-basic-single location" name="location[]">
                             <option value="" selected disabled>Select Location</option>
                             @foreach ($locations as $location)
                               @if ($budget->store_name == $location->store_name)
@@ -908,7 +911,7 @@
                         </div>
                         <div class="budget_description">
                           <label for="">Category</label>
-                          <select class="js-example-basic-single category" name="category[]" required>
+                          <select class="js-example-basic-single category" name="category[]">
                             <option value="" selected disabled>Select Category</option>
                             @foreach ($categories as $category)
                               @if ($budget->category_name == $category->category_name)
@@ -920,13 +923,13 @@
                         </div>
                         <div class="budget_description" id="select_account">
                           <label for="">Account</label>
-                          <select class="js-example-basic-single account" name="account[]" required>
+                          <select class="js-example-basic-single account" name="account[]">
                                 <option value="{{ $budget->account_id }}" selected="selected">{{ $budget->account_name }}</option>
                           </select>
                         </div>
                         <div class="budget_description">
                           <label for="">Currency</label >
-                          <select class="js-example-basic-single currency" name="currency[]" required>
+                          <select class="js-example-basic-single currency" name="currency[]">
                             <option value="" selected disabled>Select Currency</option>
                             @foreach ($currencies as $currency)
                               @if ($budget->currency_name == $currency->currency_name)
@@ -938,11 +941,11 @@
                         </div>
                         <div class="budget_description">
                           <label for="">Qty</label >
-                          <input type="number" name="qty[]" min="0" class="budget_qty" value="{{ $budget->qty }}" required>
+                          <input type="number" name="qty[]" min="0" class="budget_qty" value="{{ $budget->qty }}">
                         </div>
                         <div class="budget_description">
                           <label for="">Value</label >
-                          <input type="number" name="value[]" min="0" class="budget_value" value="{{ $budget->value }}" required>
+                          <input type="number" name="value[]" min="0" class="budget_value" value="{{ $budget->value }}">
                         </div>
                         <div class="budget_description">
                           <label for="">Total Value</label >
@@ -1000,6 +1003,9 @@
                   <textarea name="additional_notes" id="additional_notes" required></textarea>
                 </div>
                 <hr>
+                <div>
+                  <span style="font-size: 15px;" ><span style="color: red; font-weight: bold;">Notes: </span>"To ensure accurate record-keeping, all transactions must be closed out with receipts kept on hand by the cashier and the balance recorded in the website's financial system."</span>
+                </div>
                 <div class="flex">
                   <div class="request_department">
                       <div class="request_information start">
@@ -1134,16 +1140,6 @@
 
     $('.budget').last().after(clone_budget);
   });
-
-  // // Budget Receipt Step 4
-  // $(document).on('click', '.add_row_receipt', function(){
-  //   let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');
-  //   clone_budget.find('input').val('');
-  //   clone_budget.find('.delete_row').hide(); // hide delete button for cloned row
-  //   clone_budget.find('#budget_justification').remove();
-  //   $('.budget').last().after(clone_budget);
-  //   clone_budget.find('.delete_row').show(); // show delete button for cloned row
-  // });
 
   // Delete Row
   $(document).on('click', '.delete_row', function(){
@@ -1330,8 +1326,8 @@
     
     // Reset account dropdown
     row.find(".category").on("change", function () {
-      $(".account").val(null).trigger("change"); 
-      $(".account").empty();
+      row.find(".account").val(null).trigger("change"); 
+      row.find(".account").empty();
     });
   }
 
@@ -1340,8 +1336,6 @@
     add_select2($('.budget').eq(i+1));
   }
   
-  
-
   $(document).click(function(e) {
     if ($(e.target).is('.modal')) {
       $(".modal").fadeOut();
