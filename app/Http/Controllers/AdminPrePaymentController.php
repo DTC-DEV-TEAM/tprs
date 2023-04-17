@@ -521,7 +521,7 @@ use Illuminate\Support\Arr;
 
 				$requested_project = [];
 				$requested_id = [];
-
+				
 				for($i=0; $i<count($description); $i++){
 					$requested_project[] = [
 						'pre_payment_id' => $pre_payment_id[$i],
