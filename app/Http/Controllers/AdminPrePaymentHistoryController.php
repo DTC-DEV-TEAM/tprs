@@ -48,11 +48,11 @@ use App\Store;
 			$this->col[] = ["label"=>"Reference Number","name"=>"reference_number"];
 			$this->col[] = ["label"=>"Status Id","name"=>"status_id"];
 			$this->col[] = ["label"=>"Date Created","name"=>"created_at"];
-			$this->col[] = ["label"=>"Department","name"=>"department_id", "join"=>"department,department_name"];
-			$this->col[] = ["label"=>"Requestor","name"=>"created_by", "join"=>"cms_users,name"];
-			$this->col[] = ["label"=>"Approver","name"=>"approver_id", "join"=>"cms_users,name"];
+			$this->col[] = ["label"=>"Department","name"=>"department_id","join"=>"department,department_name"];
+			$this->col[] = ["label"=>"Requestor","name"=>"created_by","join"=>"cms_users,name"];
+			$this->col[] = ["label"=>"Approver","name"=>"approver_id","join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"Approve Date","name"=>"approver_date"];
-			$this->col[] = ["label"=>"Accounting","name"=>"accounting_id", "join"=>"cms_users,name"];
+			$this->col[] = ["label"=>"Accounting","name"=>"accounting_id","join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"Budget Released Date","name"=>"accounting_date_release"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
@@ -85,6 +85,36 @@ use App\Store;
 			$this->form[] = ['label'=>'Created By','name'=>'created_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Updated By','name'=>'updated_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
+
+			# OLD START FORM
+			//$this->form = [];
+			//$this->form[] = ['label'=>'Reference Number','name'=>'reference_number','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Status Id','name'=>'status_id','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'status,id'];
+			//$this->form[] = ['label'=>'Approver Id','name'=>'approver_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'approver,id'];
+			//$this->form[] = ['label'=>'Approver Note','name'=>'approver_note','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Approver Date','name'=>'approver_date','type'=>'datetime','validation'=>'required|date_format:Y-m-d H:i:s','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Accounting Id','name'=>'accounting_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'accounting,id'];
+			//$this->form[] = ['label'=>'Accounting Note','name'=>'accounting_note','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Accounting Date Release','name'=>'accounting_date_release','type'=>'datetime','validation'=>'required|date_format:Y-m-d H:i:s','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Accounting Mode Of Release','name'=>'accounting_mode_of_release','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Accounting Closed By','name'=>'accounting_closed_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Accounting Closed Date','name'=>'accounting_closed_date','type'=>'datetime','validation'=>'required|date_format:Y-m-d H:i:s','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Accounting Closed Note','name'=>'accounting_closed_note','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Requestor Receipts','name'=>'requestor_receipts','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Budget Category','name'=>'budget_category','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Budget Approval','name'=>'budget_approval','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Department Id','name'=>'department_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'department,department_name'];
+			//$this->form[] = ['label'=>'Sub Department Id','name'=>'sub_department_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'sub_department,sub_department_name'];
+			//$this->form[] = ['label'=>'Full Name','name'=>'full_name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter letters only'];
+			//$this->form[] = ['label'=>'Additional Notes','name'=>'additional_notes','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Budget Information Notes','name'=>'budget_information_notes','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Requested Amount','name'=>'requested_amount','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Total Amount','name'=>'total_amount','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Balance Amount','name'=>'balance_amount','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Status','name'=>'status','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Created By','name'=>'created_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Updated By','name'=>'updated_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			# OLD END FORM
 
 			/* 
 	        | ---------------------------------------------------------------------- 
