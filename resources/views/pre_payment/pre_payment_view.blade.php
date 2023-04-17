@@ -462,7 +462,7 @@
                                 <span style="color: green; font-style: bold;">Budget Justification</span>
                             @endif
                             @if ($row->status_id == 4)
-                                <span style="color: green; font-style: bold;">Receipt Validation</span>
+                                <span style="color: green; font-style: bold;">Receipts Validation</span>
                             @endif
                             @if ($row->status_id == 5)
                                 <span style="color: green; font-style: bold;">Transaction closed</span>
