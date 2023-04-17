@@ -25,7 +25,7 @@ class CreatePrePaymentBodyTable extends Migration
             $table->integer('qty')->nullable();
             $table->integer('value')->nullable();
             $table->integer('amount')->nullable();
-            $table->integer('budget_justification')->nullable();
+            $table->string('budget_justification')->nullable();
             $table->enum('status', array('ACTIVE', 'INACTIVE'))->default('ACTIVE')->nullable();
             $table->integer('created_by')->length(10)->unsigned()->nullable();
             $table->integer('updated_by')->length(10)->unsigned()->nullable();
