@@ -746,7 +746,7 @@
                 </div>
                 <br>
                 <div>
-                  <span style="font-size: 15px;"><span style="color: red; font-weight: bold;">Notes: </span>"After submitting the form", you can now return the receipts along with your reference number."</span>
+                  <span style="font-size: 15px;"><span style="color: red; font-weight: bold;">Notes: </span>"After submitting the form", you can now return the receipts and unused balance along with your reference number."</span>
                   <br>
                   <span style="font-size: 15px;"><span style="color: rgb(255, 255, 255); font-weight: bold; visibility: hidden;">Notes: </span>"For uploading of multiple receipts press <span style="color: green;">ctrl left click to the image</span>. <span style="color: green;">Accepts Image only</span>"</span>
                 </div>
@@ -1004,7 +1004,7 @@
                 </div>
                 <hr>
                 <div>
-                  <span style="font-size: 15px;" ><span style="color: red; font-weight: bold;">Notes: </span>"To ensure accurate record-keeping, all transactions must be closed out with receipts kept on hand by the cashier and the balance recorded in the website's financial system."</span>
+                  <span style="font-size: 15px;" ><span style="color: red; font-weight: bold;">Notes: </span>"Please turnover all physical / digital receipts, and unused balance to the accounting department"</span>
                 </div>
                 <div class="flex">
                   <div class="request_department">
