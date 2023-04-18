@@ -29,6 +29,7 @@
 
   .flex{
     display: flex;
+    
   }
 
   .requestor_name{
@@ -42,6 +43,52 @@
   }
 
   .requestor_name input{
+    width: 100%;
+    height: 35px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .mode_of_payment_dropdown{
+    width: 35%;
+  }
+
+  .mode_of_payment_dropdown label{
+    display: block;
+  }
+
+  #check_payment input{
+    width: 100%;
+    height: 35px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  #credit_card input{
+    width: 100%;
+    height: 35px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #363e4732;
+  }
+
+  #gcash input{
+    width: 100%;
+    height: 35px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+
+  .direct_deposit{
+    width: 50%;
+  }
+
+  .direct_deposit input{
     width: 100%;
     height: 35px;
     border: 1px solid #aaa;
@@ -193,13 +240,49 @@
               <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" required>
               </select>            
             </div>
+            <div class="mode_of_payment_dropdown">
+              <div class="mode_of_payment_content" id="check_payment" style="display: none;">
+                <label for="">Payee Name <span class="required">*</span></label>
+                <input type="text" name="payee_name">   
+              </div>
+              <div class="mode_of_payment_content" id="credit_card" style="display: none;">
+                <label for="">Note  <span class="required">*</span></label>
+                <input type="text" placeholder="PLEASE COORDINATE TO ACCOUNTING MANAGER" disabled>   
+              </div>
+              <div class="mode_of_payment_content" id="gcash" style="display: none;">
+                <label for="">Gcash#  <span class="required">*</span></label>
+                <input type="text" name="gcash_number">   
+              </div>
+              <div id="mode_of_payment_direct_deposit" style="display: none;">
+                <div class="flex mode_of_payment_input">
+                  <div class="mode_of_payment_content direct_deposit" style="margin-right: 5px;">
+                    <label for="">Bank Name  <span class="required">*</span></label>
+                    <input type="text" name="bank_name" oninput="this.value = this.value.toUpperCase()">   
+                  </div>
+                  <div class="mode_of_payment_content direct_deposit" style="margin-left: 5px;">
+                    <label for="">Bank Branch Name  <span class="required">*</span></label>
+                    <input type="text" name="bank_branch_name">   
+                  </div>
+                </div>
+                <div class="flex" style="margin-top: 10px;">
+                  <div class="mode_of_payment_content direct_deposit" style="margin-right: 5px;">
+                    <label for="">Bank Account Name  <span class="required">*</span></label>
+                    <input type="text" name="bank_account_name">   
+                  </div>
+                  <div class="mode_of_payment_content direct_deposit" style="margin-left: 5px;">
+                    <label for="">Bank Account Number  <span class="required">*</span></label>
+                    <input type="text" name="bank_account_number">   
+                  </div>
+                </div>
+              </div>
+            </div>
             <hr>
             <div class="total_amount_content">
               <label for=""><span class="required">*</span> Request Amount:</label>
               <input type="number" id="total_amount" name="requested_amount" value="0" min="0" required>
             </div>
             <div class="additional_notes">
-              <label for="">Budget Information: </label>
+              <label for="">Comment: </label>
               <textarea name="additional_notes" id="additional_notes" required></textarea>
             </div>
           </div>
@@ -281,6 +364,7 @@
                   _token: '{!! csrf_token() !!}'
               };
           },
+          
           processResults: function (data) {
               return {
                   results: $.map(data, function (item) {
@@ -335,71 +419,6 @@
       });
   });
 
-
-  // // Select Department
-  // $('#req_department').select2({
-  //   placeholder: "Select a department",
-  //   dropdownAutoWidth: true,
-  //   width: '100%',
-  //   ajax: {
-  //       url: '{{ route('department') }}',
-  //       dataType: 'json',
-  //       // contentType: "application/json; charset=utf-8",
-  //       delay: 250,
-  //       type: 'POST',
-  //       data: function (params) {
-  //       return {
-  //           q: params.term,
-  //           _token: '{!! csrf_token() !!}'
-  //       };
-  //       },
-  //       processResults: function (data) {
-  //       return {
-  //           results: $.map(data, function (item) {
-  //           return {
-  //               text: item.department_name,
-  //               id: item.id
-  //           }
-  //           })
-  //       };
-  //       },
-  //       cache: true
-  //   },
-  //   id: 'id'
-  // });
-
-  // // Sub Department
-  // $('#sub_department').select2({
-  //   placeholder: "Select sub department",
-  //   dropdownAutoWidth: true,
-  //   width: '100%',
-  //   ajax: {
-  //       url: '{{ route('sub_department') }}',
-  //       dataType: 'json',
-  //       // contentType: "application/json; charset=utf-8",
-  //       delay: 250,
-  //       type: 'POST',
-  //       data: function (params) {
-  //       return {
-  //           q: params.term,
-  //           _token: '{!! csrf_token() !!}'
-  //       };
-  //       },
-  //       processResults: function (data) {
-  //       return {
-  //           results: $.map(data, function (item) {
-  //           return {
-  //               text: item.sub_department_name,
-  //               id: item.id
-  //           }
-  //           })
-  //       };
-  //       },
-  //       cache: true
-  //   },
-  //   id: 'id'
-  // });
-
   // Mode Of Payment
   $('#mode_of_payment').select2({
     placeholder: "Select mode of payment",
@@ -419,7 +438,6 @@
         processResults: function (data) {
         return {
             results: $.map(data, function (item) {
-            console.log(item.id)
             return {
                 text: item.mode_of_payment_name,
                 id: item.id
@@ -430,7 +448,58 @@
         cache: true
     },
     id: 'id'
-  });
+  }).on('change', function(){
+    let mode_of_payment_val = $('#mode_of_payment').val()
+    // Check Payment
+    if (mode_of_payment_val == '3'){
+      $('#check_payment').show();
+      $('#check_payment').find('input').attr('required', true);
+      $('#credit_card').hide();
+      $('#mode_of_payment_direct_deposit').hide();
+      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#gcash').hide();
+      $('#gcash').find('input').attr('required', false);
+
+    // Credit Card
+    }else if(mode_of_payment_val == '4'){
+      $('#credit_card').show();
+      $('#check_payment').hide();
+      $('#check_payment').find('input').attr('required', false);
+      $('#mode_of_payment_direct_deposit').hide();
+      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#gcash').hide();
+      $('#gcash').find('input').attr('required', false);
+
+    // Direct Deposit
+    }else if(mode_of_payment_val == '2'){
+      $('#mode_of_payment_direct_deposit').show();
+      $('#mode_of_payment_direct_deposit').find('input').attr('required', true);
+      $('#check_payment').hide();
+      $('#check_payment').find('input').attr('required', false);
+      $('#credit_card').hide();
+      $('#gcash').hide();
+      $('#gcash').find('input').attr('required', false);
+
+    // Gcash
+    }else if(mode_of_payment_val == '1'){
+      $('#gcash').show();
+      $('#gcash').find('input').attr('required', true);
+      $('#mode_of_payment_direct_deposit').hide();
+      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#check_payment').hide();
+      $('#check_payment').find('input').attr('required', false);
+      $('#credit_card').hide();
+    }else{
+      $('#check_payment').hide();
+      $('#check_payment').find('input').attr('required', false);
+      $('#credit_card').hide();
+      $('#mode_of_payment_direct_deposit').hide();
+      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#gcash').hide();
+      $('#gcash').find('input').attr('required', false);
+
+    };
+  })
 
 </script>
 @endsection

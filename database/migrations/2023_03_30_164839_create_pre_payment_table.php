@@ -38,6 +38,14 @@ class CreatePrePaymentTable extends Migration
             $table->integer('total_amount')->nullable();
             $table->integer('balance_amount')->nullable();
             $table->string('additional_notes')->nullable();
+            $table->string('payee_name')->nullable();
+            $table->string('bank_name')->nullable();
+            $table->string('bank_branch_name')->nullable();
+            $table->string('bank_account_name')->nullable();
+            $table->string('bank_account_number')->nullable();
+            $table->string('gcash_number')->nullable();
+            $table->string('system_reference_number')->nullable();
+            $table->string('check_date')->nullable();
             $table->enum('status', array('ACTIVE', 'INACTIVE'))->default('ACTIVE')->nullable();
             $table->integer('created_by')->length(10)->unsigned()->nullable();
             $table->integer('updated_by')->length(10)->unsigned()->nullable();

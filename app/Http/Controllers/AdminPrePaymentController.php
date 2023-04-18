@@ -113,11 +113,13 @@ use Illuminate\Support\Arr;
 			$validate_receipts = PrePaymentProcess::select('id')->where('id', '4')->value('id');
 			$close = PrePaymentProcess::select('id')->where('id', '5')->value('id');
 			$rejected = PrePaymentProcess::select('id')->where('id', '6')->value('id');
+			$ap_record = PrePaymentProcess::select('id')->where('id', '7')->value('id');
 
 			if(CRUDBooster::myPrivilegeName() == 'Requestor'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $budget_released"];
 			}else if(CRUDBooster::myPrivilegeName() == 'Approver'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $requested"];
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $ap_record"];
 			}else if(CRUDBooster::myPrivilegeName() == 'Treasury' || CRUDBooster::myPrivilegeName() == 'Cashier'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $approved"];
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $validate_receipts"];
@@ -126,6 +128,7 @@ use Illuminate\Support\Arr;
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $approved"];
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $budget_released"];
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $validate_receipts"];
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $ap_record"];
 			}
 
 
@@ -327,6 +330,8 @@ use Illuminate\Support\Arr;
 					$column_value = '<span class="label" style="background-color: #5cb85c; color: white; font-size: 12px;">Closed</span>';
 				}else if($column_value == '6'){
 					$column_value = '<span class="label" style="background-color: #FF6347; color: white; font-size: 12px;">Rejected</span>';
+				}else if($column_value == '7'){
+					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For AP Recording</span>';
 				}
 				
 			}
@@ -377,10 +382,15 @@ use Illuminate\Support\Arr;
 				$submit_btn = $return_inputs['submit'];
 				$approver_note = $return_inputs['additional_notes'];
 				$accounting_mode_of_release = $return_inputs['mode_of_payment'];
-
 				if($submit_btn == 'Approve'){
-					$postdata['status_id'] = 2;
+					$postdata['status_id'] = 7;
 					$postdata['accounting_mode_of_release'] = $accounting_mode_of_release;
+					$postdata['payee_name'] = $return_inputs['payee_name'];
+					$postdata['bank_name'] = $return_inputs['bank_name'];
+					$postdata['bank_branch_name'] = $return_inputs['bank_branch_name'];
+					$postdata['bank_account_name'] = $return_inputs['bank_account_name'];
+					$postdata['bank_account_number'] = $return_inputs['bank_account_number'];
+					$postdata['gcash_number'] = $return_inputs['gcash_number'];
 				}else{
 					$postdata['status_id'] = 6;
 				}
@@ -390,7 +400,36 @@ use Illuminate\Support\Arr;
 				$postdata['approver_date'] = date('Y-m-d H:i:s');
 				
 			}
-			// Releasing Step 3
+
+			// AP recording Step 3
+			if($status == 7){
+
+				$submit_btn = $return_inputs['submit'];
+				$approver_note = $return_inputs['additional_notes'];
+				$accounting_mode_of_release = $return_inputs['mode_of_payment'];
+
+				if($submit_btn == 'Save'){
+					$postdata['status_id'] = 2;
+					$postdata['accounting_mode_of_release'] = $accounting_mode_of_release;
+					$postdata['payee_name'] = $return_inputs['payee_name'];
+					$postdata['bank_name'] = $return_inputs['bank_name'];
+					$postdata['bank_branch_name'] = $return_inputs['bank_branch_name'];
+					$postdata['bank_account_name'] = $return_inputs['bank_account_name'];
+					$postdata['bank_account_number'] = $return_inputs['bank_account_number'];
+					$postdata['gcash_number'] = $return_inputs['gcash_number'];
+					$postdata['system_reference_number'] = $return_inputs['system_reference_number'];
+					$postdata['check_date'] = $return_inputs['check_date'];
+				}else{
+					$postdata['status_id'] = 6;
+				}
+
+				$postdata['approver_note'] = $approver_note;
+				$postdata['approver_id'] = CRUDBooster::myId();
+				$postdata['approver_date'] = date('Y-m-d H:i:s');
+				
+			}
+
+			// Releasing Step 4
 			if($status == 2){
 
 				$submit_btn = $return_inputs['submit'];
@@ -409,7 +448,7 @@ use Illuminate\Support\Arr;
 				$postdata['accounting_date_release'] = date('Y-m-d H:i:s');
 				
 			}
-			// Upload Receipts Step 4
+			// Upload Receipts Step 5
 			if($status == 3){
 
 				$submit_btn = $return_inputs['submit'];
@@ -486,7 +525,7 @@ use Illuminate\Support\Arr;
 				}
 
 			}
-			// Closing Step 5
+			// Closing Step 6
 			if($status == 4){
 
 				$submit_btn = $return_inputs['submit'];
@@ -580,6 +619,8 @@ use Illuminate\Support\Arr;
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Treasury/Cashier budget justification',"success");
 			}else if($status_id == '4'){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction Closed',"success");
+			}else if($status_id == '7'){
+				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction Recorded',"success");
 			}
 	    }
 
@@ -633,6 +674,12 @@ use Illuminate\Support\Arr;
 			$budget_amount = $return_inputs['amount'];
 			$additional_notes = $return_inputs['additional_notes'];
 			$requested_amount = $return_inputs['requested_amount'];
+			$payee_name = $return_inputs['payee_name'];
+			$bank_name = $return_inputs['bank_name'];
+			$bank_branch_name = $return_inputs['bank_branch_name'];
+			$bank_account_name = $return_inputs['bank_account_name'];
+			$bank_account_number = $return_inputs['bank_account_number'];
+			$gcash_number = $return_inputs['gcash_number'];
 
 			$id = DB::table('pre_payment')->insertGetId( ['department_id' => $department, 
 				'status_id' => 1,
@@ -641,6 +688,12 @@ use Illuminate\Support\Arr;
 				'accounting_mode_of_release' => $mode_of_payment,
 				'additional_notes' => $additional_notes,
 				'requested_amount' => $requested_amount,
+				'payee_name' => $payee_name,
+				'bank_name' => $bank_name,
+				'bank_branch_name' => $bank_branch_name,
+				'bank_account_name' => $bank_account_name,
+				'bank_account_number' => $bank_account_number,
+				'gcash_number' => $gcash_number,
 				'created_by' => CRUDBooster::myId(),
 				'created_at' => date('Y-m-d H:i:s')
 				]
@@ -650,7 +703,7 @@ use Illuminate\Support\Arr;
 			// Update reference number
 			DB::table('pre_payment')->where('id', $id)
 			->update(
-				['reference_number' => 'PPF-'.str_pad($id,6,"0", STR_PAD_LEFT)]
+				['reference_number' => 'CAF-'.str_pad($id,6,"0", STR_PAD_LEFT)]
 			);
 
 			CRUDBooster::redirect(CRUDBooster::mainpath(), 'Your request has been added',"success");
@@ -794,7 +847,14 @@ use Illuminate\Support\Arr;
 					'pre_payment.reference_number',
 					'pre_payment.requested_amount',
 					'pre_payment.balance_amount',
-					'pre_payment.budget_information_notes',)
+					'pre_payment.budget_information_notes',
+					'pre_payment.payee_name',
+					'pre_payment.bank_name',
+					'pre_payment.bank_branch_name',
+					'pre_payment.bank_account_name',
+					'pre_payment.bank_account_number',
+					'pre_payment.gcash_number',
+					'check_date',)
 				->where('pre_payment.id',$id)
 				->first();
 			// PrePaymentBody
