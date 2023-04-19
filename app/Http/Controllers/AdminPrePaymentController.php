@@ -456,7 +456,7 @@ use Illuminate\Support\Arr;
 				$balance_amount = $return_inputs['balance_amount'];
 				$budget_information_notes = $return_inputs['additional_notes'];
 
-				if($submit_btn == 'Submit'){
+				if($submit_btn == 'Liquidate'){
 					$postdata['status_id'] = 4;
 					$postdata['total_amount'] = $total_amount;
 					$postdata['balance_amount'] = abs($balance_amount);
@@ -854,7 +854,8 @@ use Illuminate\Support\Arr;
 					'pre_payment.bank_account_name',
 					'pre_payment.bank_account_number',
 					'pre_payment.gcash_number',
-					'check_date',)
+					'pre_payment.check_date',
+					'pre_payment.system_reference_number',)
 				->where('pre_payment.id',$id)
 				->first();
 			// PrePaymentBody
@@ -911,6 +912,7 @@ use Illuminate\Support\Arr;
 
 			//Please use view method instead view method from laravel
 			$this->cbView("pre_payment.pre_payment_edit", $data);
+			// $this->cbView("pre_payment.test", $data);
 
 		}
 

@@ -9,6 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
+
   .request_content{
     /* margin: 0 50px; */
   }
@@ -26,6 +27,12 @@
     margin-bottom: 10px;
     margin-right: 30px;
     width: 100%;
+  }
+
+  .request_information_contents{
+    margin-bottom: 10px;
+    margin-right: 30px;
+    width: 31.4%;  
   }
 
   .flex{
@@ -88,16 +95,46 @@
 
   .budget_block{
     width: 100%;
+    position: relative;
   }
 
   .budget {
+    position: relative;
     display: flex;
     height: 100%;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    align-items: center; 
-    overflow: auto;
-    margin-top: 10px; 
+    margin-top: 20px; 
     width: 100%;
+    justify-content: space-between;
+    transition: all 0.2s ease-in-out
+  }
+
+  .budget:hover{
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+
+  }
+
+
+  .circ_delete{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 25px;
+    color: rgba(60, 64, 67, 1);
+    margin-top: -16px;
+    margin-right: -10px;
+    z-index: 10;
+    border-radius: 50%;
+    background-color: rgb(174, 176, 177);
+    height: 30px;
+    width: 30px;
+    display: grid;
+    place-items: center;
+  }
+
+  .circ_delete:hover{
+    opacity: 0.7;
+    cursor: pointer;
   }
 
   .budget::-webkit-scrollbar {
@@ -118,8 +155,8 @@
   }
 
   .budget_description{
-    width: 100%;
-    margin: 10px 10px;
+    /* width: 100%; */
+    margin: 15px 4px;
     height: 100%;
     align-items: center;
   }
@@ -136,11 +173,11 @@
     border-radius: 5px;
     border: 1px solid #aaa;
     outline-color: #007bff;
-    
   }
 
   .input_description{
-    width: 250px;
+    width: 100%;
+    /* width: 500px; */
   }
 
   .add_row{
@@ -169,10 +206,6 @@
     color: white;
     border-radius: 5px;
     border: none;
-  }
-
-  .budget_description_btns{
-
   }
 
   .add_row:hover, .delete_row:hover{
@@ -236,26 +269,28 @@
   top: 0;
   width: 100%; 
   height: 100%; 
-  background-color: rgba(0,0,0,0.5); 
+  /* background-color: rgba(0,0,0,0.5);  */
   }
 
   .modal-content {
-    display: block;
+    /* display: block; */
+    display: flex;
+    justify-content: center;
     max-width: 600px;
     max-height: 600px;
-    padding: 10px;
     margin: auto;
     position: absolute;
     left: 0;
     right: 0;
-    top: 50%;
+    top: 53%;
     transform: translateY(-50%);
+    background-color: #007bff00
   }
 
   .modal-content img {
     display: block;
-    width: 100%;
-    height: 300px;
+    max-width:  600px;
+    max-height: 600px;
   }
 
   .modal-trigger {
@@ -290,11 +325,17 @@
   #upload_img{
     padding-top: 5px;
     border: none;
+    width: 100%;
+  }
 
+  .budget_qty, .budget_value, .budget_amount{
+    width: 95px;
   }
 
   .upload_img_parent {
     text-align-last: center;
+    margin: 0;
+    padding: 0;
   }
 
   .requestor_name{
@@ -663,15 +704,17 @@
                                 <label for="">Requestor Full Name <span class="required">*</span></label>
                                 <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
                             </div>
-                            <div class="request_department">
+                        </div>
+                        <div class="mode_of_payment_section">
+                          <div class="mode_of_payment_section1">
+                            <div class="mode_of_payment_">
                               <label for="">Mode of Payment <span class="required">*</span></label>
-                              <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" disabled required>
+                              <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" required>
                                   <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
                               </select>            
-                            </div> 
-                        </div>
-                        <div class="flex">
-                            <div class="request_department">
+                            </div>
+                          </div>
+                          <div class="mode_of_payment_section2">
                             <div class="mode_of_payment_dropdown">
                                 <div class="mode_of_payment_content" id="check_payment" style="display: none;">
                                   <label for="">Payee Name <span class="required">*</span></label>
@@ -708,45 +751,47 @@
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div class="request_department">
-                                <div class="request_information start">
-                                    <label for="">Requested Date:</label>
-                                    <span>{{ $row->created_at }}</span>
-                                </div>
-                                <div class="request_information">
-                                    <label for="">Created by:</label>
-                                    <span>{{ $row->cms_users_name }}</span>
-                                </div> 
-                                <div class="request_information">
-                                    <label for="">Budget Information:</label>
-                                    <span>
-                                        {{ $row->additional_notes }}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="request_department">
-                                <div class="request_information start">
-                                    <label for="">Approved Date:</label>
-                                    <span>{{ $row->approver_date }}</span>
-                                </div>
-                                <div class="request_information">
-                                    <label for="">Approved by:</label>
-                                    <span>{{ $row->approver_name }}</span>
-                                </div>
-                                <div class="request_information">
-                                    <label for="">Approver Note:</label>
-                                    <span>
-                                        {{ $row->approver_note }}
-                                    </span>
-                                </div>
-                                <div class="request_information">
-                                    <label for="">Approver Note:</label>
-                                    <span>
-                                        {{ $row->check_date }}
-                                    </span>
-                                </div>
-                            </div>
+                          </div>
+                        </div> 
+                        <div class="flex">
+                          <div class="request_information_contents">
+                              <div class="request_information start">
+                                  <label for="">Requested Date:</label>
+                                  <span>{{ $row->created_at }}</span>
+                              </div>
+                              <div class="request_information">
+                                  <label for="">Created by:</label>
+                                  <span>{{ $row->cms_users_name }}</span>
+                              </div> 
+                              <div class="request_information">
+                                  <label for="">Comment:</label>
+                                  <span>
+                                      {{ $row->additional_notes }}
+                                  </span>
+                              </div>
+                          </div>
+                          <div class="request_information_contents">
+                              <div class="request_information start">
+                                  <label for="">Approved Date:</label>
+                                  <span>{{ $row->approver_date }}</span>
+                              </div>
+                              <div class="request_information">
+                                  <label for="">Approved by:</label>
+                                  <span>{{ $row->approver_name }}</span>
+                              </div>
+                              <div class="request_information">
+                                  <label for="">Approver Note:</label>
+                                  <span>
+                                      {{ $row->approver_note }}
+                                  </span>
+                              </div>
+                              <div class="request_information">
+                                  <label for="">Check Date:</label>
+                                  <span>
+                                      {{ $row->check_date }}
+                                  </span>
+                              </div>
+                          </div>
                         </div>
                         <hr>
                         <div class="total_amount_content">
@@ -782,75 +827,77 @@
     {{-- Budget Information Breakdown --}}
     {{-- Requestor Privilege --}}
     @if ($row->status_id == 3)
-      <div class="budget" style="display: none;">
-        <div class="budget_description">
-          <label for="">Description</label>
-          <input class="input_description" type="text"  name="description[]" required>
-        </div>
-        <div class="budget_description">
-          <label for="">Brand</label>
-          <select class="js-example-basic-single brand" name="brand[]" required>
-            <option value="" selected disabled>Select Brand</option>
-            @foreach ($brands as $brand)
-              <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
-            @endforeach
-          </select>       
-        </div>
-        <div class="budget_description">
-          <label for="">Location</label>
-          <select class="js-example-basic-single location" name="location[]" required>
-            <option value="" selected disabled>Select Location</option>
-            @foreach ($locations as $location)
-              <option value="{{ $location->id }}">{{ $location->store_name }}</option>
-            @endforeach
-          </select>   
-        </div>
-        <div class="budget_description">
-          <label for="">Category</label>
-          <select class="js-example-basic-single category" name="category[]" required>
-            <option value="" selected disabled>Select Category</option>
-            @foreach ($categories as $category)
-              <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-            @endforeach
-          </select> 
-        </div>
-        <div class="budget_description" id="select_account">
-          <label for="">Account</label>
-          <select class="js-example-basic-single account" name="account[]" required>
-            <option value="">Account</option>
-          </select>
-        </div>
-        <div class="budget_description">
-          <label for="">Currency</label >
-          <select class="js-example-basic-single currency" name="currency[]" required>
-            <option value="" selected disabled>Select Currency</option>
-            @foreach ($currencies as $currency)
-              <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
-            @endforeach
-          </select>
-        </div>
-        <div class="budget_description">
-          <label for="">Qty</label >
-          <input type="number" name="qty[]" min="0" class="budget_qty" required>
-        </div>
-        <div class="budget_description">
-          <label for="">Value</label >
-          <input type="number" name="value[]" min="0" class="budget_value" required>
-        </div>
-        <div class="budget_description">
-          <label for="">Total Value</label >
-          <input type="number" name="amount[]" min="0" class="budget_amount" readonly>
-        </div>
-        <div class="budget_description" id="step3_budget_justification">
-          <label for="">Receipts</label>
-          <div class="upload_img_parent">
-            <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple required>
+      {{-- <hr> --}}
+      <div class="budget_content" style="display: none;">
+        <div class="budget_block">
+          <div class="circ_delete" style="display: none;">
+            <i class="fa fa-close"></i>
           </div>
-        </div>
-        <div class="budget_description" style="text-align: center;">
-          <div class="budget_description_btns">
-            <button type="button" class="add_row">Add Row</button>
-            <button type="button" class="delete_row" style="display: none;">Delete</button>
+          <div class="budget">
+            <div class="budget_description">
+              <label for="">Description</label>
+              <input class="input_description" type="text"  name="description[]" required>
+            </div>
+            <div class="budget_description">
+              <label for="">Brand</label>
+              <select class="js-example-basic-single brand" name="brand[]" required>
+                <option value="" selected disabled>Select Brand</option>
+                @foreach ($brands as $brand)
+                  <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
+                @endforeach
+              </select>       
+            </div>
+            <div class="budget_description">
+              <label for="">Location</label>
+              <select class="js-example-basic-single location" name="location[]" required>
+                <option value="" selected disabled>Select Category</option>
+                @foreach ($locations as $location)
+                  <option value="{{ $location->id }}">{{ $location->store_name }}</option>
+                @endforeach
+              </select>   
+            </div>
+            <div class="budget_description">
+              <label for="">Category</label>
+              <select class="js-example-basic-single category" name="category[]" required>
+                <option value="" selected disabled>Select Category</option>
+                @foreach ($categories as $category)
+                  <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                @endforeach
+              </select> 
+            </div>
+            <div class="budget_description" id="select_account">
+              <label for="">Account</label>
+              <select class="js-example-basic-single account" name="account[]" required>
+                <option value="">Account</option>
+              </select>
+            </div>
+            <div class="budget_description">
+              <label for="">Currency</label >
+              <select class="js-example-basic-single currency" name="currency[]" required>
+                <option value="" selected disabled>Select Currency</option>
+                @foreach ($currencies as $currency)
+                  <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="budget_description">
+              <label for="">Qty</label >
+              <input type="number" name="qty[]" min="0" class="budget_qty" required>
+            </div>
+            <div class="budget_description">
+              <label for="">Value</label >
+              <input type="number" name="value[]" min="0" class="budget_value" required>
+            </div>
+            <div class="budget_description">
+              <label for="">Total Value</label >
+              <input type="number" name="amount[]" min="0" class="budget_amount" readonly>
+            </div>
+            <div class="budget_description" id="step3_budget_justification">
+              <label for="">Receipts</label>
+              <div class="upload_img_parent">
+                <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple required>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -888,36 +935,36 @@
               </div>
               <div class="flex">
                   <div class="request_department">
-                      <div class="request_information start">
-                          <label for="">Requested Date:</label>
-                          <span>{{ $row->created_at }}</span>
-                      </div>
-                      <div class="request_information">
-                          <label for="">Created by:</label>
-                          <span>{{ $row->cms_users_name }}</span>
-                      </div>
-                      <div class="request_information">
-                          <label for="">Budget Information:</label>
-                          <span>
-                              {{ $row->additional_notes }}
-                          </span>
-                      </div>
+                    <div class="request_information start">
+                        <label for="">Requested Date:</label>
+                        <span>{{ $row->created_at }}</span>
+                    </div>
+                    <div class="request_information">
+                        <label for="">Created by:</label>
+                        <span>{{ $row->cms_users_name }}</span>
+                    </div>
+                    <div class="request_information">
+                        <label for="">Comment:</label>
+                        <span>
+                            {{ $row->additional_notes }}
+                        </span>
+                    </div>
                   </div>
                   <div class="request_department">
-                      <div class="request_information start">
-                          <label for="">Approved Date:</label>
-                          <span>{{ $row->approver_date }}</span>
-                      </div>
-                      <div class="request_information">
-                          <label for="">Approved by:</label>
-                          <span>{{ $row->approver_name }}</span>
-                      </div>
-                      <div class="request_information">
-                          <label for="">Approver Note:</label>
-                          <span>
-                              {{ $row->approver_note }}
-                          </span>
-                      </div>
+                    <div class="request_information start">
+                        <label for="">Approved Date:</label>
+                        <span>{{ $row->approver_date }}</span>
+                    </div>
+                    <div class="request_information">
+                        <label for="">Approved by:</label>
+                        <span>{{ $row->approver_name }}</span>
+                    </div>
+                    <div class="request_information">
+                        <label for="">Approver Note:</label>
+                        <span>
+                            {{ $row->approver_note }}
+                        </span>
+                    </div>
                   </div>
                   <div class="request_department">
                       <div class="request_information start">
@@ -938,7 +985,7 @@
                 </div>
                 <hr>
                 <div class="budget_info">
-                  <p>Budget Information Breakdown</p>
+                  <p>Items Breakdown</p>
                 </div>
                 <div class="budget_content">
                   <div class="budget_block">
@@ -1007,19 +1054,28 @@
                           <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple required>
                         </div>
                       </div>
-                      <div class="budget_description" style="text-align: center;">
-                        <div class="budget_description_btns">
-                          <button type="button" class="add_row">Add Row</button>
-                          <button type="button" class="delete_row" style="display: none;">Delete</button>
-                        </div>
-                      </div>
                     </div>
+                  </div>
+                </div>
+                <div class="budget_description">
+                  <div class="budget_description_btns">
+                    <button type="button" class="add_row">Add Row</button>
                   </div>
                 </div>
                 <hr>
                 <div class="total_amount_content">
                   <label for="">Reference Number:</label>
-                  <span>{{ $row->reference_number }}</span>
+                  <input style="border: none;" value="{{ $row->reference_number }}" readonly>
+                </div>
+                <div class="flex">
+                  <div class="total_amount_content">
+                    <label for="">Check Date:</label>
+                    <input style="border: none;" value="{{ $row->check_date }}" readonly>
+                  </div>
+                  <div class="total_amount_content">
+                    <label for="">System Ref#:</label>
+                    <input style="border: none;" value="{{ $row->system_reference_number }}" readonly>
+                  </div>
                 </div>
                 <div class="flex">
                   <div class="total_amount_content">
@@ -1051,12 +1107,16 @@
         </div>
         <div class='panel-footer'>
           <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
-          <input type='submit' class='btn btn-primary' name="submit" id="submit_approve" value='Submit'/>
+          <input type='submit' class='btn btn-primary' name="submit" id="submit_approve" value='Liquidate'/>
           <input type="id" name="returns_id" value="{{ $row->id }}" style="visibility: hidden;">
           <input type="status_id" name="status_id" value="{{ $row->status_id }}" style="visibility: hidden;">
         </div>
         </form>
       </div>
+      
+      {{-- <script>
+          $('body').addClass('sidebar-collapse');
+      </script> --}}
     @endif
 
     {{-- Accounting Validating Budget Information --}}
@@ -1170,7 +1230,7 @@
 
                 <hr>
                 <div class="budget_info">
-                  <p>Budget Information Breakdown</p>
+                  <p>Items Breakdown</p>
                 </div>
                 <div class="budget_content">
                   @foreach ($pre_payment_body as $budget)
@@ -1408,20 +1468,20 @@
 
   // Add Row
   $(document).on('click', '.add_row', function(){
-    $(this).parents().find('.delete_row').css('display', 'inline-block');
-    $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
-    let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '').css('display','');
+    // $(this).parents().find('.delete_row').css('display', 'inline-block');
+    $('.budget_content').eq(0).find('.delete_row').css('display', 'inline-block');
+    let clone_budget = $('.budget_content').eq(0).clone().css('box-shadow', '').css('display','');
     clone_budget.find('input').val('');
     // clone_budget.find('#budget_justification').remove();
     add_select2(clone_budget);
 
     // Get the number of existing budget justifications
-    var count = $('.budget').length;
+    var count = $('.budget_content').length;
 
     // Add the current count to the name attribute of the file input
     clone_budget.find('#upload_img').attr('name', 'budget_justification' + count + '[]');
 
-    $(this).parents('.budget').after(clone_budget);
+    $(this).parents('.budget_description').before(clone_budget);
   });
 
   $(document).on('click', '.add_row_receipt', function(){
@@ -1436,25 +1496,47 @@
   });
 
   // Delete Row
-  $(document).on('click', '.delete_row', function(){
-    $(this).parents('.budget').remove();
+  $(document).on('click', '.circ_delete', function(){
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+        $(this).parents('.budget_content').remove();
+      }
+    })
 
-    if($('.budget').length == 2){
-      $('.budget').find('.delete_row').eq(1).css('display', 'none');
-    }
   })
 
   // Hover budget row
   $(document).on('click', '.budget', function(){
     $('.budget').css('box-shadow', '');
     $(this).css('box-shadow', 'rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset');
-  })
+    $(this).closest('.budget_content').find('.circ_delete').show();
+    $('.circ_delete').not($(this).closest('.budget_content').find('.circ_delete')).hide();
+  });
 
+  // Hide circ_delete element when clicking outside of budgets
   $(document).on('click', function(event) {
     if (!$(event.target).closest('.budget').length) {
       $('.budget').css('box-shadow', '');
+      $('.circ_delete').css('display', 'none');
     }
   });
+  // End of Hover Budget Row
+
+
+  // End of Hover budget row
 
   // Budget Justification
   let budget_image = $('#budget_justification').find('.budget_image');
@@ -1646,27 +1728,27 @@
   function add_select2(row){
     row.find(".brand").select2({
       placeholder: "Select Brand",
-      width: '150px',
+      width: '128',
     })
 
     row.find(".location").select2({
       placeholder: "Select Location",
-      width: '250px',
+      width: '149',
     })
 
     row.find(".category").select2({
       placeholder: "Select Category",
-      width: '150px',
+      width: '145',
     });
 
     row.find(".currency").select2({
       placeholder: "Currency",
-      width: '120px',
+      width: '106.5',
     })
     
     row.find(".account").select2({
       placeholder: "Select an account",
-      width: '200px',
+      width: '150px',
       ajax: {
         url: "{{ route('account') }}",
         dataType: "json",
