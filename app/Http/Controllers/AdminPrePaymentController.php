@@ -321,7 +321,7 @@ use Illuminate\Support\Arr;
 				if($column_value == '1'){
 					$column_value = '<span class="label" style="background-color: #2980B9; color: white; font-size: 12px;">For Approval</span>';
 				}else if($column_value == '2'){
-					$column_value = '<span class="label" style="background-color: #BDC581; color: white; font-size: 12px;">For Budget Release</span>';
+					$column_value = '<span class="label" style="background-color: #BDC581; color: white; font-size: 12px;">For Release</span>';
 				}else if($column_value == '3'){
 					$column_value = '<span class="label" style="background-color: #f0ad4e; color: white; font-size: 12px;">For Receipts Validation</span>';
 				}else if($column_value == '4'){
@@ -436,7 +436,7 @@ use Illuminate\Support\Arr;
 				$accounting_note = $return_inputs['additional_notes'];
 				$accounting_mode_of_release = $return_inputs['mode_of_payment'];
 
-				if($submit_btn == 'Budget Released'){
+				if($submit_btn == 'Release'){
 					$postdata['status_id'] = 3;
 					$postdata['accounting_mode_of_release'] = $accounting_mode_of_release;
 				}else{
@@ -486,7 +486,6 @@ use Illuminate\Support\Arr;
 					},
 					ARRAY_FILTER_USE_KEY
 				);
-
 				for($i=0;$i<count($filteredArray);$i++){
 					$array_file = array_values($filteredArray)[$i];
 					
@@ -497,8 +496,9 @@ use Illuminate\Support\Arr;
 					}
 					array_push($requested_project, $array_file);
 				}
+				// dd($requested_project);
 
-				for($i=0; $i<count($requested_project); $i++){
+				for($i=0; $i<count($description); $i++){
 					
 					$insert_pre_payment_body[] = [
 						'pre_payment_id' => $id,
@@ -511,7 +511,7 @@ use Illuminate\Support\Arr;
 						'qty' => $qty[$i],
 						'value' => $receipt_value[$i],
 						'amount' => $amount[$i],
-						'budget_justification' => implode(", ",$requested_project[$i]),
+						'budget_justification' => $requested_project[$i] ? implode(", ",$requested_project[$i]) : null,
 						'created_by' => CRUDBooster::myId(),
 						'created_at' => date('Y-m-d H:i:s')
 					];
@@ -533,12 +533,15 @@ use Illuminate\Support\Arr;
 				$total_amount = $return_inputs['total_amount'];
 				$balance_amount = $return_inputs['balance_amount'];
 				$accounting_closed_note = $return_inputs['additional_notes'];
+				$ar_reference_number = $return_inputs['ar_reference_number'];
 
 				if($submit_btn == 'Close'){
 					$postdata['status_id'] = 5;
 					$postdata['total_amount'] = $total_amount;
 					$postdata['balance_amount'] = abs($balance_amount);
-					$postdata['accounting_closed_note'] = $accounting_closed_note;
+					$postdata['accounting_closed_note'] = $accounting_closed_note;	
+					$postdata['ar_reference_number'] = $ar_reference_number;
+
 					$postdata['accounting_closed_by'] = CRUDBooster::myId();
 					$postdata['accounting_closed_date'] = date('Y-m-d H:i:s');
 				}else{
@@ -616,11 +619,11 @@ use Illuminate\Support\Arr;
 			}else if($status_id == '2'){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'The form has been updated.',"success");
 			}else if($status_id == '3'){
-				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Treasury/Cashier budget justification',"success");
+				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Released',"success");
 			}else if($status_id == '4'){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction Closed',"success");
 			}else if($status_id == '7'){
-				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction Recorded',"success");
+				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction Recorded to the system',"success");
 			}
 	    }
 
@@ -812,7 +815,7 @@ use Illuminate\Support\Arr;
 						
 			return response()->json($results);
 		}
-
+		
 		// Edit
 		public function getEdit($id) {
 			//Create an Auth	
@@ -873,6 +876,7 @@ use Illuminate\Support\Arr;
 					'accounts.id as account_id',
 					'currencies.currency_name')
 				->where('pre_payment_id',$id)
+				// ->orderByDesc('id')
 				->get();
 			// PrePaymentBodyDate
 			$data['pre_payment_body_date'] = DB::table('pre_payment_body')
@@ -893,18 +897,22 @@ use Illuminate\Support\Arr;
 				->select('id','mode_of_payment_name')
 				->where('id', $data['row']->accounting_mode_of_release)
 				->first();
+			// Brand
 			$data['brands'] = Brand
 				::where('status', 'ACTIVE')
 				->orderBy('brand_name')
 				->get();
+			// Store
 			$data['locations'] = Store
 				::where('store_status', 'ACTIVE')
 				->orderBy('store_name')
 				->get();
+			// Category
 			$data['categories'] = Category
 				::where('status', 'Active')
 				->orderBy('category_name')
 				->get();
+			// Currency
 			$data['currencies'] = Currency
 				::where('status', 'Active')
 				->orderBy('currency_name')
@@ -912,7 +920,6 @@ use Illuminate\Support\Arr;
 
 			//Please use view method instead view method from laravel
 			$this->cbView("pre_payment.pre_payment_edit", $data);
-			// $this->cbView("pre_payment.test", $data);
 
 		}
 

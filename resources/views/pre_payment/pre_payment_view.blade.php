@@ -7,6 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <style>
+
   .request_content{
     /* margin: 0 50px; */
   }
@@ -24,6 +25,12 @@
     margin-bottom: 10px;
     margin-right: 30px;
     width: 100%;
+  }
+
+  .request_information_contents{
+    margin-bottom: 10px;
+    margin-right: 30px;
+    width: 31.4%;  
   }
 
   .flex{
@@ -86,16 +93,49 @@
 
   .budget_block{
     width: 100%;
+    position: relative;
   }
 
   .budget {
+    position: relative;
     display: flex;
     height: 100%;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    align-items: center; 
-    overflow: auto;
-    margin-top: 10px; 
+    margin-top: 20px; 
     width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+    overflow-x: auto;
+    border-radius: 5px;
+  }
+
+  .budget:hover{
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+
+  }
+
+
+  .circ_delete{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 25px;
+    color: rgba(60, 64, 67, 1);
+    margin-top: -16px;
+    margin-right: -10px;
+    z-index: 10;
+    border-radius: 50%;
+    background-color: rgb(174, 176, 177);
+    height: 30px;
+    width: 30px;
+    display: grid;
+    place-items: center;
+  }
+
+  .circ_delete:hover{
+    opacity: 0.7;
+    cursor: pointer;
   }
 
   .budget::-webkit-scrollbar {
@@ -116,8 +156,8 @@
   }
 
   .budget_description{
-    width: 100%;
-    margin: 10px 10px;
+    /* width: 100%; */
+    margin: 15px 4px;
     height: 100%;
     align-items: center;
   }
@@ -134,15 +174,17 @@
     border-radius: 5px;
     border: 1px solid #aaa;
     outline-color: #007bff;
-    
   }
 
   .input_description{
-    width: 250px;
+    width: 100%;
+    /* width: 500px; */
   }
 
   .add_row{
-    padding: 8px 15px;
+    /* padding: 8px 45px; */
+    width: 100px;
+    height: 35px;
     background-color: rgb(32, 120, 208);
     color: white;
     border-radius: 5px;
@@ -150,7 +192,8 @@
   }
 
   .add_row_receipt{
-    padding: 8px 15px;
+    width: 100px;
+    height: 35px;
     background-color: rgb(32, 120, 208);
     color: white;
     border-radius: 5px;
@@ -158,18 +201,13 @@
   }
 
   .delete_row{
-    padding: 8px 15px;
+    width: 100px;
+    height: 35px;
     background-color: rgb(226, 71, 71);
     color: white;
     border-radius: 5px;
     border: none;
   }
-
-  /* .budget_description_btns{
-    position: relative;
-    top: 13px;
-    border-left: 1px solid #aaa;
-  } */
 
   .add_row:hover, .delete_row:hover{
     opacity: 0.8;
@@ -182,6 +220,7 @@
   .total_amount_content label{
     font-size: 15px;
     margin-right: 10px;
+    width: 131px;
   }
 
   .total_amount_content input{
@@ -191,6 +230,7 @@
     border: 1px solid #aaa;
     text-align: center;
     margin-right: 10px;
+    width: 150px;
   }
 
   .request_information label{
@@ -231,26 +271,28 @@
   top: 0;
   width: 100%; 
   height: 100%; 
-  background-color: rgba(0,0,0,0.5); 
+  /* background-color: rgba(0,0,0,0.5);  */
   }
 
   .modal-content {
-    display: block;
+    display: flex;
+    justify-content: center;
     max-width: 600px;
     max-height: 600px;
-    padding: 10px;
     margin: auto;
     position: absolute;
     left: 0;
     right: 0;
-    top: 50%;
+    top: 53%;
     transform: translateY(-50%);
+    background: transparent;
+    box-shadow: none !important;
   }
 
   .modal-content img {
     display: block;
-    width: 100%;
-    height: 300px;
+    max-width:  600px;
+    max-height: 600px;
   }
 
   .modal-trigger {
@@ -285,13 +327,101 @@
   #upload_img{
     padding-top: 5px;
     border: none;
+    width: 100%;
+  }
 
+  .budget_qty, .budget_value, .budget_amount{
+    width: 95px;
   }
 
   .upload_img_parent {
-  text-align-last: center;
+    text-align-last: center;
+    margin: 0;
+    padding: 0;
   }
-  
+
+  .requestor_name{
+    width: 35%;
+    margin-bottom: 10px;
+  }
+
+  .requestor_name label{
+    display: block;
+    font-size: 15px;
+  }
+
+  .requestor_name input{
+    width: 100%;
+    height: 35px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .mode_of_payment_{
+    width: 100%;  
+  }
+
+  .mode_of_payment_dropdown{
+    width: 100%;
+  }
+
+  .mode_of_payment_dropdown label{
+    display: block;
+  }
+
+  #check_payment input{
+    width: 100%;
+    height: 35px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  #credit_card input{
+    width: 100%;
+    height: 35px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #eee;
+  }
+
+  #gcash input{
+    width: 100%;
+    height: 35px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+
+  .direct_deposit{
+    width: 50%;
+  }
+
+  .direct_deposit input{
+    width: 100%;
+    height: 35px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .mode_of_payment_section{
+    display: flex;
+    width: 100%;
+  }
+
+  .mode_of_payment_section1{
+    width: 31.4%;
+    margin-right: 30px;
+  }
+
+  .mode_of_payment_section2{
+    width: 31.4%;
+  }
+
 </style>
 @endpush
 
@@ -451,7 +581,7 @@
                       </div>
                     </div>
                     <div class="total_amount_content">
-                        <label for="">Status: 
+                        <span style="font-weight: bold; font-size: 15px;" for="">Status: 
                             @if ($row->status_id == 1)
                                 <span style="color: green; font-style: bold;">Requesting</span>
                             @endif
@@ -470,6 +600,9 @@
                             @if ($row->status_id == 6)
                                 <span style="color: red; font-style: bold;">Rejected</span>
                             @endif
+                            @if ($row->status_id == 7)
+                                <span style="color: red; font-style: bold;">AP Recording</span>
+                            @endif
                         </label>
                     </div>
                     <hr>
@@ -484,7 +617,7 @@
                               <span>{{ $row->cms_users_name }}</span>
                           </div>
                           <div class="request_information">
-                              <label for="">Budget Information:</label>
+                              <label for="">Comment:</label>
                               <span>
                                   {{ $row->additional_notes }}
                               </span>
@@ -508,7 +641,7 @@
                       </div>
                       <div class="request_department">
                         <div class="request_information start">
-                            <label for="">Budget Approval Date:</label>
+                            <label for="">Approval Date:</label>
                             <span>{{ $row->accounting_date_release }}</span>
                         </div>
                         <div class="request_information">
@@ -710,7 +843,7 @@
 
     row.find(".location").select2({
       placeholder: "Select Location",
-      width: '250px',
+      width: '200px',
     })
 
     row.find(".category").select2({

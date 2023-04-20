@@ -106,7 +106,10 @@
     margin-top: 20px; 
     width: 100%;
     justify-content: space-between;
-    transition: all 0.2s ease-in-out
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+    overflow-x: auto;
+    border-radius: 5px;
   }
 
   .budget:hover{
@@ -229,6 +232,7 @@
     border: 1px solid #aaa;
     text-align: center;
     margin-right: 10px;
+    width: 150px;
   }
 
   .request_information label{
@@ -273,7 +277,6 @@
   }
 
   .modal-content {
-    /* display: block; */
     display: flex;
     justify-content: center;
     max-width: 600px;
@@ -284,7 +287,8 @@
     right: 0;
     top: 53%;
     transform: translateY(-50%);
-    background-color: #007bff00
+    background: transparent;
+    box-shadow: none !important;
   }
 
   .modal-content img {
@@ -419,7 +423,6 @@
   .mode_of_payment_section2{
     width: 31.4%;
   }
-
 
 </style>
 
@@ -584,20 +587,6 @@
                                   <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
                               </select>            
                             </div>
-                            <div class="request_information start">
-                              <label for="">Requested Date:</label>
-                              <span>{{ $row->created_at }}</span>
-                            </div>
-                            <div class="request_information">
-                                <label for="">Created by:</label>
-                                <span>{{ $row->cms_users_name }}</span>
-                            </div>
-                            <div class="request_information">
-                                <label for="">Comment:</label>
-                                <span>
-                                    {{ $row->additional_notes }}
-                                </span>
-                            </div>
                           </div>
                           <div class="mode_of_payment_section2">
                             <div class="mode_of_payment_dropdown">
@@ -639,27 +628,43 @@
                           </div>
                         </div> 
                         <hr>
-                        <div class="total_amount_content">
+                        <div class="flex">
+                          <div class="total_amount_content">
                             <label for="">Reference Number:</label>
-                            <span>{{ $row->reference_number }}</span>
+                            <input type="text" style="border: 1px solid #fff;" value="{{ $row->reference_number }}" readonly>
                         </div>
                         <div class="total_amount_content">
-                          <label for="">Check Date: </label>
-                          <input type="text" name="check_date" required>
+                          <label for="">Amount Requested:</label>
+                          <input type="number" value="{{ $row->requested_amount }}" readonly>
+                        </div>
                         </div>
                         <div class="flex">
                           <div class="total_amount_content">
-                            <label for="">System Reference#:</label>
+                            <label for="">BEACH pre-payment#:</label>
                             <input type="text" placeholder="Enter ref#" name="system_reference_number" required>
                           </div>
                           <div class="total_amount_content">
-                            <label for="">Amount Requested:</label>
-                            <input type="number" value="{{ $row->requested_amount }}" readonly>
+                            <label for="">Cheque Date: </label>
+                            <input type="date" name="check_date" required>
                           </div>
                         </div>
                         <div class="additional_notes">
                             <label for="">Additional Notes: </label>
                             <textarea name="additional_notes" id="additional_notes" required></textarea>
+                        </div>
+                        <div class="request_information start">
+                          <label for="">Requested Date:</label>
+                          <span>{{ $row->created_at }}</span>
+                        </div>
+                        <div class="request_information">
+                            <label for="">Created by:</label>
+                            <span>{{ $row->cms_users_name }}</span>
+                        </div>
+                        <div class="request_information">
+                            <label for="">Comment:</label>
+                            <span>
+                                {{ $row->additional_notes }}
+                            </span>
                         </div>
                     </div>
                     </div>        
@@ -680,7 +685,7 @@
     @if ($row->status_id == 2)
         <form method='post' action='{{CRUDBooster::mainpath('edit-save/'.$row->id)}}'>
             <div class='panel panel-default'>
-                <div class='panel-heading'>Request Budget</div>
+                <div class='panel-heading'>Request Cash Advance</div>
                 <div class='panel-body'>
                     {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
                     
@@ -788,7 +793,7 @@
                               <div class="request_information">
                                   <label for="">Check Date:</label>
                                   <span>
-                                      {{ $row->check_date }}
+                                      {{ date('Y-m-d', strtotime($row->check_date)) }}
                                   </span>
                               </div>
                           </div>
@@ -808,7 +813,7 @@
                         </div>
                         <br>
                         <div>
-                          <span style="font-size: 15px;"><span style="color: red; font-weight: bold;">Note: </span>Click Budget Released button after the requestor received his/her budget.</span>
+                          <span style="font-size: 15px;"><span style="color: red; font-weight: bold;">Note: </span>Click Release button after the requestor received his/her budget.</span>
                         </div>
                     </div>
                     </div>        
@@ -816,7 +821,7 @@
                 <div class='panel-footer'>
                     <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
                     <input type='submit' class='btn btn-danger' name="submit" value='Reject'/>
-                    <input type='submit' class='btn btn-primary' name="submit" value='Budget Released'/>
+                    <input type='submit' class='btn btn-primary' name="submit" value='Release'/>
                     <input type="id" name="returns_id" value="{{ $row->id }}" style="visibility: hidden;">
                     <input type="status_id" name="status_id" value="{{ $row->status_id }}" style="visibility: hidden;">
                 </div>
@@ -968,7 +973,7 @@
                   </div>
                   <div class="request_department">
                       <div class="request_information start">
-                          <label for="">Budget Date Released:</label>
+                          <label for="">Date Released:</label>
                           <span>{{ $row->accounting_date_release }}</span>
                       </div>
                       <div class="request_information">
@@ -992,14 +997,15 @@
                     <div class="budget">
                       <div class="budget_description">
                         <label for="">Description</label>
-                        <input class="input_description" type="text"  name="description[]" required>
+                        <input class="input_description" type="text" value="UNUSED AMOUNT" name="description[]" required>
                       </div>
                       <div class="budget_description">
                         <label for="">Brand</label>
-                        <select class="js-example-basic-single brand" name="brand[]" required>
+                        <select class="js-example-basic-single brand" id="brand" name="brand[]" required>
                           <option value="" selected disabled>Select Brand</option>
                           @foreach ($brands as $brand)
-                            <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
+                      
+                            <option {{ ($brand->id == 53) ? "selected": "" }} value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
                           @endforeach
                         </select>       
                       </div>
@@ -1008,14 +1014,14 @@
                         <select class="js-example-basic-single location" name="location[]" required>
                           <option value="" selected disabled>Select Category</option>
                           @foreach ($locations as $location)
-                            <option value="{{ $location->id }}">{{ $location->store_name }}</option>
+                            <option {{ ($location->id == 115) ? "selected": "" }} value="{{ $location->id }}">{{ $location->store_name }}</option>
                           @endforeach
                         </select>   
                       </div>
                       <div class="budget_description">
                         <label for="">Category</label>
                         <select class="js-example-basic-single category" name="category[]" required>
-                          <option value="" selected disabled>Select Category</option>
+                          {{-- <option value="" selected disabled>Select Category</option> --}}
                           @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                           @endforeach
@@ -1024,7 +1030,7 @@
                       <div class="budget_description" id="select_account">
                         <label for="">Account</label>
                         <select class="js-example-basic-single account" name="account[]" required>
-                          <option value="">Account</option>
+                          <option value="2" selected>CASH IN BANK</option>
                         </select>
                       </div>
                       <div class="budget_description">
@@ -1038,7 +1044,7 @@
                       </div>
                       <div class="budget_description">
                         <label for="">Qty</label >
-                        <input type="number" name="qty[]" min="0" class="budget_qty" required>
+                        <input type="number" name="qty[]" min="0" value="1" class="budget_qty" required>
                       </div>
                       <div class="budget_description">
                         <label for="">Value</label >
@@ -1051,7 +1057,7 @@
                       <div class="budget_description" id="step3_budget_justification">
                         <label for="">Receipts</label>
                         <div class="upload_img_parent">
-                          <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple required>
+                          <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple>
                         </div>
                       </div>
                     </div>
@@ -1069,11 +1075,11 @@
                 </div>
                 <div class="flex">
                   <div class="total_amount_content">
-                    <label for="">Check Date:</label>
-                    <input style="border: none;" value="{{ $row->check_date }}" readonly>
+                    <label for="">AP Date Checked:</label>
+                    <input style="border: none;" value="{{ date('Y-m-d', strtotime($row->check_date)) }}" readonly>
                   </div>
                   <div class="total_amount_content">
-                    <label for="">System Ref#:</label>
+                    <label for="">BEACH pre-payment#:</label>
                     <input style="border: none;" value="{{ $row->system_reference_number }}" readonly>
                   </div>
                 </div>
@@ -1121,77 +1127,84 @@
 
     {{-- Accounting Validating Budget Information --}}
     @if ($row->status_id == 4)
-      <div class="budget" style="display: none;">
-        <div class="budget_description">
-          <label for="">Description</label>
-          <input class="input_description" type="text"  name="description[]" required>
-        </div>
-        <div class="budget_description">
-          <label for="">Brand</label>
-          <select class="js-example-basic-single brand" name="brand[]" required>
-            <option value="" selected disabled>Select Brand</option>
-            @foreach ($brands as $brand)
-              <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
-            @endforeach
-          </select>       
-        </div>
-        <div class="budget_description">
-          <label for="">Location</label>
-          <select class="js-example-basic-single location" name="location[]" required>
-            <option value="" selected disabled>Select Location</option>
-            @foreach ($locations as $location)
-              <option value="{{ $location->id }}">{{ $location->store_name }}</option>
-            @endforeach
-          </select>   
-        </div>
-        <div class="budget_description">
-          <label for="">Category</label>
-          <select class="js-example-basic-single category" name="category[]" required>
-            <option value="" selected disabled>Select Category</option>
-            @foreach ($categories as $category)
-              <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-            @endforeach
-          </select> 
-        </div>
-        <div class="budget_description" id="select_account">
-          <label for="">Account</label>
-          <select class="js-example-basic-single account" name="account[]" required>
-            <option value="">Account</option>
-          </select>
-        </div>
-        <div class="budget_description">
-          <label for="">Currency</label >
-          <select class="js-example-basic-single currency" name="currency[]" required>
-            <option value="" selected disabled>Select Currency</option>
-            @foreach ($currencies as $currency)
-              <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
-            @endforeach
-          </select>
-        </div>
-        <div class="budget_description">
-          <label for="">Qty</label >
-          <input type="number" name="qty[]" min="0" class="budget_qty" required>
-        </div>
-        <div class="budget_description">
-          <label for="">Value</label >
-          <input type="number" name="value[]" min="0" class="budget_value" required>
-        </div>
-        <div class="budget_description">
-          <label for="">Total Value</label >
-          <input type="number" name="amount[]" min="0" class="budget_amount" readonly>
-        </div>
-        <div class="budget_description" id="step3_budget_justification">
-          <label for="">Receipts</label>
-          <div class="upload_img_parent">
-            <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple>
+      <div class="budget_content" style="display: none;">
+        <div class="budget_block">
+          <div class="circ_delete" style="display: none;">
+            <i class="fa fa-close"></i>
           </div>
-        </div>
-        <div class="budget_description">
-          <div class="budget_description_btns">
-            <button type="button" class="add_row_receipt">Add Row</button>
-            <button type="button" class="delete_row" style="display: none;">Delete</button>
-            <input type="id" name="returns_id[]" value="" style="display: none;">
-            <input type="id" name="project_id[]" value="{{ $row->id }}" style="display: none;">
+          <div class="budget">
+            <div class="budget_description">
+              <label for="">Description</label>
+              <input class="input_description" type="text"  name="description[]" required>
+            </div>
+            <div class="budget_description">
+              <label for="">Brand</label>
+              <select class="js-example-basic-single brand" name="brand[]" required>
+                <option value="" selected disabled>Select Brand</option>
+                @foreach ($brands as $brand)
+                  <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
+                @endforeach
+              </select>       
+            </div>
+            <div class="budget_description">
+              <label for="">Location</label>
+              <select class="js-example-basic-single location" name="location[]" required>
+                <option value="" selected disabled>Select Category</option>
+                @foreach ($locations as $location)
+                  <option value="{{ $location->id }}">{{ $location->store_name }}</option>
+                @endforeach
+              </select>   
+            </div>
+            <div class="budget_description">
+              <label for="">Category</label>
+              <select class="js-example-basic-single category" name="category[]" required>
+                <option value="" selected disabled>Select Category</option>
+                @foreach ($categories as $category)
+                  <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                @endforeach
+              </select> 
+            </div>
+            <div class="budget_description" id="select_account">
+              <label for="">Account</label>
+              <select class="js-example-basic-single account" name="account[]" required>
+                <option value="">Account</option>
+              </select>
+            </div>
+            <div class="budget_description">
+              <label for="">Currency</label >
+              <select class="js-example-basic-single currency" name="currency[]" required>
+                <option value="" selected disabled>Select Currency</option>
+                @foreach ($currencies as $currency)
+                  <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="budget_description">
+              <label for="">Qty</label >
+              <input type="number" name="qty[]" min="0" class="budget_qty" required>
+            </div>
+            <div class="budget_description">
+              <label for="">Value</label >
+              <input type="number" name="value[]" min="0" class="budget_value" required>
+            </div>
+            <div class="budget_description">
+              <label for="">Total Value</label >
+              <input type="number" name="amount[]" min="0" class="budget_amount" readonly>
+            </div>
+            <div class="budget_description" id="step3_budget_justification">
+              <label for="">Receipts</label>
+              <div class="upload_img_parent">
+                <input style="" type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" disabled>
+              </div>
+            </div>
+            <div class="budget_description" style="display: none;">
+              <div class="budget_description_btns">
+                {{-- <button type="button" class="add_row_receipt" style="width: 100px;">Add Row</button>
+                <button type="button" class="delete_row" style="display: none;">Delete</button> --}}
+                <input type="id" name="returns_id[]" value="{{ $budget->id }}" style="display: none;">
+                <input type="id" name="project_id[]" value="{{ $row->id }}" style="display: none;">
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1324,8 +1337,8 @@
                         </div>
                         <div class="budget_description" style="text-align: center;">
                           <div class="budget_description_btns">
-                            <button type="button" class="add_row_receipt" style="width: 100px;">Add Row</button>
-                            <button type="button" class="delete_row" style="display: none;">Delete</button>
+                            {{-- <button type="button" class="add_row_receipt" style="width: 100px;">Add Row</button>
+                            <button type="button" class="delete_row" style="display: none;">Delete</button> --}}
                             <input type="id" name="returns_id[]" value="{{ $budget->id }}" style="display: none;">
                             <input type="id" name="project_id[]" value="{{ $row->id }}" style="display: none;">
                           </div>
@@ -1334,10 +1347,21 @@
                     </div>
                   @endforeach
                 </div>
+                <div class="budget_description">
+                  <div class="budget_description_btns">
+                    <button type="button" class="add_row_receipt">Add Row</button>
+                  </div>
+                </div>
                 <hr>
-                <div class="total_amount_content">
-                  <label for="">Reference Number:</label>
-                  <span>{{ $row->reference_number }}</span>
+                <div class="flex">
+                  <div class="total_amount_content">
+                    <label for="">Reference#:</label>
+                    <input style="border: 1px solid #fff;" value="{{ $row->reference_number }}" readonly>
+                  </div>
+                  <div class="total_amount_content">
+                    <label for="">AR reference#:</label>
+                    <input type="text" name="ar_reference_number" placeholder="Input ar#" required>
+                  </div>
                 </div>
                 <div class="flex">
                   <div class="total_amount_content">
@@ -1372,7 +1396,7 @@
                           <span>{{ $row->cms_users_name }}</span>
                       </div>
                       <div class="request_information">
-                          <label for="">Budget Information:</label>
+                          <label for="">Comment:</label>
                           <span>
                               {{ $row->additional_notes }}
                           </span>
@@ -1399,7 +1423,7 @@
                         <label for="">RCT. Breakdown Date:</label>
                         <span>{{ $pre_payment_body_date->created_at }}</span>
                         <div class="request_information">
-                          <label for="">Budget Info Note:</label>
+                          <label for="">Breakdown Note:</label>
                           <span>{{ $row->budget_information_notes }}</span>
                       </div>
                     </div>
@@ -1485,14 +1509,12 @@
   });
 
   $(document).on('click', '.add_row_receipt', function(){
-    $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
-    let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '').css('display','');
-    clone_budget.find('.delete_row').hide(); // hide delete button for cloned row
-    clone_budget.find('.delete_row').show(); // show delete button for cloned row
-    clone_budget.find('input[name="budget_justification[]"]').parents().remove();
+    $('.budget_content').eq(0).find('.delete_row').css('display', 'inline-block');
+    let clone_budget = $('.budget_content').eq(0).clone().css('box-shadow', '').css('display','');
+    // clone_budget.find('input[name="budget_justification[]"]').parents().attr("disabled", 'disabled');
     add_select2(clone_budget);
 
-    $('.budget').last().after(clone_budget);
+    $('.budget_content').last().after(clone_budget);
   });
 
   // Delete Row
@@ -1507,12 +1529,16 @@
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
+        $(this).parents('.budget_content').fadeOut(500, function() {
+          $(this).remove();
+        });
         Swal.fire(
           'Deleted!',
           'Your file has been deleted.',
           'success'
         )
-        $(this).parents('.budget_content').remove();
+
+
       }
     })
 
@@ -1533,9 +1559,6 @@
       $('.circ_delete').css('display', 'none');
     }
   });
-  // End of Hover Budget Row
-
-
   // End of Hover budget row
 
   // Budget Justification
@@ -1765,9 +1788,10 @@
           console.log(error);
         },
         processResults: function (data) {
+          // console.log($('.budget_content').index(row));
+          // data = data.filter(account=>account.account_name!='CASH IN BANK')
           return {
             results: $.map(data, function (item) {
-              
               return {
                 text: item.account_name,
                 id: item.id,
