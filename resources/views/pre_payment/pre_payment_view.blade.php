@@ -682,11 +682,6 @@
         </div>
     </div>
 
-
-
-
-
-
 <script>
 
   function get_sum(){
@@ -706,6 +701,7 @@
         $(this).val(val);
   });
 
+  // Add Row
   $(document).on('click', '.add_row', function(){
     $('.budget').eq(0).find('.delete_row').css('display', 'inline-block');
     let clone_budget = $('.budget').eq(0).clone().css('box-shadow', '');

@@ -212,7 +212,7 @@
   <!-- Your html goes here -->
   <p class="noprint"><a title="Main Module" href="{{ CRUDBooster::mainpath() }}"><i class="fa fa-chevron-circle-left "></i> &nbsp; Back To List Data Pre Payment</a></p> 
   <div class='panel panel-default'>
-    <div class='panel-heading'>Request Budget</div>
+    <div class='panel-heading'>Request Cash Advance</div>
     <div class='panel-body'>
       {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
         <form method="POST" action="{{ route('add_request') }}">
@@ -457,18 +457,24 @@
       $('#credit_card').hide();
       $('#mode_of_payment_direct_deposit').hide();
       $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#mode_of_payment_direct_deposit').find('input').val('');
       $('#gcash').hide();
       $('#gcash').find('input').attr('required', false);
+      
 
     // Credit Card
     }else if(mode_of_payment_val == '4'){
       $('#credit_card').show();
       $('#check_payment').hide();
       $('#check_payment').find('input').attr('required', false);
+      $('#check_payment').find('input').val('');
       $('#mode_of_payment_direct_deposit').hide();
       $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#mode_of_payment_direct_deposit').find('input').val('');
       $('#gcash').hide();
       $('#gcash').find('input').attr('required', false);
+      $('#gcash').find('input').val('');
+      
 
     // Direct Deposit
     }else if(mode_of_payment_val == '2'){
@@ -476,9 +482,11 @@
       $('#mode_of_payment_direct_deposit').find('input').attr('required', true);
       $('#check_payment').hide();
       $('#check_payment').find('input').attr('required', false);
+      $('#check_payment').find('input').val('');
       $('#credit_card').hide();
       $('#gcash').hide();
       $('#gcash').find('input').attr('required', false);
+      $('#gcash').find('input').val('');
 
     // Gcash
     }else if(mode_of_payment_val == '1'){
@@ -486,20 +494,25 @@
       $('#gcash').find('input').attr('required', true);
       $('#mode_of_payment_direct_deposit').hide();
       $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#mode_of_payment_direct_deposit').find('input').val('');
       $('#check_payment').hide();
       $('#check_payment').find('input').attr('required', false);
+      $('#check_payment').find('input').val('');
       $('#credit_card').hide();
     }else{
       $('#check_payment').hide();
       $('#check_payment').find('input').attr('required', false);
+      $('#check_payment').find('input').val('');
       $('#credit_card').hide();
       $('#mode_of_payment_direct_deposit').hide();
       $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#mode_of_payment_direct_deposit').find('input').val('');
       $('#gcash').hide();
       $('#gcash').find('input').attr('required', false);
+      $('#gcash').find('input').val('');
 
     };
-  })
+  });
 
 </script>
 @endsection

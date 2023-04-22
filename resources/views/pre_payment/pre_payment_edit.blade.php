@@ -11,22 +11,32 @@
 <style>
 
   .request_content{
-    /* margin: 0 50px; */
-  }
-
-  .request_content_department{
     width: 100%;
   }
- 
+/* 
+  .request_content_department{
+    width: 100%;
+  } */
+
+.by_department {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.request_department {
+  margin-bottom: 10px;
+  margin-right: 30px;
+  width: 31.9%;
+}
+
+.request_department:last-child {
+  margin-right: 0;
+}
+
 
   .required{
     color: red;
-  }
-
-  .request_department{
-    margin-bottom: 10px;
-    margin-right: 30px;
-    width: 100%;
   }
 
   .request_information_contents{
@@ -424,6 +434,13 @@
     width: 31.4%;
   }
 
+  /* @media screen and (max-width: 990px) {
+    .by_department {
+      flex-wrap: wrap;
+    }
+
+  } */
+
 </style>
 
 @endpush
@@ -439,106 +456,106 @@
     @if ($row->status_id == 1) 
         <form method='post' action='{{CRUDBooster::mainpath('edit-save/'.$row->id)}}' id="approve_budget">
             <div class='panel panel-default'>
-                <div class='panel-heading'>Request Budget</div>
+                <div class='panel-heading'>Request Approval</div>
                 <div class='panel-body'>
                     {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
                     {{ csrf_field() }}
                     <div class='form-group'>
-                    <div class="request_content">
-                        <div class="flex">
-                        <div class="request_department">
-                            <label for="">Department <span class="required">*</span></label>
-                            <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
-                                <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
-                            </select>   
+                      <div class="request_content">
+                          <div class="by_department">
+                            <div class="request_department">
+                              <label for="">Department <span class="required">*</span></label>
+                              <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
+                                  <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
+                              </select>   
                             </div>       
                             <div class="request_department">
-                                <label for="">Sub Department <span class="required">*</span></label>
-                                <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
-                                    <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
-                                </select>                           
+                                  <label for="">Sub Department <span class="required">*</span></label>
+                                  <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
+                                      <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
+                                  </select>                           
                             </div> 
                             <div class="request_department r_full_name">
-                                <label for="">Requestor Full Name <span class="required">*</span></label>
-                                <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
+                                  <label for="">Requestor Full Name <span class="required">*</span></label>
+                                  <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
                             </div> 
-                        </div>
-                        <div class="mode_of_payment_section">
-                          <div class="mode_of_payment_section1">
-                            <div class="mode_of_payment_">
-                              <label for="">Mode of Payment <span class="required">*</span></label>
-                              <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" required>
-                                  <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
-                              </select>            
-                            </div>
-                            <div class="request_information start">
-                              <label for="">Requested Date:</label>
-                              <span>{{ $row->created_at }}</span>
-                            </div>
-                            <div class="request_information">
-                                <label for="">Created by:</label>
-                                <span>{{ $row->cms_users_name }}</span>
-                            </div>
-                            <div class="request_information">
-                                <label for="">Comment:</label>
-                                <span>
-                                    {{ $row->additional_notes }}
-                                </span>
-                            </div>
                           </div>
-                          <div class="mode_of_payment_section2">
-                            <div class="mode_of_payment_dropdown">
-                                <div class="mode_of_payment_content" id="check_payment" style="display: none;">
-                                  <label for="">Payee Name <span class="required">*</span></label>
-                                  <input type="text" name="payee_name" value="{{ $row->payee_name }}">   
-                                </div>
-                                <div class="mode_of_payment_content" id="credit_card" style="display: none;">
-                                  <label for="">Note  <span class="required">*</span></label>
-                                  <input type="text" placeholder="PLEASE COORDINATE TO ACCOUNTING MANAGER" disabled>   
-                                </div>
-                                <div class="mode_of_payment_content" id="gcash" style="display: none;">
-                                  <label for="">Gcash#  <span class="required">*</span></label>
-                                  <input type="text" name="gcash_number" value="{{ $row->gcash_number }}">   
-                                </div>
-                                <div id="mode_of_payment_direct_deposit" style="display: none;">
-                                  <div class="flex mode_of_payment_input">
-                                    <div class="mode_of_payment_content direct_deposit" style="margin-right: 5px;">
-                                      <label for="">Bank Name  <span class="required">*</span></label>
-                                      <input type="text" name="bank_name" oninput="this.value = this.value.toUpperCase()" value="{{ $row->bank_name }}">   
-                                    </div>
-                                    <div class="mode_of_payment_content direct_deposit" style="margin-left: 5px;">
-                                      <label for="">Bank Branch Name  <span class="required">*</span></label>
-                                      <input type="text" name="bank_branch_name" value="{{ $row->bank_branch_name }}">   
-                                    </div>
-                                  </div>
-                                  <div class="flex" style="margin-top: 10px;">
-                                    <div class="mode_of_payment_content direct_deposit" style="margin-right: 5px;">
-                                      <label for="">Bank Account Name  <span class="required">*</span></label>
-                                      <input type="text" name="bank_account_name" value="{{ $row->bank_account_name }}">   
-                                    </div>
-                                    <div class="mode_of_payment_content direct_deposit" style="margin-left: 5px;">
-                                      <label for="">Bank Account Number  <span class="required">*</span></label>
-                                      <input type="text" name="bank_account_number" value="{{ $row->bank_account_number }}">   
-                                    </div>
-                                  </div>
-                                </div>
+                          <div class="mode_of_payment_section">
+                            <div class="mode_of_payment_section1">
+                              <div class="mode_of_payment_">
+                                <label for="">Mode of Payment <span class="required">*</span></label>
+                                <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" required>
+                                    <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
+                                </select>            
                               </div>
+                              <div class="request_information start">
+                                <label for="">Requested Date:</label>
+                                <span>{{ $row->created_at }}</span>
+                              </div>
+                              <div class="request_information">
+                                  <label for="">Created by:</label>
+                                  <span>{{ $row->cms_users_name }}</span>
+                              </div>
+                              <div class="request_information">
+                                  <label for="">Comment:</label>
+                                  <span>
+                                      {{ $row->additional_notes }}
+                                  </span>
+                              </div>
+                            </div>
+                            <div class="mode_of_payment_section2">
+                              <div class="mode_of_payment_dropdown">
+                                  <div class="mode_of_payment_content" id="check_payment" style="display: none;">
+                                    <label for="">Payee Name <span class="required">*</span></label>
+                                    <input type="text" name="payee_name" value="{{ $row->payee_name }}">   
+                                  </div>
+                                  <div class="mode_of_payment_content" id="credit_card" style="display: none;">
+                                    <label for="">Note  <span class="required">*</span></label>
+                                    <input type="text" placeholder="PLEASE COORDINATE TO ACCOUNTING MANAGER" disabled>   
+                                  </div>
+                                  <div class="mode_of_payment_content" id="gcash" style="display: none;">
+                                    <label for="">Gcash#  <span class="required">*</span></label>
+                                    <input type="text" name="gcash_number" value="{{ $row->gcash_number }}">   
+                                  </div>
+                                  <div id="mode_of_payment_direct_deposit" style="display: none;">
+                                    <div class="flex mode_of_payment_input">
+                                      <div class="mode_of_payment_content direct_deposit" style="margin-right: 5px;">
+                                        <label for="">Bank Name  <span class="required">*</span></label>
+                                        <input type="text" name="bank_name" oninput="this.value = this.value.toUpperCase()" value="{{ $row->bank_name }}">   
+                                      </div>
+                                      <div class="mode_of_payment_content direct_deposit" style="margin-left: 5px;">
+                                        <label for="">Bank Branch Name  <span class="required">*</span></label>
+                                        <input type="text" name="bank_branch_name" value="{{ $row->bank_branch_name }}">   
+                                      </div>
+                                    </div>
+                                    <div class="flex" style="margin-top: 10px;">
+                                      <div class="mode_of_payment_content direct_deposit" style="margin-right: 5px;">
+                                        <label for="">Bank Account Name  <span class="required">*</span></label>
+                                        <input type="text" name="bank_account_name" value="{{ $row->bank_account_name }}">   
+                                      </div>
+                                      <div class="mode_of_payment_content direct_deposit" style="margin-left: 5px;">
+                                        <label for="">Bank Account Number  <span class="required">*</span></label>
+                                        <input type="text" name="bank_account_number" value="{{ $row->bank_account_number }}">   
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                          </div> 
+                          <hr>
+                          <div class="total_amount_content">
+                              <label for="">Reference Number:</label>
+                              <span>{{ $row->reference_number }}</span>
                           </div>
-                        </div> 
-                        <hr>
-                        <div class="total_amount_content">
-                            <label for="">Reference Number:</label>
-                            <span>{{ $row->reference_number }}</span>
-                        </div>
-                        <div class="total_amount_content">
-                          <label for="">Amount Requested:</label>
-                          <input type="number" value="{{ $row->requested_amount }}" readonly>
-                        </div>
-                        <div class="additional_notes">
-                            <label for="">Additional Notes: </label>
-                            <textarea name="additional_notes" id="additional_notes" required></textarea>
-                        </div>
-                    </div>
+                          <div class="total_amount_content">
+                            <label for="">Amount Requested:</label>
+                            <input type="number" value="{{ $row->requested_amount }}" readonly>
+                          </div>
+                          <div class="additional_notes">
+                              <label for="">Additional Notes: </label>
+                              <textarea name="additional_notes" id="additional_notes" required></textarea>
+                          </div>
+                      </div>
                     </div>        
                 </div>
                 <div class='panel-footer'>
@@ -1570,7 +1587,6 @@
   // Select Department
   $('#req_department').select2({
     placeholder: "Select a department",
-    dropdownAutoWidth: true,
     width: '100%',
     ajax: {
         url: '{{ route('department') }}',
@@ -1685,7 +1701,7 @@
       $('#mode_of_payment_direct_deposit').find('input').val('');
       $('#gcash').hide();
       $('#gcash').find('input').attr('required', false);
-      $('#gcash').find('input').val('');
+      
 
     // Credit Card
     }else if(mode_of_payment_val == '4'){
@@ -1699,7 +1715,7 @@
       $('#gcash').hide();
       $('#gcash').find('input').attr('required', false);
       $('#gcash').find('input').val('');
-
+      
 
     // Direct Deposit
     }else if(mode_of_payment_val == '2'){
