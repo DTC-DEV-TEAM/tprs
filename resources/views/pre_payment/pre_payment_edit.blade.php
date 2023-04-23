@@ -232,7 +232,7 @@
   .total_amount_content label{
     font-size: 15px;
     margin-right: 10px;
-    width: 131px;
+    width: 150px;
   }
 
   .total_amount_content input{
@@ -244,6 +244,18 @@
     margin-right: 10px;
     width: 150px;
   }
+
+  /* AP Recording */
+  .ap_recording{
+    display: flex;
+    width: 100%;
+  }
+
+  .ap_recording_content{
+    min-width: 31.9%;
+    margin-right: 30px;
+  }
+  /* End of AP Recording */
 
   .request_information label{
     font-size: 15px;
@@ -380,6 +392,7 @@
 
   .mode_of_payment_dropdown label{
     display: block;
+    width: 150px;
   }
 
   #check_payment input{
@@ -422,24 +435,18 @@
 
   .mode_of_payment_section{
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
   }
 
   .mode_of_payment_section1{
-    width: 31.4%;
+    width: 31.9%;
     margin-right: 30px;
   }
 
   .mode_of_payment_section2{
-    width: 31.4%;
+    width: 31.9%;
   }
-
-  /* @media screen and (max-width: 990px) {
-    .by_department {
-      flex-wrap: wrap;
-    }
-
-  } */
 
 </style>
 
@@ -462,24 +469,24 @@
                     {{ csrf_field() }}
                     <div class='form-group'>
                       <div class="request_content">
-                          <div class="by_department">
-                            <div class="request_department">
-                              <label for="">Department <span class="required">*</span></label>
-                              <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
-                                  <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
-                              </select>   
-                            </div>       
-                            <div class="request_department">
-                                  <label for="">Sub Department <span class="required">*</span></label>
-                                  <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
-                                      <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
-                                  </select>                           
-                            </div> 
-                            <div class="request_department r_full_name">
-                                  <label for="">Requestor Full Name <span class="required">*</span></label>
-                                  <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
-                            </div> 
-                          </div>
+                        <div class="by_department">
+                          <div class="request_department">
+                            <label for="">Department <span class="required">*</span></label>
+                            <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
+                                <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
+                            </select>   
+                          </div>       
+                          <div class="request_department">
+                                <label for="">Sub Department <span class="required">*</span></label>
+                                <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
+                                    <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
+                                </select>                           
+                          </div> 
+                          <div class="request_department r_full_name">
+                                <label for="">Requestor Full Name <span class="required">*</span></label>
+                                <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
+                          </div> 
+                        </div>
                           <div class="mode_of_payment_section">
                             <div class="mode_of_payment_section1">
                               <div class="mode_of_payment_">
@@ -577,24 +584,24 @@
                 <div class='panel-body'>
                     {{ csrf_field() }}
                     <div class='form-group'>
-                    <div class="request_content">
-                        <div class="flex">
-                        <div class="request_department">
+                      <div class="request_content">
+                        <div class="by_department">
+                          <div class="request_department">
                             <label for="">Department <span class="required">*</span></label>
                             <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
                                 <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
                             </select>   
-                            </div>       
-                            <div class="request_department">
+                          </div>       
+                          <div class="request_department">
                                 <label for="">Sub Department <span class="required">*</span></label>
                                 <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
                                     <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
                                 </select>                           
-                            </div> 
-                            <div class="request_department r_full_name">
+                          </div> 
+                          <div class="request_department r_full_name">
                                 <label for="">Requestor Full Name <span class="required">*</span></label>
                                 <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
-                            </div>
+                          </div> 
                         </div>
                         <div class="mode_of_payment_section">
                           <div class="mode_of_payment_section1">
@@ -645,24 +652,26 @@
                           </div>
                         </div> 
                         <hr>
-                        <div class="flex">
-                          <div class="total_amount_content">
-                            <label for="">Reference Number:</label>
-                            <input type="text" style="border: 1px solid #fff;" value="{{ $row->reference_number }}" readonly>
-                        </div>
-                        <div class="total_amount_content">
-                          <label for="">Amount Requested:</label>
-                          <input type="number" value="{{ $row->requested_amount }}" readonly>
-                        </div>
-                        </div>
-                        <div class="flex">
-                          <div class="total_amount_content">
-                            <label for="">BEACH pre-payment#:</label>
-                            <input type="text" placeholder="Enter ref#" name="system_reference_number" required>
+                        <div class="ap_recording">
+                          <div class="ap_recording_content">
+                            <div class="total_amount_content">
+                                <label for="">Reference Number:</label>
+                                <input type="text" style="border: 1px solid #fff;" value="{{ $row->reference_number }}" readonly>
+                            </div>
+                            <div class="total_amount_content">
+                              <label for="">Amount Requested:</label>
+                              <input type="number" value="{{ $row->requested_amount }}" readonly>
+                            </div>
                           </div>
-                          <div class="total_amount_content">
-                            <label for="">Cheque Date: </label>
-                            <input type="date" name="check_date" required>
+                          <div class="ap_recording_content">
+                            <div class="total_amount_content">
+                              <label for="">BEACH pre-payment#:</label>
+                              <input type="text" placeholder="Enter ref#" name="system_reference_number" required>
+                            </div>
+                            <div class="total_amount_content">
+                              <label for="">Cheque Date: </label>
+                              <input type="date" name="check_date" required>
+                            </div>
                           </div>
                         </div>
                         <div class="additional_notes">
@@ -683,7 +692,7 @@
                                 {{ $row->additional_notes }}
                             </span>
                         </div>
-                    </div>
+                      </div>
                     </div>        
                 </div>
                 <div class='panel-footer'>
@@ -708,34 +717,34 @@
                     
                     {{ csrf_field() }}
                     <div class='form-group'>
-                    <div class="request_content">
-                        <div class="flex">
-                            <div class="request_department">
-                                <label for="">Department <span class="required">*</span></label>
-                                <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
-                                    <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
-                                </select>   
-                            </div>       
-                            <div class="request_department">
+                      <div class="request_content">
+                        <div class="by_department">
+                          <div class="request_department">
+                            <label for="">Department <span class="required">*</span></label>
+                            <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
+                                <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
+                            </select>   
+                          </div>       
+                          <div class="request_department">
                                 <label for="">Sub Department <span class="required">*</span></label>
                                 <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
                                     <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
                                 </select>                           
-                            </div>   
-                            <div class="request_department r_full_name">
+                          </div> 
+                          <div class="request_department r_full_name">
                                 <label for="">Requestor Full Name <span class="required">*</span></label>
                                 <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
-                            </div>
+                          </div> 
                         </div>
-                        <div class="mode_of_payment_section">
-                          <div class="mode_of_payment_section1">
-                            <div class="mode_of_payment_">
-                              <label for="">Mode of Payment <span class="required">*</span></label>
-                              <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" required>
-                                  <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
-                              </select>            
+                          <div class="mode_of_payment_section">
+                            <div class="mode_of_payment_section1">
+                              <div class="mode_of_payment_">
+                                <label for="">Mode of Payment <span class="required">*</span></label>
+                                <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" required>
+                                    <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
+                                </select>            
+                              </div>
                             </div>
-                          </div>
                           <div class="mode_of_payment_section2">
                             <div class="mode_of_payment_dropdown">
                                 <div class="mode_of_payment_content" id="check_payment" style="display: none;">
@@ -775,64 +784,64 @@
                               </div>
                           </div>
                         </div> 
-                        <div class="flex">
-                          <div class="request_information_contents">
-                              <div class="request_information start">
-                                  <label for="">Requested Date:</label>
-                                  <span>{{ $row->created_at }}</span>
-                              </div>
-                              <div class="request_information">
-                                  <label for="">Created by:</label>
-                                  <span>{{ $row->cms_users_name }}</span>
-                              </div> 
-                              <div class="request_information">
-                                  <label for="">Comment:</label>
-                                  <span>
-                                      {{ $row->additional_notes }}
-                                  </span>
-                              </div>
+                      <hr>
+                      <div class="total_amount_content">
+                          <label for="">Reference Number:</label>
+                          <span>{{ $row->reference_number }}</span>
+                      </div>
+                      <div class="total_amount_content">
+                          <label for="">Used Amount:</label>
+                          <input type="number" value="{{ $row->requested_amount }}" readonly>
+                      </div>
+                      <div class="additional_notes">
+                          <label for="">Additional Notes: </label>
+                          <textarea name="additional_notes" id="additional_notes" required></textarea>
+                      </div>                        
+                      <div class="ap_recording">
+                        <div class="ap_recording_content">
+                          <div class="request_information start">
+                              <label for="">Requested Date:</label>
+                              <span>{{ $row->created_at }}</span>
                           </div>
-                          <div class="request_information_contents">
-                              <div class="request_information start">
-                                  <label for="">Approved Date:</label>
-                                  <span>{{ $row->approver_date }}</span>
-                              </div>
-                              <div class="request_information">
-                                  <label for="">Approved by:</label>
-                                  <span>{{ $row->approver_name }}</span>
-                              </div>
-                              <div class="request_information">
-                                  <label for="">Approver Note:</label>
-                                  <span>
-                                      {{ $row->approver_note }}
-                                  </span>
-                              </div>
-                              <div class="request_information">
-                                  <label for="">Check Date:</label>
-                                  <span>
-                                      {{ date('Y-m-d', strtotime($row->check_date)) }}
-                                  </span>
-                              </div>
+                          <div class="request_information">
+                              <label for="">Created by:</label>
+                              <span>{{ $row->cms_users_name }}</span>
+                          </div> 
+                          <div class="request_information">
+                              <label for="">Comment:</label>
+                              <span>
+                                  {{ $row->additional_notes }}
+                              </span>
                           </div>
                         </div>
-                        <hr>
-                        <div class="total_amount_content">
-                            <label for="">Reference Number:</label>
-                            <span>{{ $row->reference_number }}</span>
-                        </div>
-                        <div class="total_amount_content">
-                            <label for="">Used Amount:</label>
-                            <input type="number" value="{{ $row->requested_amount }}" readonly>
-                        </div>
-                        <div class="additional_notes">
-                            <label for="">Additional Notes: </label>
-                            <textarea name="additional_notes" id="additional_notes" required></textarea>
+                        <div class="ap_recording_content">
+                            <div class="request_information start">
+                                <label for="">Approved Date:</label>
+                                <span>{{ $row->approver_date }}</span>
+                            </div>
+                            <div class="request_information">
+                                <label for="">Approved by:</label>
+                                <span>{{ $row->approver_name }}</span>
+                            </div>
+                            <div class="request_information">
+                                <label for="">Approver Note:</label>
+                                <span>
+                                    {{ $row->approver_note }}
+                                </span>
+                            </div>
+                            <div class="request_information">
+                                <label for="">Cheque Date:</label>
+                                <span>
+                                    {{ date('Y-m-d', strtotime($row->check_date)) }}
+                                </span>
+                            </div>
+                          </div>
                         </div>
                         <br>
                         <div>
-                          <span style="font-size: 15px;"><span style="color: red; font-weight: bold;">Note: </span>Click Release button after the requestor received his/her budget.</span>
+                          <span style="font-size: 15px;"><span style="color: red; font-weight: bold;">Note: </span>Click Release button after the requestor received his/her Cash Advance.</span>
                         </div>
-                    </div>
+                      </div>
                     </div>        
                 </div>
                 <div class='panel-footer'>
@@ -852,7 +861,7 @@
       {{-- <hr> --}}
       <div class="budget_content" style="display: none;">
         <div class="budget_block">
-          <div class="circ_delete" style="display: none;">
+          <div class="circ_delete">
             <i class="fa fa-close"></i>
           </div>
           <div class="budget">
@@ -925,7 +934,7 @@
       </div>
       <div class='panel panel-default'>
         <form method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
-        <div class='panel-heading'>Request Budget</div>
+        <div class='panel-heading'>Receipts Validation</div>
         <div class='panel-body'>
           {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
             {{ csrf_field() }}
@@ -1086,32 +1095,34 @@
                   </div>
                 </div>
                 <hr>
-                <div class="total_amount_content">
-                  <label for="">Reference Number:</label>
-                  <input style="border: none;" value="{{ $row->reference_number }}" readonly>
-                </div>
-                <div class="flex">
-                  <div class="total_amount_content">
-                    <label for="">AP Date Checked:</label>
-                    <input style="border: none;" value="{{ date('Y-m-d', strtotime($row->check_date)) }}" readonly>
+                <div class="ap_recording">
+                  <div class="ap_recording_content">
+                    <div class="total_amount_content">
+                      <label for="">Reference Number:</label>
+                      <input style="border: none;" value="{{ $row->reference_number }}" readonly>
+                    </div>
+                    <div class="total_amount_content">
+                      <label for="">AP Date Checked:</label>
+                      <input style="border: none;" value="{{ date('Y-m-d', strtotime($row->check_date)) }}" readonly>
+                    </div>
+                    <div class="total_amount_content">
+                      <label for="">BEACH pre-payment#:</label>
+                      <input style="border: none;" value="{{ $row->system_reference_number }}" readonly>
+                    </div>
                   </div>
-                  <div class="total_amount_content">
-                    <label for="">BEACH pre-payment#:</label>
-                    <input style="border: none;" value="{{ $row->system_reference_number }}" readonly>
-                  </div>
-                </div>
-                <div class="flex">
-                  <div class="total_amount_content">
-                    <label for="">Requested Amount:</label>
-                    <input type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
-                  </div>
-                  <div class="total_amount_content">
-                    <label for="">Used Amount:</label>
-                    <input type="number" id="total_amount" value="0" name="total_amount" readonly>
-                  </div>
-                  <div class="total_amount_content">
-                    <label for="">To be returned:</label>
-                    <input type="number" id="balance_amount" value="0" name="balance_amount" readonly>
+                  <div class="ap_recording_content">
+                    <div class="total_amount_content">
+                      <label for="">Requested Amount:</label>
+                      <input type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
+                    </div>
+                    <div class="total_amount_content">
+                      <label for="">Used Amount:</label>
+                      <input type="number" id="total_amount" value="0" name="total_amount" readonly>
+                    </div>
+                    <div class="total_amount_content">
+                      <label for="">To be returned:</label>
+                      <input type="number" id="balance_amount" value="0" name="balance_amount" readonly>
+                    </div>
                   </div>
                 </div>
                 <div class="additional_notes">
@@ -1502,9 +1513,9 @@
   // Name first letter uppercase
   $('#req_full_name').on('keyup', function() {
     var val = $(this).val().toLowerCase().replace(/\b[a-z]/g, function(letter) {
-          return letter.toUpperCase();
-        });
-        $(this).val(val);
+      return letter.toUpperCase();
+    });
+    $(this).val(val);
   });
 
   // Add Row
@@ -1515,10 +1526,8 @@
     clone_budget.find('input').val('');
     // clone_budget.find('#budget_justification').remove();
     add_select2(clone_budget);
-
     // Get the number of existing budget justifications
     var count = $('.budget_content').length;
-
     // Add the current count to the name attribute of the file input
     clone_budget.find('#upload_img').attr('name', 'budget_justification' + count + '[]');
 
@@ -1565,15 +1574,15 @@
   $(document).on('click', '.budget', function(){
     $('.budget').css('box-shadow', '');
     $(this).css('box-shadow', 'rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset');
-    $(this).closest('.budget_content').find('.circ_delete').show();
-    $('.circ_delete').not($(this).closest('.budget_content').find('.circ_delete')).hide();
+    // $(this).closest('.budget_content').find('.circ_delete').show();
+    // $('.circ_delete').not($(this).closest('.budget_content').find('.circ_delete')).hide();
   });
 
   // Hide circ_delete element when clicking outside of budgets
   $(document).on('click', function(event) {
     if (!$(event.target).closest('.budget').length) {
       $('.budget').css('box-shadow', '');
-      $('.circ_delete').css('display', 'none');
+      // $('.circ_delete').css('display', 'none');
     }
   });
   // End of Hover budget row
