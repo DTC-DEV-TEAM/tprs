@@ -295,7 +295,6 @@
   top: 0;
   width: 100%; 
   height: 100%; 
-  /* background-color: rgba(0,0,0,0.5);  */
   }
 
   .modal-content {
@@ -409,7 +408,7 @@
     border: 1px solid #aaa;
     border-radius: 5px;
     text-align: center;
-    background-color: #eee;
+    background-color: #eeeeee;
   }
 
   #gcash input{
@@ -472,6 +471,10 @@
   .receipts_total_amount{
     width: 365px;
     padding-right: 10px;
+  }
+
+  .receipts_amount_contents:nth-child(2) input{
+    background-color: #eeeeee;
   }
 
   /* End of Receipts Validation */
@@ -960,7 +963,7 @@
         </div>
       </div>
       <div class='panel panel-default'>
-        <form method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
+        <form method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data" id="receipts_validation">
         <div class='panel-heading'>Receipts Validation</div>
         <div class='panel-body'>
           {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
@@ -1050,21 +1053,20 @@
                     <div class="budget">
                       <div class="budget_description">
                         <label for="">Description</label>
-                        <input class="input_description" type="text" value="UNUSED AMOUNT" name="description[]" required>
+                        <input class="input_description" type="text" value="UNUSED AMOUNT" name="description[]" style="background-color: #eeeeee;" readonly>
                       </div>
                       <div class="budget_description">
                         <label for="">Brand</label>
-                        <select class="js-example-basic-single brand" id="brand" name="brand[]" required>
+                        <select class="js-example-basic-single brand" id="brand" name="brand[]" disabled>
                           <option value="" selected disabled>Select Brand</option>
                           @foreach ($brands as $brand)
-                      
                             <option {{ ($brand->id == 53) ? "selected": "" }} value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
                           @endforeach
                         </select>       
                       </div>
                       <div class="budget_description">
                         <label for="">Location</label>
-                        <select class="js-example-basic-single location" name="location[]" required>
+                        <select class="js-example-basic-single location" name="location[]" disabled>
                           <option value="" selected disabled>Select Category</option>
                           @foreach ($locations as $location)
                             <option {{ ($location->id == 115) ? "selected": "" }} value="{{ $location->id }}">{{ $location->store_name }}</option>
@@ -1073,7 +1075,7 @@
                       </div>
                       <div class="budget_description">
                         <label for="">Category</label>
-                        <select class="js-example-basic-single category" name="category[]" required>
+                        <select class="js-example-basic-single category" name="category[]" disabled>
                           {{-- <option value="" selected disabled>Select Category</option> --}}
                           @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->category_name }}</option>
@@ -1082,7 +1084,7 @@
                       </div>
                       <div class="budget_description" id="select_account">
                         <label for="">Account</label>
-                        <select class="js-example-basic-single account" name="account[]" required>
+                        <select class="js-example-basic-single account" name="account[]" disabled>
                           <option value="2" selected>CASH IN BANK</option>
                         </select>
                       </div>
@@ -1101,16 +1103,16 @@
                       </div>
                       <div class="budget_description">
                         <label for="">Value</label >
-                        <input type="number" name="value[]" min="0" class="budget_value" required>
+                        <input type="number" name="value[]" min="1" value="0" class="budget_value" required>
                       </div>
                       <div class="budget_description">
                         <label for="">Total Value</label >
-                        <input type="number" name="amount[]" min="0" class="budget_amount" readonly>
+                        <input type="number" name="amount[]" min="0" class="budget_amount" value="0" id="cash_in_bank_total_value" style="background-color: #eeeeee" readonly>
                       </div>
                       <div class="budget_description" id="step3_budget_justification">
                         <label for="">Receipts</label>
                         <div class="upload_img_parent">
-                          <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" multiple>
+                          <input type="file" name="budget_justification[]" accept="image/png, image/gif, image/jpeg" id="upload_img" class="receipts_upload_img" multiple>
                         </div>
                       </div>
                     </div>
@@ -1129,7 +1131,7 @@
                       <input style="border: none;" value="{{ $row->reference_number }}" readonly>
                     </div>
                     <div class="total_amount_content receipts_total_amount">
-                      <label for="">AP Date Checked:</label>
+                      <label for="">Cheque Date:</label>
                       <input style="border: none;" value="{{ date('Y-m-d', strtotime($row->check_date)) }}" readonly>
                     </div>
                     <div class="total_amount_content receipts_total_amount">
@@ -1148,11 +1150,11 @@
                     </div>
                     <div class="total_amount_content receipts_total_amount">
                       <label for="">Unused Amount:</label>
-                      <input type="number" id="balance_amount" value="0" name="balance_amount" readonly>
+                      <input type="number" id="unused_amount" value="0" name="unused_amount" readonly>
                     </div>
                     <div class="total_amount_content receipts_total_amount">
                       <label for="">Remaining Balance:</label>
-                      <input type="number" id="remaining_blance" name="remaining_blance" read>
+                      <input type="number" id="remaining_balance" value="0" name="remaining_blance" readonly>
                     </div>
                   </div>
                 </div>
@@ -1172,7 +1174,7 @@
         </div>
         <div class='panel-footer'>
           <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
-          <input type='submit' class='btn btn-primary' name="submit" id="submit_approve" value='Liquidate'/>
+          <input type='submit' class='btn btn-primary' name="submit" id="submit_approve" value='Liquidate' disabled/>
           <input type="id" name="returns_id" value="{{ $row->id }}" style="visibility: hidden;">
           <input type="status_id" name="status_id" value="{{ $row->status_id }}" style="visibility: hidden;">
         </div>
@@ -1188,7 +1190,7 @@
     @if ($row->status_id == 4)
       <div class="budget_content" style="display: none;">
         <div class="budget_block">
-          <div class="circ_delete" style="display: none;">
+          <div class="circ_delete">
             <i class="fa fa-close"></i>
           </div>
           <div class="budget">
@@ -1269,37 +1271,36 @@
       </div>
       <div class='panel panel-default'>
         <form id="close" method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
-        <div class='panel-heading'>Validate Budget Information</div>
+        <div class='panel-heading'>Validate Receipts</div>
         <div class='panel-body'>
           {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
             {{ csrf_field() }}
             <div class='form-group'>
               <div class="request_content">
-                <div class="flex">
-                  <div class="request_department">
+                <div class="receipts_per_department">
+                  <div class="receipts_request_department">
                       <label for="">Department <span class="required">*</span></label>
                       <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
                           <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
                       </select>   
                   </div>       
-                  <div class="request_department">
+                  <div class="receipts_request_department">
                       <label for="">Sub Department <span class="required">*</span></label>
                       <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
                           <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
                       </select>                           
                   </div>   
-                  <div class="request_department r_full_name">
+                  <div class="receipts_request_department r_full_name">
                       <label for="">Requestor Full Name <span class="required">*</span></label>
                       <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
                   </div>
-                  <div class="request_department">
+                  <div class="receipts_request_department">
                       <label for="">Mode of Payment <span class="required">*</span></label>
                       <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" disabled required>
                           <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
                       </select>            
                   </div>
-              </div>
-
+                </div>
                 <hr>
                 <div class="budget_info">
                   <p>Items Breakdown</p>
@@ -1376,16 +1377,20 @@
                         </div>
                         <div class="budget_description">
                           <label for="">Total Value</label >
-                          <input type="number" name="amount[]" min="0" class="budget_amount" value="{{ $budget->amount }}" readonly>
+                          <input type="number" name="amount[]" min="0" class="budget_amount" id="cash_in_bank_total_value" value="{{ $budget->amount }}" readonly>
                         </div>
                         <div class="budget_description" id="budget_justification" style="width: 200px;">
                           <div style="width: 200px;">
-                            <label for="">Budget Justification</label>
+                            <label for="">Receipts</label>
                             @php
                               $img = explode(", ",$budget->budget_justification);
                             @endphp
                             @foreach ($img as $receipts_img)
-                              <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No Image Inserted" style="height: 75px; width: 49%; display: inline-block; margin-top: 2px;" id="budget_image" class="modal-trigger">
+                              @if ($receipts_img == null)
+                                <p>No Image Inserted</p>
+                              @else
+                                <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No Image Inserted" style="height: 75px; width: 49%; display: inline-block; margin-top: 2px;" id="budget_image" class="modal-trigger">
+                              @endif
                             @endforeach
                             <div class="modal">
                               <div class="modal-content">
@@ -1412,28 +1417,32 @@
                   </div>
                 </div>
                 <hr>
-                <div class="flex">
-                  <div class="total_amount_content">
-                    <label for="">Reference#:</label>
-                    <input style="border: 1px solid #fff;" value="{{ $row->reference_number }}" readonly>
+                <div class="receipts_amount_contents">
+                  <div class="total_amount_content receipts_total_amount">
+                    <label for="">Reference Number:</label>
+                    <input style="border: none;" value="{{ $row->reference_number }}" readonly>
                   </div>
-                  <div class="total_amount_content">
+                  <div class="total_amount_content receipts_total_amount">
                     <label for="">AR reference#:</label>
-                    <input type="text" name="ar_reference_number" placeholder="Input ar#" required>
+                    <input type="text" name="ar_reference_number" placeholder="Input AR#" required>
                   </div>
                 </div>
-                <div class="flex">
-                  <div class="total_amount_content">
+                <div class="receipts_amount_contents">
+                  <div class="total_amount_content receipts_total_amount">
                     <label for="">Requested Amount:</label>
                     <input type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
                   </div>
-                  <div class="total_amount_content">
+                  <div class="total_amount_content receipts_total_amount">
                     <label for="">Used Amount:</label>
                     <input type="number" id="total_amount" value="{{ $row->total_amount }}" name="total_amount" readonly>
                   </div>
-                  <div class="total_amount_content">
-                    <label for="">Returned Balance:</label>
-                    <input type="number" id="balance_amount" value="{{ $row->balance_amount }}" name="balance_amount" readonly>
+                  <div class="total_amount_content receipts_total_amount">
+                    <label for="">Unused Amount:</label>
+                    <input type="number" id="unused_amount" value="{{ $row->unused_amount }}" name="unused_amount" readonly>
+                  </div>
+                  <div class="total_amount_content receipts_total_amount">
+                    <label for="">Remaining Balance:</label>
+                    <input type="number" id="remaining_balance" value="{{ $row->balance_amount }}" name="remaining_blance" readonly>
                   </div>
                 </div>
                 <div class="additional_notes">
@@ -1502,19 +1511,43 @@
 
 <script>
   
+  
+
   // Budget Information Breakdown Computation
   function get_all_sum(){
     let total = 0;
+    let remaining_balance = 0;
 
-    $('.budget_amount').each(function(){
+    $('.budget_amount:not(:eq(1))').each(function(){
       total += parseFloat($(this).val() || 0);
     });
 
+    $('.budget_amount').each(function(){
+      remaining_balance += parseFloat($(this).val() || 0);
+    })
+
     const requested_amount = $('#requested_amount').val();
-    const to_be_returned = requested_amount - total;
+    const to_be_returned = requested_amount - remaining_balance;
+    const cash_in_bank_total_value = $('#cash_in_bank_total_value').val();
 
     $('#total_amount').val(Math.abs(total));
-    $('#balance_amount').val(to_be_returned);
+    $('#remaining_balance').val(to_be_returned);
+    $('#unused_amount').val(cash_in_bank_total_value);
+    
+    if (to_be_returned == 0) {
+      $('#submit_approve').click(function(){
+        $('.brand').attr('disabled', false);
+        $('.location').attr('disabled', false);
+        $('.category').attr('disabled', false);
+        $('.account').attr('disabled', false);
+      })
+      $('#submit_approve').attr('disabled', false);
+      $('#submit_approve').removeAttr('title');
+    } else {
+      $('#submit_approve').attr('title', 'Please ensure that the remaining balance is zero before proceeding.');
+      $('#submit_approve').attr('disabled', true);
+    }
+
   }
 
   function get_sum(row){
@@ -1523,6 +1556,7 @@
     const value = row.find('.budget_value').val();
     const total = qty * value;
     row.find('.budget_amount').val(total);
+
     get_all_sum();
   }
 
@@ -1562,7 +1596,6 @@
     // Add the current count to the name attribute of the file input
     clone_budget.find('#upload_img').attr('name', 'budget_justification' + count + '[]');
 
-    
     $(this).parents('.budget_description').before(clone_budget);
     $(clone_budget).hide().fadeIn(500);
   });
@@ -1814,7 +1847,7 @@
 
     row.find(".location").select2({
       placeholder: "Select Location",
-      width: '149',
+      width: '180',
     })
 
     row.find(".category").select2({
