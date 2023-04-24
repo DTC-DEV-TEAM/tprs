@@ -325,7 +325,7 @@ use App\Store;
 				if($column_value == '1'){
 					$column_value = '<span class="label" style="background-color: #2980B9; color: white; font-size: 12px;">For Approval</span>';
 				}else if($column_value == '2'){
-					$column_value = '<span class="label" style="background-color: #BDC581; color: white; font-size: 12px;">For Budget Released</span>';
+					$column_value = '<span class="label" style="background-color: #BDC581; color: white; font-size: 12px;">For Release</span>';
 				}else if($column_value == '3'){
 					$column_value = '<span class="label" style="background-color: #f0ad4e; color: white; font-size: 12px;">For Receipts Validation</span>';
 				}else if($column_value == '4'){
@@ -334,6 +334,8 @@ use App\Store;
 					$column_value = '<span class="label" style="background-color: #5cb85c; color: white; font-size: 12px;">Closed</span>';
 				}else if($column_value == '6'){
 					$column_value = '<span class="label" style="background-color: #FF6347; color: white; font-size: 12px;">Rejected</span>';
+				}else if($column_value == '7'){
+					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For AP Recording</span>';
 				}
 				
 			}
@@ -455,6 +457,9 @@ use App\Store;
 					'pre_payment.reference_number',
 					'pre_payment.accounting_closed_date',
 					'pre_payment.accounting_closed_note',
+					'pre_payment.unused_amount',
+					'pre_payment.system_reference_number',
+					'pre_payment.ar_reference_number',
 				)
 				->where('pre_payment.id',$id)
 				->first();
