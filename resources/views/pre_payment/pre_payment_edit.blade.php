@@ -448,6 +448,33 @@
     width: 31.9%;
   }
 
+  /* Receipts Validation */
+  .receipts_per_department{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .receipts_request_department{
+    width: 365px;
+    padding-right: 10px;
+  }
+
+  .receipts_comments{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .receipts_amount_contents{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .receipts_total_amount{
+    width: 365px;
+    padding-right: 10px;
+  }
+
+  /* End of Receipts Validation */
 </style>
 
 @endpush
@@ -855,7 +882,7 @@
         </form>
     @endif
 
-    {{-- Budget Information Breakdown --}}
+    {{-- Receipts Information Breakdown --}}
     {{-- Requestor Privilege --}}
     @if ($row->status_id == 3)
       {{-- <hr> --}}
@@ -940,32 +967,32 @@
             {{ csrf_field() }}
             <div class='form-group'>
               <div class="request_content">
-                <div class="flex">
-                  <div class="request_department">
+                <div class="receipts_per_department">
+                  <div class="receipts_request_department">
                       <label for="">Department <span class="required">*</span></label>
                       <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
                           <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
                       </select>   
                   </div>       
-                  <div class="request_department">
+                  <div class="receipts_request_department">
                       <label for="">Sub Department <span class="required">*</span></label>
                       <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
                           <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
                       </select>                           
                   </div>   
-                  <div class="request_department r_full_name">
+                  <div class="receipts_request_department r_full_name">
                       <label for="">Requestor Full Name <span class="required">*</span></label>
                       <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
                   </div>
-                  <div class="request_department">
+                  <div class="receipts_request_department">
                       <label for="">Mode of Payment <span class="required">*</span></label>
                       <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" disabled required>
                           <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
                       </select>            
                   </div>
               </div>
-              <div class="flex">
-                  <div class="request_department">
+              <div class="receipts_comments">
+                  <div class="receipts_request_department">
                     <div class="request_information start">
                         <label for="">Requested Date:</label>
                         <span>{{ $row->created_at }}</span>
@@ -981,7 +1008,7 @@
                         </span>
                     </div>
                   </div>
-                  <div class="request_department">
+                  <div class="receipts_request_department">
                     <div class="request_information start">
                         <label for="">Approved Date:</label>
                         <span>{{ $row->approver_date }}</span>
@@ -997,7 +1024,7 @@
                         </span>
                     </div>
                   </div>
-                  <div class="request_department">
+                  <div class="receipts_request_department">
                       <div class="request_information start">
                           <label for="">Date Released:</label>
                           <span>{{ $row->accounting_date_release }}</span>
@@ -1095,33 +1122,37 @@
                   </div>
                 </div>
                 <hr>
-                <div class="ap_recording">
-                  <div class="ap_recording_content">
-                    <div class="total_amount_content">
+                <div class="receipts_amount_comments">
+                  <div class="receipts_amount_contents">
+                    <div class="total_amount_content receipts_total_amount">
                       <label for="">Reference Number:</label>
                       <input style="border: none;" value="{{ $row->reference_number }}" readonly>
                     </div>
-                    <div class="total_amount_content">
+                    <div class="total_amount_content receipts_total_amount">
                       <label for="">AP Date Checked:</label>
                       <input style="border: none;" value="{{ date('Y-m-d', strtotime($row->check_date)) }}" readonly>
                     </div>
-                    <div class="total_amount_content">
+                    <div class="total_amount_content receipts_total_amount">
                       <label for="">BEACH pre-payment#:</label>
                       <input style="border: none;" value="{{ $row->system_reference_number }}" readonly>
                     </div>
                   </div>
-                  <div class="ap_recording_content">
-                    <div class="total_amount_content">
+                  <div class="receipts_amount_contents">
+                    <div class="total_amount_content receipts_total_amount">
                       <label for="">Requested Amount:</label>
                       <input type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
                     </div>
-                    <div class="total_amount_content">
+                    <div class="total_amount_content receipts_total_amount">
                       <label for="">Used Amount:</label>
                       <input type="number" id="total_amount" value="0" name="total_amount" readonly>
                     </div>
-                    <div class="total_amount_content">
-                      <label for="">To be returned:</label>
+                    <div class="total_amount_content receipts_total_amount">
+                      <label for="">Unused Amount:</label>
                       <input type="number" id="balance_amount" value="0" name="balance_amount" readonly>
+                    </div>
+                    <div class="total_amount_content receipts_total_amount">
+                      <label for="">Remaining Balance:</label>
+                      <input type="number" id="remaining_blance" name="remaining_blance" read>
                     </div>
                   </div>
                 </div>
@@ -1531,7 +1562,9 @@
     // Add the current count to the name attribute of the file input
     clone_budget.find('#upload_img').attr('name', 'budget_justification' + count + '[]');
 
+    
     $(this).parents('.budget_description').before(clone_budget);
+    $(clone_budget).hide().fadeIn(500);
   });
 
   $(document).on('click', '.add_row_receipt', function(){
