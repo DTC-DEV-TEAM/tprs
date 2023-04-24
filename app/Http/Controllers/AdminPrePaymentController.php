@@ -38,9 +38,7 @@ use Illuminate\Support\Arr;
 			$this->button_action_style = "button_icon";
 			$this->button_add = true;
 			$this->button_edit = false;
-			if (CRUDBooster::myPrivilegeName() == "Super Administrator"){
-				$this->button_delete = true;
-			}
+			$this->button_delete = false;
 			$this->button_detail = true;
 			$this->button_show = true;
 			$this->button_filter = true;
@@ -53,25 +51,23 @@ use Illuminate\Support\Arr;
 			$this->col = [];
 			$this->col[] = ["label"=>"Reference Number","name"=>"reference_number"];
 			$this->col[] = ["label"=>"Request Status","name"=>"status_id"];
-			$this->col[] = ["label"=>"Department","name"=>"department_id" , "join"=>"department,department_name"];
-			$this->col[] = ["label"=>"Requested By","name"=>"created_by" , "join"=>"cms_users,name"];
+			$this->col[] = ["label"=>"Department","name"=>"department_id","join"=>"department,department_name"];
+			$this->col[] = ["label"=>"Requested By","name"=>"created_by","join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"Request Date","name"=>"created_at"];
-			$this->col[] = ["label"=>"Approved By","name"=>"approver_id", "join"=>"cms_users,name"];
+			$this->col[] = ["label"=>"Approved By","name"=>"approver_id","join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"Approved Date","name"=>"approver_date"];
-			$this->col[] = ["label"=>"Approved By Accounting","name"=>"accounting_id", "join"=>"cms_users,name"];
-			$this->col[] = ["label"=>"Budget Date Released ","name"=>"accounting_date_release"];
-			// $this->col[] = ["label"=>"Menu Product Type","name"=>"menu_product_types_id","join"=>"menu_product_types,menu_product_type_description"];
-
+			$this->col[] = ["label"=>"Approved By Accounting","name"=>"accounting_id","join"=>"cms_users,name"];
+			$this->col[] = ["label"=>"Budget Date Released","name"=>"accounting_date_release"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'Reference Number','name'=>'reference_number','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Approver Id','name'=>'approver_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Aprrover Note','name'=>'aprrover_note','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'approver,id'];
+			$this->form[] = ['label'=>'Aprrover Note','name'=>'aprrover_note','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Approver Date','name'=>'approver_date','type'=>'datetime','validation'=>'required|date_format:Y-m-d H:i:s','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Accounting Id','name'=>'accounting_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Accounting Note','name'=>'accounting_note','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'accounting,id'];
+			$this->form[] = ['label'=>'Accounting Note','name'=>'accounting_note','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Accounting Date','name'=>'accounting_date','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Accounting Mode Of Release','name'=>'accounting_mode_of_release','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Requestor Receipts','name'=>'requestor_receipts','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
@@ -79,6 +75,22 @@ use Illuminate\Support\Arr;
 			$this->form[] = ['label'=>'Created By','name'=>'created_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Updated By','name'=>'updated_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
+
+			# OLD START FORM
+			//$this->form = [];
+			//$this->form[] = ['label'=>'Reference Number','name'=>'reference_number','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Approver Id','name'=>'approver_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Aprrover Note','name'=>'aprrover_note','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'approver,id'];
+			//$this->form[] = ['label'=>'Approver Date','name'=>'approver_date','type'=>'datetime','validation'=>'required|date_format:Y-m-d H:i:s','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Accounting Id','name'=>'accounting_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Accounting Note','name'=>'accounting_note','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'accounting,id'];
+			//$this->form[] = ['label'=>'Accounting Date','name'=>'accounting_date','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Accounting Mode Of Release','name'=>'accounting_mode_of_release','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Requestor Receipts','name'=>'requestor_receipts','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Budget Approval','name'=>'budget_approval','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Created By','name'=>'created_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Updated By','name'=>'updated_by','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			# OLD END FORM
 
 			/* 
 	        | ---------------------------------------------------------------------- 
@@ -455,12 +467,14 @@ use Illuminate\Support\Arr;
 				$total_amount = $return_inputs['total_amount'];
 				$balance_amount = $return_inputs['balance_amount'];
 				$budget_information_notes = $return_inputs['additional_notes'];
+				$unused_amount = $return_inputs['unused_amount'];
 
 				if($submit_btn == 'Liquidate'){
 					$postdata['status_id'] = 4;
 					$postdata['total_amount'] = $total_amount;
 					$postdata['balance_amount'] = abs($balance_amount);
 					$postdata['budget_information_notes'] = $budget_information_notes;
+					$postdata['unused_amount'] = $unused_amount;
 				}else{
 					$postdata['status_id'] = 6;
 				}
@@ -478,7 +492,13 @@ use Illuminate\Support\Arr;
 				$budget_justification = [$return_inputs['budget_justification']];
 				$requested_project = [];
 				$insert_pre_payment_body = [];
+	
+				if($return_inputs['budget_justification'] == null){
+					$return_inputs['budget_justification'] = null;
+				}
 
+				$sort_return_inputs = ksort($return_inputs);
+				
 				$filteredArray = array_filter(
 					$return_inputs,
 					function($key) {
@@ -486,17 +506,23 @@ use Illuminate\Support\Arr;
 					},
 					ARRAY_FILTER_USE_KEY
 				);
+
+				
 				for($i=0;$i<count($filteredArray);$i++){
+
 					$array_file = array_values($filteredArray)[$i];
-					
-					foreach($array_file as $key=>$value){
-						$filename = uniqid().'.'.$value->getClientOriginalExtension();
-						$array_file[$key] = $filename;
-						$value->move(public_path('pre_payment/img'), $filename);
+					if($array_file == null){
+						$array_file = null;
+					}else{
+						foreach($array_file as $key=>$value){
+						
+							$filename = uniqid().'.'.$value->getClientOriginalExtension();
+							$array_file[$key] = $filename;
+							$value->move(public_path('pre_payment/img'), $filename);
+						}
 					}
 					array_push($requested_project, $array_file);
 				}
-				// dd($requested_project);
 
 				for($i=0; $i<count($description); $i++){
 					
@@ -591,8 +617,6 @@ use Illuminate\Support\Arr;
 				}
 			}
 
-			
-
 	    }
 
 	    /* 
@@ -603,7 +627,7 @@ use Illuminate\Support\Arr;
 	    | 
 	    */
 	    public function hook_after_edit($id) {
-	        //Your code here 
+
 			$return_inputs = Input::all();
 			$status_id = $return_inputs['status_id'];
 
@@ -625,6 +649,7 @@ use Illuminate\Support\Arr;
 			}else if($status_id == '7'){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction Recorded to the system',"success");
 			}
+
 	    }
 
 	    /* 
@@ -858,7 +883,8 @@ use Illuminate\Support\Arr;
 					'pre_payment.bank_account_number',
 					'pre_payment.gcash_number',
 					'pre_payment.check_date',
-					'pre_payment.system_reference_number',)
+					'pre_payment.system_reference_number',
+					'pre_payment.unused_amount',)
 				->where('pre_payment.id',$id)
 				->first();
 			// PrePaymentBody
@@ -962,10 +988,10 @@ use Illuminate\Support\Arr;
 					'pre_payment.reference_number',
 					'pre_payment.accounting_closed_date',
 					'pre_payment.accounting_closed_note',
+					'pre_payment.unused_amount'
 				)
 				->where('pre_payment.id',$id)
 				->first();
-			
 			// PrePaymentBody
 			$data['pre_payment_body'] = DB::table('pre_payment_body')
 				->leftJoin('brand as brands' , 'pre_payment_body.brand', 'brands.id')
