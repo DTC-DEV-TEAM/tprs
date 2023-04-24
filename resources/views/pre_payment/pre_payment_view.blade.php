@@ -9,22 +9,32 @@
 <style>
 
   .request_content{
-    /* margin: 0 50px; */
-  }
-
-  .request_content_department{
     width: 100%;
   }
- 
+/* 
+  .request_content_department{
+    width: 100%;
+  } */
+
+.by_department {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.request_department {
+  margin-bottom: 10px;
+  margin-right: 30px;
+  width: 31.9%;
+}
+
+.request_department:last-child {
+  margin-right: 0;
+}
+
 
   .required{
     color: red;
-  }
-
-  .request_department{
-    margin-bottom: 10px;
-    margin-right: 30px;
-    width: 100%;
   }
 
   .request_information_contents{
@@ -220,7 +230,7 @@
   .total_amount_content label{
     font-size: 15px;
     margin-right: 10px;
-    width: 131px;
+    width: 150px;
   }
 
   .total_amount_content input{
@@ -232,6 +242,18 @@
     margin-right: 10px;
     width: 150px;
   }
+
+  /* AP Recording */
+  .ap_recording{
+    display: flex;
+    width: 100%;
+  }
+
+  .ap_recording_content{
+    min-width: 31.9%;
+    margin-right: 30px;
+  }
+  /* End of AP Recording */
 
   .request_information label{
     font-size: 15px;
@@ -272,6 +294,17 @@
   width: 100%; 
   height: 100%; 
   /* background-color: rgba(0,0,0,0.5);  */
+  }
+
+    /* image display center */
+    .modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
   }
 
   .modal-content {
@@ -368,6 +401,7 @@
 
   .mode_of_payment_dropdown label{
     display: block;
+    width: 150px;
   }
 
   #check_payment input{
@@ -384,7 +418,7 @@
     border: 1px solid #aaa;
     border-radius: 5px;
     text-align: center;
-    background-color: #eee;
+    background-color: #eeeeee;
   }
 
   #gcash input{
@@ -410,19 +444,52 @@
 
   .mode_of_payment_section{
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
   }
 
   .mode_of_payment_section1{
-    width: 31.4%;
+    width: 31.9%;
     margin-right: 30px;
   }
 
   .mode_of_payment_section2{
-    width: 31.4%;
+    width: 31.9%;
   }
 
+  /* Receipts Validation */
+  .receipts_per_department{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .receipts_request_department{
+    width: 365px;
+    padding-right: 10px;
+  }
+
+  .receipts_comments{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .receipts_amount_contents{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .receipts_total_amount{
+    width: 365px;
+    padding-right: 10px;
+  }
+
+  .receipts_amount_contents:nth-child(2) input{
+    background-color: #eeeeee;
+  }
+
+  /* End of Receipts Validation */
 </style>
+
 @endpush
 
 @extends('crudbooster::admin_template')
@@ -433,36 +500,37 @@
   <!-- Your html goes here -->
     <p class="noprint"><a title="Main Module" href="{{ CRUDBooster::mainpath() }}"><i class="fa fa-chevron-circle-left "></i> &nbsp; Back To List Data Pre Payment</a></p> 
     <div class='panel panel-default'>
-        <div class='panel-heading'>Request Budget</div>
+        <div class='panel-heading'>Cash Advance View Request</div>
         <div class='panel-body'>
             {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
             
             {{ csrf_field() }}
             <div class='form-group'>
                 <div class="request_content">
-                    <div class="flex">
-                    <div class="request_department">
+                  <div class="receipts_per_department">
+                    <div class="receipts_request_department">
                         <label for="">Department <span class="required">*</span></label>
-                        <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled>
+                        <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
                             <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
-                        </select>          </div>       
-                        <div class="request_department">
-                            <label for="">Sub Department <span class="required">*</span></label>
-                            <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled>
-                                <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
-                            </select>                           
-                        </div> 
-                        <div class="request_department r_full_name">
-                            <label for="">Requestor Full Name <span class="required">*</span></label>
-                            <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}">
-                        </div>
-                        <div class="request_department">
-                            <label for="">Mode of Payment <span class="required">*</span></label>
-                            <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" disabled>
-                                <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
-                            </select>            
-                        </div> 
+                        </select>   
+                    </div>       
+                    <div class="receipts_request_department">
+                        <label for="">Sub Department <span class="required">*</span></label>
+                        <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
+                            <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
+                        </select>                           
+                    </div>   
+                    <div class="receipts_request_department r_full_name">
+                        <label for="">Requestor Full Name <span class="required">*</span></label>
+                        <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
                     </div>
+                    <div class="receipts_request_department">
+                        <label for="">Mode of Payment <span class="required">*</span></label>
+                        <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" disabled required>
+                            <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
+                        </select>            
+                    </div>
+                  </div>
                     <hr>
                     <div class="budget_info">
                       <p>Budget Information Breakdown</p>
@@ -539,16 +607,20 @@
                             </div>
                             <div class="budget_description">
                               <label for="">Total Value</label >
-                              <input type="number" name="amount[]" min="0" class="budget_amount" value="{{ $budget->amount }}" disabled>
+                              <input type="number" name="amount[]" min="0" class="budget_amount" value="{{ $budget->amount }}" id="cash_in_bank_total_value" disabled>
                             </div>
                             <div class="budget_description" id="budget_justification" style="width: 200px;">
                               <div style="width: 200px;">
-                                <label for="">Budget Justification</label>
+                                <label for="">Receipts</label>
                                 @php
                                   $img = explode(", ",$budget->budget_justification);
                                 @endphp
                                 @foreach ($img as $receipts_img)
-                                  <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No Image Inserted" style="height: 75px; width: 49%; display: inline-block; margin-top: 2px;" id="budget_image" class="modal-trigger">
+                                  @if ($receipts_img == null)
+                                    <p>No Image Inserted</p>
+                                  @else
+                                    <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No Image Inserted" style="height: 75px; width: 49%; display: inline-block; margin-top: 2px;" id="budget_image" class="modal-trigger">
+                                  @endif
                                 @endforeach
                                 <div class="modal">
                                   <div class="modal-content">
@@ -562,22 +634,42 @@
                       @endforeach
                     </div>
                     <hr>
-                    <div class="total_amount_content">
+                    <div class="receipts_amount_contents">
+                      <div class="total_amount_content receipts_total_amount">
                         <label for="">Reference Number:</label>
-                        <span>{{ $row->reference_number }}</span>
+                        <input style="border: none; background-color: #fff;" value="{{ $row->reference_number }}" readonly>
+                      </div>
+                      @if (CRUDBooster::myPrivilegeName() != 'Requestor')
+                        <div class="total_amount_content receipts_total_amount">
+                          <label for="">Cheque Date:</label>
+                          <input style="border: none; background-color: #fff;" value="{{ date('Y-m-d', strtotime($row->check_date)) }}" readonly>
+                        </div>
+                        <div class="total_amount_content receipts_total_amount">
+                          <label for="">BEACH pre-payment#:</label>
+                          <input style="border: none; background-color: #fff;" value="{{ $row->system_reference_number }}" readonly>
+                        </div>
+                        <div class="total_amount_content receipts_total_amount">
+                          <label for="">AR reference#:</label>
+                          <input style="border: none; background-color: #fff;" value="{{ $row->ar_reference_number }}" readonly>
+                        </div>
+                      @endif
                     </div>
-                    <div class="flex">
-                      <div class="total_amount_content">
+                    <div class="receipts_amount_contents">
+                      <div class="total_amount_content receipts_total_amount">
                         <label for="">Requested Amount:</label>
                         <input type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
                       </div>
-                      <div class="total_amount_content">
-                        <label for="">Total Amount:</label>
-                        <input type="number" id="total_amount" value="{{ $row->total_amount }}" readonly>
+                      <div class="total_amount_content receipts_total_amount">
+                        <label for="">Used Amount:</label>
+                        <input type="number" id="total_amount" value="{{ $row->total_amount }}" name="total_amount" readonly>
                       </div>
-                      <div class="total_amount_content">
-                        <label for="">Balance:</label>
-                        <input type="number" id="balance_amount" value="{{ $row->balance_amount }}" readonly>
+                      <div class="total_amount_content receipts_total_amount">
+                        <label for="">Unused Amount:</label>
+                        <input type="number" id="unused_amount" value="{{ $row->unused_amount }}" name="unused_amount" readonly>
+                      </div>
+                      <div class="total_amount_content receipts_total_amount">
+                        <label for="">Remaining Balance:</label>
+                        <input type="number" id="remaining_balance" value="{{ $row->balance_amount }}" name="remaining_blance" readonly>
                       </div>
                     </div>
                     <div class="total_amount_content">
@@ -684,14 +776,40 @@
 
 <script>
 
-  function get_sum(){
-    var total = 0;
-    $('.budget_amount').each(function(){
-      var value = parseFloat($(this).val() || 0)
-      total += value;
-    })     
+function get_all_sum(){
+    let total = 0;
+    let remaining_balance = 0;
 
-    $('#total_amount').val(total);   
+    $('.budget_amount:not(:eq(1))').each(function(){
+      total += parseFloat($(this).val() || 0);
+    });
+
+    $('.budget_amount').each(function(){
+      remaining_balance += parseFloat($(this).val() || 0);
+    })
+
+    const requested_amount = $('#requested_amount').val();
+    const to_be_returned = requested_amount - remaining_balance;
+    const cash_in_bank_total_value = $('#cash_in_bank_total_value').val();
+
+    $('#total_amount').val(Math.abs(total));
+    $('#remaining_balance').val(to_be_returned);
+    $('#unused_amount').val(cash_in_bank_total_value);
+    
+    if (to_be_returned == 0) {
+      $('#submit_approve').click(function(){
+        $('.brand').attr('disabled', false);
+        $('.location').attr('disabled', false);
+        $('.category').attr('disabled', false);
+        $('.account').attr('disabled', false);
+      })
+      $('#submit_approve').attr('disabled', false);
+      $('#submit_approve').removeAttr('title');
+    } else {
+      $('#submit_approve').attr('title', 'Please ensure that the remaining balance is zero before proceeding.');
+      $('#submit_approve').attr('disabled', true);
+    }
+
   }
 
   $('#req_full_name').on('keyup', function() {
@@ -839,7 +957,7 @@
 
     row.find(".location").select2({
       placeholder: "Select Location",
-      width: '200px',
+      width: '150px',
     })
 
     row.find(".category").select2({
@@ -854,7 +972,7 @@
     
     row.find(".account").select2({
       placeholder: "Select an account",
-      width: '200px',
+      width: '150px',
       ajax: {
         url: "{{ route('account') }}",
         dataType: "json",
@@ -897,6 +1015,20 @@
   for(i=0; i<budget_length; i++){
     add_select2($('.budget').eq(i));
   }
+
+  // Image modal
+  $(".modal-trigger").click(function(){
+    var imgSrc = $(this).attr('src');
+    $(".modal").fadeIn();
+    $(".modal-content img").attr("src", imgSrc);
+  });
+  
+  $(document).click(function(e) {
+    if ($(e.target).is('.modal')) {
+      $(".modal").fadeOut();
+    }
+  });
+  // End of Image modal
 
 </script>
 @endsection
