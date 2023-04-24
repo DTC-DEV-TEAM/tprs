@@ -36,6 +36,7 @@ class CreatePrePaymentTable extends Migration
             $table->string('budget_information_notes')->nullable();
             $table->integer('requested_amount')->nullable();
             $table->integer('total_amount')->nullable();
+            $table->integer('unused_amount')->nullable();
             $table->integer('balance_amount')->nullable();
             $table->string('additional_notes')->nullable();
             $table->string('payee_name')->nullable();
