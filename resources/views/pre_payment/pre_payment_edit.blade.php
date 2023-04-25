@@ -478,6 +478,11 @@
   }
 
   /* End of Receipts Validation */
+
+  .read_only{
+    background-color: #eee;
+  }
+
 </style>
 
 @endpush
@@ -937,7 +942,11 @@
               <select class="js-example-basic-single currency" name="currency[]" required>
                 <option value="" selected disabled>Select Currency</option>
                 @foreach ($currencies as $currency)
-                  <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                  @if ($currency->id == '1')
+                      <option value="{{ $currency->id }}" selected>{{ $currency->currency_name }}</option>
+                    @else
+                      <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                  @endif
                 @endforeach
               </select>
             </div>
@@ -951,7 +960,7 @@
             </div>
             <div class="budget_description">
               <label for="">Total Value</label >
-              <input type="number" name="amount[]" min="0" class="budget_amount" readonly>
+              <input type="number" name="amount[]" min="0" class="budget_amount" style="background-color: #eeeeee" readonly>
             </div>
             <div class="budget_description" id="step3_budget_justification">
               <label for="">Receipts</label>
@@ -1093,7 +1102,11 @@
                         <select class="js-example-basic-single currency" name="currency[]" required>
                           <option value="" selected disabled>Select Currency</option>
                           @foreach ($currencies as $currency)
-                            <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                            @if ($currency->id == '1')
+                                <option value="{{ $currency->id }}" selected>{{ $currency->currency_name }}</option>
+                              @else
+                                <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                            @endif
                           @endforeach
                         </select>
                       </div>
@@ -1142,19 +1155,19 @@
                   <div class="receipts_amount_contents">
                     <div class="total_amount_content receipts_total_amount">
                       <label for="">Requested Amount:</label>
-                      <input type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
+                      <input class="read_only" type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
                     </div>
                     <div class="total_amount_content receipts_total_amount">
                       <label for="">Used Amount:</label>
-                      <input type="number" id="total_amount" value="0" name="total_amount" readonly>
+                      <input class="read_only" type="number" id="total_amount" value="0" name="total_amount" readonly>
                     </div>
                     <div class="total_amount_content receipts_total_amount">
                       <label for="">Unused Amount:</label>
-                      <input type="number" id="unused_amount" value="0" name="unused_amount" readonly>
+                      <input class="read_only" type="number" id="unused_amount" value="0" name="unused_amount" readonly>
                     </div>
                     <div class="total_amount_content receipts_total_amount">
                       <label for="">Remaining Balance:</label>
-                      <input type="number" id="remaining_balance" value="0" name="remaining_blance" readonly>
+                      <input class="read_only" type="number" id="remaining_balance" value="0" name="remaining_blance" readonly>
                     </div>
                   </div>
                 </div>
@@ -1236,7 +1249,11 @@
               <select class="js-example-basic-single currency" name="currency[]" required>
                 <option value="" selected disabled>Select Currency</option>
                 @foreach ($currencies as $currency)
-                  <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                  @if ($currency->id == '1')
+                      <option value="{{ $currency->id }}" selected>{{ $currency->currency_name }}</option>
+                    @else
+                      <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                  @endif
                 @endforeach
               </select>
             </div>
@@ -1250,7 +1267,7 @@
             </div>
             <div class="budget_description">
               <label for="">Total Value</label >
-              <input type="number" name="amount[]" min="0" class="budget_amount" readonly>
+              <input type="number" name="amount[]" min="0" class="budget_amount" style="background-color: #eeeeee" readonly>
             </div>
             <div class="budget_description" id="step3_budget_justification">
               <label for="">Receipts</label>
@@ -1377,7 +1394,7 @@
                         </div>
                         <div class="budget_description">
                           <label for="">Total Value</label >
-                          <input type="number" name="amount[]" min="0" class="budget_amount" id="cash_in_bank_total_value" value="{{ $budget->amount }}" readonly>
+                          <input type="number" name="amount[]" min="0" class="budget_amount" id="cash_in_bank_total_value" value="{{ $budget->amount }}" style="background-color: #eeeeee" readonly>
                         </div>
                         <div class="budget_description" id="budget_justification" style="width: 200px;">
                           <div style="width: 200px;">
@@ -1430,19 +1447,19 @@
                 <div class="receipts_amount_contents">
                   <div class="total_amount_content receipts_total_amount">
                     <label for="">Requested Amount:</label>
-                    <input type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
+                    <input class="read_only" type="number" id="requested_amount" value="{{ $row->requested_amount }}" readonly>
                   </div>
                   <div class="total_amount_content receipts_total_amount">
                     <label for="">Used Amount:</label>
-                    <input type="number" id="total_amount" value="{{ $row->total_amount }}" name="total_amount" readonly>
+                    <input class="read_only" type="number" id="total_amount" value="{{ $row->total_amount }}" name="total_amount" readonly>
                   </div>
                   <div class="total_amount_content receipts_total_amount">
                     <label for="">Unused Amount:</label>
-                    <input type="number" id="unused_amount" value="{{ $row->unused_amount }}" name="unused_amount" readonly>
+                    <input class="read_only" type="number" id="unused_amount" value="{{ $row->unused_amount }}" name="unused_amount" readonly>
                   </div>
                   <div class="total_amount_content receipts_total_amount">
                     <label for="">Remaining Balance:</label>
-                    <input type="number" id="remaining_balance" value="{{ $row->balance_amount }}" name="remaining_blance" readonly>
+                    <input class="read_only" type="number" id="remaining_balance" value="{{ $row->balance_amount }}" name="remaining_blance" readonly>
                   </div>
                 </div>
                 <div class="additional_notes">
