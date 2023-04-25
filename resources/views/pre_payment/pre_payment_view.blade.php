@@ -487,6 +487,10 @@
     background-color: #eeeeee;
   }
 
+  input{
+    background-color: #eeeeee;
+  }
+
   /* End of Receipts Validation */
 </style>
 
