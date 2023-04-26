@@ -886,7 +886,7 @@ use Illuminate\Support\Arr;
 					'pre_payment.gcash_number',
 					'pre_payment.check_date',
 					'pre_payment.system_reference_number',
-					'pre_payment.unused_amount',)
+					'pre_payment.unused_amount')
 				->where('pre_payment.id',$id)
 				->first();
 			// PrePaymentBody

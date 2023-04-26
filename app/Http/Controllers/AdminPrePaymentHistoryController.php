@@ -459,7 +459,7 @@ use App\Store;
 					'pre_payment.accounting_closed_note',
 					'pre_payment.unused_amount',
 					'pre_payment.system_reference_number',
-					'pre_payment.ar_reference_number',
+					'pre_payment.ar_reference_number'
 				)
 				->where('pre_payment.id',$id)
 				->first();
