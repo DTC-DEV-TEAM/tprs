@@ -13,27 +13,22 @@
   .request_content{
     width: 100%;
   }
-/* 
-  .request_content_department{
+
+  .by_department {
+    display: flex;
+    flex-wrap: wrap;
     width: 100%;
-  } */
+  }
 
-.by_department {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-}
+  .request_department {
+    margin-bottom: 10px;
+    margin-right: 30px;
+    width: 31.9%;
+  }
 
-.request_department {
-  margin-bottom: 10px;
-  margin-right: 30px;
-  width: 31.9%;
-}
-
-.request_department:last-child {
-  margin-right: 0;
-}
-
+  .request_department:last-child {
+    margin-right: 0;
+  }
 
   .required{
     color: red;
@@ -126,7 +121,6 @@
     box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
 
   }
-
 
   .circ_delete{
     position: absolute;
@@ -257,11 +251,23 @@
   }
   /* End of AP Recording */
 
+  /* Request Information */
+  .request_information{
+    display: flex;
+  }
+
   .request_information label{
     font-size: 15px;
     margin-right: 10px;
     width: 150px;
   }
+
+  .request_information span{
+    font-size: 15px;
+    margin-right: 10px;
+    width: 150px;
+  }
+  /* End of Request Information  */
 
   .start{
     margin-top: 20px;
@@ -483,6 +489,11 @@
     background-color: #eee;
   }
 
+  #remaining_balance{
+    color:  #d32f2f;
+    font-weight: bold;
+  }
+
 </style>
 
 @endpush
@@ -591,7 +602,7 @@
                           </div>
                           <div class="total_amount_content">
                             <label for="">Amount Requested:</label>
-                            <input type="number" value="{{ $row->requested_amount }}" readonly>
+                            <input type="number" value="{{ $row->requested_amount }}"  style="background-color: #eeeeee;" readonly>
                           </div>
                           <div class="additional_notes">
                               <label for="">Additional Notes: </label>
@@ -695,7 +706,7 @@
                             </div>
                             <div class="total_amount_content">
                               <label for="">Amount Requested:</label>
-                              <input type="number" value="{{ $row->requested_amount }}" readonly>
+                              <input type="number" value="{{ $row->requested_amount }}"  style="background-color: #eeeeee;" readonly>
                             </div>
                           </div>
                           <div class="ap_recording_content">
@@ -825,8 +836,8 @@
                           <span>{{ $row->reference_number }}</span>
                       </div>
                       <div class="total_amount_content">
-                          <label for="">Used Amount:</label>
-                          <input type="number" value="{{ $row->requested_amount }}" readonly>
+                          <label for="">Amount Requested:</label>
+                          <input type="number" value="{{ $row->requested_amount }}"  style="background-color: #eeeeee;" readonly>
                       </div>
                       <div class="additional_notes">
                           <label for="">Additional Notes: </label>
@@ -1031,9 +1042,7 @@
                     </div>
                     <div class="request_information">
                         <label for="">Approver Note:</label>
-                        <span>
-                            {{ $row->approver_note }}
-                        </span>
+                        <span>{{ $row->approver_note }}</span>
                     </div>
                   </div>
                   <div class="receipts_request_department">
@@ -1047,9 +1056,7 @@
                       </div>
                       <div class="request_information">
                           <label for="">Accounting Note:</label>
-                          <span>
-                              {{ $row->accounting_note }}
-                          </span>
+                          <span>{{ $row->accounting_note }}</span>
                       </div>
                   </div>
                 </div>
@@ -1507,11 +1514,11 @@
                     <div class="request_information start">
                         <label for="">RCT. Breakdown Date:</label>
                         <span>{{ $pre_payment_body_date->created_at }}</span>
-                        <div class="request_information">
-                          <label for="">Breakdown Note:</label>
-                          <span>{{ $row->budget_information_notes }}</span>
-                      </div>
                     </div>
+                    <div class="request_information">
+                      <label for="">Breakdown Note:</label>
+                      <span>{{ $row->budget_information_notes }}</span>
+                    </div>  
                   </div>            
                 </div>
               </div>
@@ -1552,6 +1559,7 @@
     $('#unused_amount').val(cash_in_bank_total_value);
     
     if (to_be_returned == 0) {
+      $('#remaining_balance').css('color', 'green');
       $('#submit_approve').click(function(){
         $('.brand').attr('disabled', false);
         $('.location').attr('disabled', false);
@@ -1560,7 +1568,8 @@
       })
       $('#submit_approve').attr('disabled', false);
       $('#submit_approve').removeAttr('title');
-    } else {
+    }else {
+      $('#remaining_balance').css('color', '#d32f2f');
       $('#submit_approve').attr('title', 'Please ensure that the remaining balance is zero before proceeding.');
       $('#submit_approve').attr('disabled', true);
     }

@@ -255,11 +255,23 @@
   }
   /* End of AP Recording */
 
+  /* Request Information */
+  .request_information{
+    display: flex;
+  }
+
   .request_information label{
     font-size: 15px;
     margin-right: 10px;
     width: 150px;
   }
+
+  .request_information span{
+    font-size: 15px;
+    margin-right: 10px;
+    width: 150px;
+  }
+  /* End of Request Information  */
 
   .start{
     margin-top: 20px;
