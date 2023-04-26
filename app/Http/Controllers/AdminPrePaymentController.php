@@ -481,8 +481,6 @@ use Illuminate\Support\Arr;
 					$postdata['balance_amount'] = abs($balance_amount);
 					$postdata['budget_information_notes'] = $budget_information_notes;
 					$postdata['unused_amount'] = $unused_amount;
-				}else{
-					$postdata['status_id'] = 6;
 				}
 
 				$id = $return_inputs['returns_id'];
@@ -576,8 +574,6 @@ use Illuminate\Support\Arr;
 
 					$postdata['accounting_closed_by'] = CRUDBooster::myId();
 					$postdata['accounting_closed_date'] = date('Y-m-d H:i:s');
-				}else{
-					$postdata['status_id'] = 6;
 				}
 
 				$id = $return_inputs['returns_id'];
