@@ -697,7 +697,7 @@
                                 <span style="color: green; font-style: bold;">Approved</span>
                             @endif
                             @if ($row->status_id == 3)
-                                <span style="color: green; font-style: bold;">Budget Justification</span>
+                                <span style="color: green; font-style: bold;">Receipts Justification</span>
                             @endif
                             @if ($row->status_id == 4)
                                 <span style="color: green; font-style: bold;">Receipts Validation</span>
@@ -709,7 +709,10 @@
                                 <span style="color: red; font-style: bold;">Rejected</span>
                             @endif
                             @if ($row->status_id == 7)
-                                <span style="color: red; font-style: bold;">AP Recording</span>
+                                <span style="color: green; font-style: bold;">AP Recording</span>
+                            @endif
+                            @if ($row->status_id == 8)
+                                <span style="color: green; font-style: bold;">Transmittal Recording</span>
                             @endif
                         </label>
                     </div>
@@ -765,6 +768,24 @@
                       </div>
                   </div>
                   <div class="flex">
+                    <div class="request_department">
+                      <div class="request_information start">
+                        <label for="">RCT. Breakdown Date:</label>
+                        <span>{{ $pre_payment_body_date->created_at }}</span>
+                      </div>
+                      <div class="request_information">
+                        <label for="">Breakdown Note:</label>
+                        <span>{{ $row->budget_information_notes }}</span>
+                      </div>
+                      <div class="request_information">
+                        <label for="">Date Transmitted:</label>
+                        <span>{{ date('Y-m-d', strtotime($row->transmit_date)) }}</span>
+                      </div>
+                      <div class="request_information">
+                        <label for="">Received by:</label>
+                        <span>{{ $row->transmit_received_by }}</span>
+                      </div>
+                    </div>
                     <div class="request_department">
                       <div class="request_information start">
                           <label for="">Date Closed:</label>
