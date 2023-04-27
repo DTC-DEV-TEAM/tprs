@@ -368,6 +368,7 @@
           processResults: function (data) {
               return {
                   results: $.map(data, function (item) {
+                      console.log(item);
                       return {
                           text: item.department_name,
                           id: item.id
