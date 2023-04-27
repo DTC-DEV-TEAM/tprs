@@ -449,18 +449,24 @@ use App\Store;
 					'pre_payment.reference_number',
 					'pre_payment.accounting_date_release',
 					'pre_payment.accounting_note',
+					'pre_payment.accounting_closed_date',
+					'pre_payment.accounting_closed_note',
 					'pre_payment.total_amount',
 					'pre_payment.reference_number',
 					'pre_payment.requested_amount',
 					'pre_payment.balance_amount',
 					'pre_payment.budget_information_notes',
-					'pre_payment.reference_number',
-					'pre_payment.accounting_closed_date',
-					'pre_payment.accounting_closed_note',
-					'pre_payment.unused_amount',
+					'pre_payment.payee_name',
+					'pre_payment.bank_name',
+					'pre_payment.bank_branch_name',
+					'pre_payment.bank_account_name',
+					'pre_payment.bank_account_number',
+					'pre_payment.gcash_number',
+					'pre_payment.check_date',
 					'pre_payment.system_reference_number',
-					'pre_payment.ar_reference_number'
-				)
+					'pre_payment.unused_amount',
+					'pre_payment.transmit_date',
+					'pre_payment.transmit_received_by')
 				->where('pre_payment.id',$id)
 				->first();
 			
