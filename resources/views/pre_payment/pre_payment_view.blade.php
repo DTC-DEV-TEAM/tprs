@@ -779,7 +779,9 @@
                       </div>
                       <div class="request_information">
                         <label for="">Date Transmitted:</label>
-                        <span>{{ date('Y-m-d', strtotime($row->transmit_date)) }}</span>
+                        @if(!is_null($row->transmit_date))
+                          <span>{{ date('Y-m-d', strtotime($row->transmit_date)) }}</span>
+                        @endif
                       </div>
                       <div class="request_information">
                         <label for="">Received by:</label>
