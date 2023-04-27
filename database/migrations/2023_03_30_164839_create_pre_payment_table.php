@@ -48,6 +48,9 @@ class CreatePrePaymentTable extends Migration
             $table->string('system_reference_number')->nullable();
             $table->timestamp('check_date')->nullable();
             $table->string('ar_reference_number')->nullable();
+            $table->timestamp('transmit_date')->nullable();
+            $table->string('transmit_received_by')->nullable();
+            $table->timestamp('transmit_submit_date')->nullable();
             $table->enum('status', array('ACTIVE', 'INACTIVE'))->default('ACTIVE')->nullable();
             $table->integer('created_by')->length(10)->unsigned()->nullable();
             $table->integer('updated_by')->length(10)->unsigned()->nullable();
