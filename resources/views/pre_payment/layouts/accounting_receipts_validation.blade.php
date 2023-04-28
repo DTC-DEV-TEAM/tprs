@@ -327,6 +327,7 @@
     <div class='panel-footer'>
       <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
       <input id="close_transaction" type='submit' class='btn btn-primary' name="submit" value='Close'/>
+      <input type="status_id" name="status_id" value="{{ $row->status_id }}" style="visibility: hidden;">
     </div>
     </form>
   </div>

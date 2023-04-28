@@ -77,6 +77,11 @@
   </div>
   <div class='panel panel-default'>
     <div class='panel-heading'>Receipts Validation</div>
+    <div class="loading" style="display: none;">
+      <div class="loading_content">
+          <p>Transaction is on process...</p>
+      </div>
+    </div>
     <form method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data" id="receipts_validation">
       <div class='panel-body'>
         {{ csrf_field() }}
@@ -215,7 +220,7 @@
                   </div>
                   <div class="budget_description">
                     <label for="">Value</label >
-                    <input type="number" name="value[]" min="1" value="0" class="budget_value" required>
+                    <input type="number" name="value[]" min="0" value="0" class="budget_value" required>
                   </div>
                   <div class="budget_description">
                     <label for="">Total Value</label >
@@ -291,4 +296,5 @@
         <input type="status_id" name="status_id" value="{{ $row->status_id }}" style="visibility: hidden;">
       </div>
     </form>
+    
   </div>

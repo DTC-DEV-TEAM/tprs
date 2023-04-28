@@ -17,6 +17,8 @@ use CRUDBooster;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Arr;
+use Intervention\Image\Facades\Image;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 
 	class AdminPrePaymentController extends \crocodicstudio\crudbooster\controllers\CBController {
@@ -185,7 +187,7 @@ use Illuminate\Support\Arr;
 	        | 
 	        */
 	        $this->index_button = array();
-			if(CRUDBooster::getCurrentMethod() == 'getIndex'){
+			if((CRUDBooster::getCurrentMethod() == 'getIndex') && (CRUDBooster::myPrivilegeName() != 'Treasury') ){
 				$this->index_button[] = ['label'=>'Request Cash Advance','url'=>CRUDBooster::mainpath("add"),"icon"=>"fa fa-plus", 'color'=>'success'];
 			}
 
@@ -322,9 +324,9 @@ use Illuminate\Support\Arr;
 			if (CRUDBooster::myPrivilegeName() == 'Requestor'){
 				$query->where('pre_payment.created_by', CRUDBooster::myId())->orderByDesc('pre_payment.reference_number');
 			}else if (CRUDBooster::myPrivilegeName() == 'Approver'){
-				$query->where('pre_payment.status_id', $requested)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
-				$query->orWhere('pre_payment.status_id', $for_recording)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
-
+				// $query->where('pre_payment.status_id', $requested)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
+				// $query->orWhere('pre_payment.status_id', $for_recording)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
+				$query->whereIn('pre_payment.sub_department_id', $approver_sub_department);
 				// $query->orWhere('status_id', $requested);
 			}else{
 				$query->orderByDesc('pre_payment.reference_number')->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
@@ -528,11 +530,34 @@ use Illuminate\Support\Arr;
 					if($array_file == null){
 						$array_file = null;
 					}else{
-						foreach($array_file as $key=>$value){
+						// foreach($array_file as $key=>$value){
 						
-							$filename = uniqid().'.'.$value->getClientOriginalExtension();
+						// 	$filename = uniqid().'.'.$value->getClientOriginalExtension();
+						// 	$array_file[$key] = $filename;
+						// 	$value->move(public_path('pre_payment/img'), $filename);
+
+						// 	 // Optimize the uploaded image
+						// 	// $optimizerChain = OptimizerChainFactory::create();
+						// 	// $optimizerChain->optimize(public_path('pre_payment/img/' . $filename));
+						// }
+						foreach ($array_file as $key => $value) {
+							$filename = uniqid() . '.' . $value->getClientOriginalExtension();
 							$array_file[$key] = $filename;
-							$value->move(public_path('pre_payment/img'), $filename);
+							
+							$image = Image::make($value);
+						
+							// Resize the image to a maximum width of 1024 pixels and a maximum height of 768 pixels
+							$image->resize(1024, 768, function ($constraint) {
+								$constraint->aspectRatio();
+								$constraint->upsize();
+							});
+						
+							// Save the resized image to the public folder
+							$image->save(public_path('pre_payment/img/' . $filename));
+						
+							// Optimize the uploaded image
+							$optimizerChain = OptimizerChainFactory::create();
+							$optimizerChain->optimize(public_path('pre_payment/img/' . $filename));
 						}
 					}
 					array_push($requested_project, $array_file);
@@ -833,6 +858,7 @@ use Illuminate\Support\Arr;
 			$requested_project = [];
 			
 			for($i=0; $i<count($project_name); $i++){
+
 				$file = $budget_justification[$i];
 				$filename = uniqid() . '.' . $file->getClientOriginalExtension();
 				$file->move(public_path('pre_payment/img'), $filename);

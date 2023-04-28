@@ -494,6 +494,33 @@
     font-weight: bold;
   }
 
+  /* loading_submit */
+  .loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* add a semi-transparent background */
+  }
+
+  .loading_content{
+      height: 150px;
+      width: 400px;
+      background-color: rgba(164, 164, 164, 0.955);
+      border-radius: 5px;
+      font-size: 18px;
+      display: grid;
+      place-items: center;
+      color: rgb(255, 255, 255);
+      box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+      
+  }
+
 </style>
 
 @endpush
@@ -577,6 +604,7 @@
           $('.location').removeAttr('disabled');
           $('.category').removeAttr('disabled');
           $('.account').removeAttr('disabled');
+          $('.loading').show();
         });
       })
       $('#submit_approve').attr('disabled', false);

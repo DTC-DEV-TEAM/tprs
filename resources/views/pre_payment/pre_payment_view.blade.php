@@ -502,8 +502,9 @@
   input{
     background-color: #eeeeee;
   }
-
   /* End of Receipts Validation */
+  
+  
 </style>
 
 @endpush

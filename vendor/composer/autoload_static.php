@@ -74,6 +74,8 @@ class ComposerStaticInit8e131d5b8a7f779ca5ceb6a25b29c59e
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
             'SuperClosure\\' => 13,
+            'Spatie\\LaravelImageOptimizer\\' => 29,
+            'Spatie\\ImageOptimizer\\' => 22,
         ),
         'R' => 
         array (
@@ -245,6 +247,14 @@ class ComposerStaticInit8e131d5b8a7f779ca5ceb6a25b29c59e
         'SuperClosure\\' => 
         array (
             0 => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src',
+        ),
+        'Spatie\\LaravelImageOptimizer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/laravel-image-optimizer/src',
+        ),
+        'Spatie\\ImageOptimizer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/image-optimizer/src',
         ),
         'Ramsey\\Uuid\\' => 
         array (
@@ -2543,7 +2553,7 @@ class ComposerStaticInit8e131d5b8a7f779ca5ceb6a25b29c59e
         'Intervention\\Image\\ImageManagerStatic' => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image/ImageManagerStatic.php',
         'Intervention\\Image\\ImageServiceProvider' => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image/ImageServiceProvider.php',
         'Intervention\\Image\\ImageServiceProviderLaravel4' => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image/ImageServiceProviderLaravel4.php',
-        'Intervention\\Image\\ImageServiceProviderLaravel5' => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image/ImageServiceProviderLaravel5.php',
+        'Intervention\\Image\\ImageServiceProviderLaravelRecent' => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image/ImageServiceProviderLaravelRecent.php',
         'Intervention\\Image\\ImageServiceProviderLeague' => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image/ImageServiceProviderLeague.php',
         'Intervention\\Image\\ImageServiceProviderLumen' => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image/ImageServiceProviderLumen.php',
         'Intervention\\Image\\Imagick\\Color' => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image/Imagick/Color.php',
@@ -4034,6 +4044,22 @@ class ComposerStaticInit8e131d5b8a7f779ca5ceb6a25b29c59e
         'SebastianBergmann\\ResourceOperations\\ResourceOperations' => __DIR__ . '/..' . '/sebastian/resource-operations/src/ResourceOperations.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
         'SessionUpdateTimestampHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
+        'Spatie\\ImageOptimizer\\DummyLogger' => __DIR__ . '/..' . '/spatie/image-optimizer/src/DummyLogger.php',
+        'Spatie\\ImageOptimizer\\Image' => __DIR__ . '/..' . '/spatie/image-optimizer/src/Image.php',
+        'Spatie\\ImageOptimizer\\Optimizer' => __DIR__ . '/..' . '/spatie/image-optimizer/src/Optimizer.php',
+        'Spatie\\ImageOptimizer\\OptimizerChain' => __DIR__ . '/..' . '/spatie/image-optimizer/src/OptimizerChain.php',
+        'Spatie\\ImageOptimizer\\OptimizerChainFactory' => __DIR__ . '/..' . '/spatie/image-optimizer/src/OptimizerChainFactory.php',
+        'Spatie\\ImageOptimizer\\Optimizers\\BaseOptimizer' => __DIR__ . '/..' . '/spatie/image-optimizer/src/Optimizers/BaseOptimizer.php',
+        'Spatie\\ImageOptimizer\\Optimizers\\Gifsicle' => __DIR__ . '/..' . '/spatie/image-optimizer/src/Optimizers/Gifsicle.php',
+        'Spatie\\ImageOptimizer\\Optimizers\\Jpegoptim' => __DIR__ . '/..' . '/spatie/image-optimizer/src/Optimizers/Jpegoptim.php',
+        'Spatie\\ImageOptimizer\\Optimizers\\Optipng' => __DIR__ . '/..' . '/spatie/image-optimizer/src/Optimizers/Optipng.php',
+        'Spatie\\ImageOptimizer\\Optimizers\\Pngquant' => __DIR__ . '/..' . '/spatie/image-optimizer/src/Optimizers/Pngquant.php',
+        'Spatie\\ImageOptimizer\\Optimizers\\Svgo' => __DIR__ . '/..' . '/spatie/image-optimizer/src/Optimizers/Svgo.php',
+        'Spatie\\LaravelImageOptimizer\\Exceptions\\InvalidConfiguration' => __DIR__ . '/..' . '/spatie/laravel-image-optimizer/src/Exceptions/InvalidConfiguration.php',
+        'Spatie\\LaravelImageOptimizer\\ImageOptimizerFacade' => __DIR__ . '/..' . '/spatie/laravel-image-optimizer/src/ImageOptimizerFacade.php',
+        'Spatie\\LaravelImageOptimizer\\ImageOptimizerServiceProvider' => __DIR__ . '/..' . '/spatie/laravel-image-optimizer/src/ImageOptimizerServiceProvider.php',
+        'Spatie\\LaravelImageOptimizer\\Middlewares\\OptimizeImages' => __DIR__ . '/..' . '/spatie/laravel-image-optimizer/src/Middlewares/OptimizeImages.php',
+        'Spatie\\LaravelImageOptimizer\\OptimizerChainFactory' => __DIR__ . '/..' . '/spatie/laravel-image-optimizer/src/OptimizerChainFactory.php',
         'SuperClosure\\Analyzer\\AstAnalyzer' => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src/Analyzer/AstAnalyzer.php',
         'SuperClosure\\Analyzer\\ClosureAnalyzer' => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src/Analyzer/ClosureAnalyzer.php',
         'SuperClosure\\Analyzer\\Token' => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src/Analyzer/Token.php',
