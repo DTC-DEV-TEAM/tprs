@@ -36,7 +36,7 @@ use Illuminate\Support\Arr;
 			$this->button_table_action = true;
 			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
-			$this->button_add = true;
+			$this->button_add = false;
 			$this->button_edit = false;
 			$this->button_delete = true;
 			$this->button_detail = true;
@@ -185,6 +185,9 @@ use Illuminate\Support\Arr;
 	        | 
 	        */
 	        $this->index_button = array();
+			if(CRUDBooster::getCurrentMethod() == 'getIndex'){
+				$this->index_button[] = ['label'=>'Request Cash Advance','url'=>CRUDBooster::mainpath("add"),"icon"=>"fa fa-plus", 'color'=>'success'];
+			}
 
 
 
@@ -218,7 +221,7 @@ use Illuminate\Support\Arr;
 	        | $this->script_js = "function() { ... }";
 	        |
 	        */
-	        $this->script_js = NULL;
+	        $this->script_js = "NULL";
 
 
             /*

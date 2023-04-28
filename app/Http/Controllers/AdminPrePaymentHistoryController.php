@@ -336,6 +336,8 @@ use App\Store;
 					$column_value = '<span class="label" style="background-color: #FF6347; color: white; font-size: 12px;">Rejected</span>';
 				}else if($column_value == '7'){
 					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For AP Recording</span>';
+				}else if($column_value == '8'){
+					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For Transmittal Recording</span>';
 				}
 				
 			}
@@ -466,10 +468,10 @@ use App\Store;
 					'pre_payment.system_reference_number',
 					'pre_payment.unused_amount',
 					'pre_payment.transmit_date',
-					'pre_payment.transmit_received_by')
+					'pre_payment.transmit_received_by',
+					'pre_payment.ar_reference_number')
 				->where('pre_payment.id',$id)
 				->first();
-			
 			// PrePaymentBody
 			$data['pre_payment_body'] = DB::table('pre_payment_body')
 				->leftJoin('brand as brands' , 'pre_payment_body.brand', 'brands.id')

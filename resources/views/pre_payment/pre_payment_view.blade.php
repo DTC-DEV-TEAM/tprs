@@ -549,7 +549,7 @@
                   </div>
                     <hr>
                     <div class="budget_info">
-                      <p>Budget Information Breakdown</p>
+                      <p>Receipts Information Breakdown</p>
                     </div>
                     <div class="budget_content">
                       @foreach ($pre_payment_body as $budget)
@@ -658,7 +658,9 @@
                       @if (CRUDBooster::myPrivilegeName() != 'Requestor')
                         <div class="total_amount_content receipts_total_amount">
                           <label for="">Cheque Date:</label>
-                          <input style="border: none; background-color: #fff;" value="{{ date('Y-m-d', strtotime($row->check_date)) }}" readonly>
+                          @if (!is_null($row->check_date))
+                            <input style="border: none; background-color: #fff;" value="{{ date('Y-m-d', strtotime($row->check_date)) }}" readonly>
+                          @endif
                         </div>
                         <div class="total_amount_content receipts_total_amount">
                           <label for="">BEACH pre-payment#:</label>
