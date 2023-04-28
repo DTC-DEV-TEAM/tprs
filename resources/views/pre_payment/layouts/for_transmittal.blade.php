@@ -85,6 +85,11 @@
   </div>
 </div>
 <div class='panel panel-default'>
+  <div class="loading" style="display: none;">
+    <div class="loading_content">
+        <p>Transaction is on process...</p>
+    </div>
+  </div>
   <form id="close" method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
   <div class='panel-heading'>Validate Receipts</div>
   <div class='panel-body'>
