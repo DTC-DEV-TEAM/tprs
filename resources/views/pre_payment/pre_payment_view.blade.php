@@ -518,10 +518,7 @@
     <p class="noprint"><a title="Main Module" href="{{ CRUDBooster::mainpath() }}"><i class="fa fa-chevron-circle-left "></i> &nbsp; Back To List Data Pre Payment</a></p> 
     <div class='panel panel-default'>
         <div class='panel-heading'>Cash Advance View Request</div>
-        <div class='panel-body'>
-            {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
-            
-            {{ csrf_field() }}
+        <div class='panel-body'>            
             <div class='form-group'>
                 <div class="request_content">
                   <div class="receipts_per_department">
