@@ -301,6 +301,10 @@ use App\Store;
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
+			$user = CRUDBooster::myId();
+			$user_account_department_id = DB::table('cms_users')->where('id', $user)->value('approver_department_id');
+			
+
 			$requested = PrePaymentProcess::select('id')->where('id', '1')->value('id');
 			$approved = PrePaymentProcess::select('id')->where('id', '2')->value('id');
 			$budget_released = PrePaymentProcess::select('id')->where('id', '3')->value('id');
@@ -308,7 +312,12 @@ use App\Store;
 			$close = PrePaymentProcess::select('id')->where('id', '5')->value('id');
 			$rejected = PrePaymentProcess::select('id')->where('id', '6')->value('id');
 
-	        $query->orderByDesc('reference_number');
+			if(CRUDBooster::myPrivilegeName() == 'Approver'){
+				$query->whereIn('pre_payment.department_id', explode(',', $user_account_department_id))->orderByDesc('reference_number');
+			}else{
+				$query->orderByDesc('reference_number');
+			}
+	        
 
 	    }
 
