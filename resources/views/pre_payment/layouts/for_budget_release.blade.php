@@ -74,10 +74,17 @@
                   </div>
                 </div> 
               <hr>
-              <div class="total_amount_content">
-                  <label for="">Reference Number:</label>
-                  <span>{{ $row->reference_number }}</span>
+              <div class="flex">
+                <div class="total_amount_content" style="width: 34.3%;">
+                    <label for="">Reference Number:</label>
+                    <span>{{ $row->reference_number }}</span>
+                </div>
+                <div class="total_amount_content" style="width: 34.3%;">
+                    <label for="">Released Date:</label>
+                    <input type="date" name="release_date" style="padding: 5px;" required>
+                </div>
               </div>
+
               <div class="total_amount_content">
                   <label for="">Amount Requested:</label>
                   <input type="number" value="{{ $row->requested_amount }}"  style="background-color: #eeeeee;" readonly>

@@ -476,7 +476,8 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 				$postdata['accounting_note'] = $accounting_note;
 				$postdata['accounting_id'] = CRUDBooster::myId();
-				$postdata['accounting_date_release'] = date('Y-m-d H:i:s');
+				// $postdata['accounting_date_release'] = date('Y-m-d H:i:s');
+				$postdata['accounting_date_release'] = $return_inputs['release_date'];
 				
 			}
 			// Upload Receipts Step 5
