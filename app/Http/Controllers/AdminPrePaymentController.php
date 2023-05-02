@@ -598,7 +598,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$transmit_date = $return_inputs['transmit_date'];
 				$transmit_received_by = $return_inputs['transmit_received_by'];
 				$total_amount = $return_inputs['total_amount'];
-				$balance_amount = $return_inputs['balance_amount'];
+				$balance_amount = $return_inputs['remaining_balance'];
 				$accounting_closed_note = $return_inputs['additional_notes'];
 				$ar_reference_number = $return_inputs['ar_reference_number'];
 
@@ -617,7 +617,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					$postdata['ar_reference_number'] = $ar_reference_number;
 					$postdata['accounting_closed_by'] = CRUDBooster::myId();
 					$postdata['accounting_closed_date'] = date('Y-m-d H:i:s');
-
+					
 					$id = $return_inputs['returns_id'];
 					$description = $return_inputs['description'];
 					$brand = $return_inputs['brand'];
@@ -668,7 +668,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$submit_btn = $return_inputs['submit'];
 				$accounting_note = $return_inputs['additional_notes'];
 				$total_amount = $return_inputs['total_amount'];
-				$balance_amount = $return_inputs['balance_amount'];
+				$balance_amount = $return_inputs['remaining_balance'];
 				$accounting_closed_note = $return_inputs['additional_notes'];
 				$ar_reference_number = $return_inputs['ar_reference_number'];
 
@@ -678,7 +678,6 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					$postdata['balance_amount'] = abs($balance_amount);
 					$postdata['accounting_closed_note'] = $accounting_closed_note;	
 					$postdata['ar_reference_number'] = $ar_reference_number;
-
 					$postdata['accounting_closed_by'] = CRUDBooster::myId();
 					$postdata['accounting_closed_date'] = date('Y-m-d H:i:s');
 				}
@@ -739,19 +738,22 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 			$return_inputs = Input::all();
 			$status_id = $return_inputs['status_id'];
+			$submit = $return_inputs['submit'];
 			
-			if($status_id == '1'){
+			if(($status_id == '1') && ($submit != 'Reject')){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'The request has been approved.',"success");
-			}else if($status_id == '2'){
+			}else if(($status_id == '2') && ($submit != 'Reject')){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Cash Advance has been released.',"success");
 			}else if($status_id == '3'){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'You may now proceed to return the receipts and any remaining balance, along with your reference number.',"success");
 			}else if($status_id == '4'){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction Closed.',"success");
-			}else if($status_id == '7'){
+			}else if(($status_id == '7') && ($submit != 'Reject')){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction Recorded to the system.',"success");
 			}else if($status_id == '8'){
-				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction saved.',"success");
+				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Transaction Saved.',"success");
+			}else{
+				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Request Rejected.',"success");
 			}
 
 	    }
@@ -1082,9 +1084,11 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
 				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
 				->leftJoin('cms_users as accounting', 'pre_payment.accounting_id', 'accounting.id')
+				->leftJoin('cms_users as accounting_closed', 'pre_payment.accounting_closed_by', 'accounting_closed.id')
 				->select('cms_users.name as cms_users_name',
 					'approver.name as approver_name',
 					'accounting.name as accounting_name',
+					'accounting_closed.name as accounting_closed_by',
 					'pre_payment.status_id',
 					'pre_payment.id',
 					'pre_payment.department_id',
@@ -1099,6 +1103,8 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					'pre_payment.reference_number',
 					'pre_payment.accounting_date_release',
 					'pre_payment.accounting_note',
+					'pre_payment.accounting_closed_date',
+					'pre_payment.accounting_closed_note',
 					'pre_payment.total_amount',
 					'pre_payment.reference_number',
 					'pre_payment.requested_amount',

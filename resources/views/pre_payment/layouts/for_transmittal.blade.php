@@ -225,7 +225,7 @@
             </div>
             <div class="total_amount_content receipts_total_amount">
               <label for="">Remaining Balance:</label>
-              <input class="read_only" type="number" id="remaining_balance" value="{{ $row->balance_amount }}" name="remaining_blance" readonly>
+              <input class="read_only" type="number" id="remaining_balance" value="{{ $row->balance_amount }}" name="remaining_balance" readonly>
             </div>
           </div>
           <div class="receipts_amount_contents">
@@ -558,7 +558,7 @@
             </div>
             <div class="total_amount_content receipts_total_amount">
               <label for="">Remaining Balance:</label>
-              <input class="read_only" type="number" id="remaining_balance" value="{{ $row->balance_amount }}" name="remaining_blance" readonly>
+              <input class="read_only" type="number" id="remaining_balance" value="{{ $row->balance_amount }}" name="remaining_balance" readonly>
             </div>
           </div>
           <div class="additional_notes">
