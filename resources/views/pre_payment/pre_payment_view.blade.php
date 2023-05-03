@@ -786,7 +786,7 @@
                         @endif
                       </div>
                       <div class="request_information">
-                        <label for="">Received by:</label>
+                        <label for="">AP Specialist:</label>
                         <span>{{ $row->transmit_received_by }}</span>
                       </div>
                     </div>

@@ -604,7 +604,7 @@
           $('.location').removeAttr('disabled');
           $('.category').removeAttr('disabled');
           $('.account').removeAttr('disabled');
-          $('.loading').show();
+          $('.typewriter').show();
         });
       })
       $('#submit_approve').attr('disabled', false);

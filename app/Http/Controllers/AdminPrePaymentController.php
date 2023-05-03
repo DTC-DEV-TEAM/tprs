@@ -189,7 +189,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 	        | 
 	        */
 	        $this->index_button = array();
-			if((CRUDBooster::getCurrentMethod() == 'getIndex') && (CRUDBooster::myPrivilegeName() != 'Treasury') ){
+			if((CRUDBooster::getCurrentMethod() == 'getIndex') && (CRUDBooster::myPrivilegeName() != 'Treasury')  && (CRUDBooster::myPrivilegeName() != 'AP Checker') ){
 				$this->index_button[] = ['label'=>'Request Cash Advance','url'=>CRUDBooster::mainpath("add"),"icon"=>"fa fa-plus", 'color'=>'success'];
 			}
 

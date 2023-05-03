@@ -1,4 +1,4 @@
-@if(CRUDBooster::myPrivilegeName() == 'Requestor')
+@if(CRUDBooster::myPrivilegeName() == 'Requestor' || CRUDBooster::myPrivilegeName() == 'Approver')
 <div class="budget_content" style="display: none;">
   <div class="budget_block">
     <div class="circ_delete">
@@ -308,7 +308,7 @@
     <div class="budget">
       <div class="budget_description">
         <label for="">Description</label>
-        <input class="input_description" type="text"  name="description[]" required>
+        <input class="input_description" type="text"  name="description[]" oninput="this.value = this.value.toUpperCase()" required>
       </div>
       <div class="budget_description">
         <label for="">Brand</label>
@@ -386,8 +386,8 @@
   </div>
 </div>
 <div class='panel panel-default'>
-  <form id="close" method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
   <div class='panel-heading'>Validate Receipts</div>
+  <form id="close" method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
   <div class='panel-body'>
     {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
       {{ csrf_field() }}
