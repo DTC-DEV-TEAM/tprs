@@ -349,9 +349,9 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 	    */    
 	    public function hook_row_index($column_index,&$column_value) {	        
 	    	//Your code here
-
-			if($column_index == '3'){
-
+			if($column_index == '10' && $column_value){
+				$column_value = date('Y-m-d', strtotime($column_value));
+			}if($column_index == '3'){
 				if($column_value == '1'){
 					$column_value = '<span class="label" style="background-color: #2980B9; color: white; font-size: 12px;">For Approval</span>';
 				}else if($column_value == '2'){
