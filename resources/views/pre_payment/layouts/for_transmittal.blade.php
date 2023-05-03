@@ -234,7 +234,7 @@
               <input type="date" name="transmit_date" style="padding: 5px;" required>
             </div>
             <div class="total_amount_content receipts_total_amount" style="width: 500px;">
-              <label for="">Recipient Name: <span style="color: red; font-weight: bold;">* </span></label>
+              <label for="">AP Specialist: <span style="color: red; font-weight: bold;">* </span></label>
               <input type="text" name="transmit_received_by" style=" width: 310px;" required>
             </div>
           </div>

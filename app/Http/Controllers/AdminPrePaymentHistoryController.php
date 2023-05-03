@@ -53,7 +53,7 @@ use App\Store;
 			$this->col[] = ["label"=>"Approver","name"=>"approver_id","join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"Approve Date","name"=>"approver_date"];
 			$this->col[] = ["label"=>"Accounting","name"=>"accounting_id","join"=>"cms_users,name"];
-			$this->col[] = ["label"=>"Budget Released Date","name"=>"accounting_date_release"];
+			$this->col[] = ["label"=>"Cash Advance Released Date","name"=>"accounting_date_release"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE

@@ -752,8 +752,10 @@
                       </div>
                       <div class="request_department">
                         <div class="request_information start">
-                            <label for="">Approval Date:</label>
-                            <span>{{ $row->accounting_date_release }}</span>
+                            <label for="">Released Date:</label>
+                            @if(!is_null($row->accounting_date_release))
+                              <span>{{ date('Y-m-d', strtotime($row->accounting_date_release)) }}</span>
+                            @endif
                         </div>
                         <div class="request_information">
                             <label for="">Accounting Name:</label>

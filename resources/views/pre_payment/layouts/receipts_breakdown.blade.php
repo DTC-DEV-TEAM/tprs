@@ -144,8 +144,11 @@
               </div>
               <div class="receipts_request_department">
                   <div class="request_information start">
-                      <label for="">Date Released:</label>
-                      <span>{{ $row->accounting_date_release }}</span>
+                      <label for="">Released Date:</label>
+                      {{-- <span>{{ $row->accounting_date_release }}</span> --}}
+                      @if(!is_null($row->accounting_date_release))
+                        <span>{{ date('Y-m-d', strtotime($row->accounting_date_release)) }}</span>
+                      @endif
                   </div>
                   <div class="request_information">
                       <label for="">Accounting Name:</label>

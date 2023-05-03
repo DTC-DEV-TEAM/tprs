@@ -74,16 +74,27 @@
                   </div>
                 </div> 
               <hr>
-              <div class="flex">
-                <div class="total_amount_content" style="width: 34.3%;">
+              <div class="by_department">
+                <div class="request_department total_amount_content">
+                  <label for="">Reference Number:</label>
+                  <span>{{ $row->reference_number }}</span>
+                </div>       
+                <div class="request_department total_amount_content">
+                  <label for="">Released Date:</label>
+                  <input type="date" name="release_date" style="padding: 5px;" required>                      
+                </div> 
+              </div>
+              
+              {{-- <div class="flex" style="display: flex-wrap: wrap;">
+                <div class="total_amount_content" style="width: 35%;">
                     <label for="">Reference Number:</label>
                     <span>{{ $row->reference_number }}</span>
                 </div>
-                <div class="total_amount_content" style="width: 34.3%;">
+                <div class="total_amount_content" style="width: 34.9%;">
                     <label for="">Released Date:</label>
                     <input type="date" name="release_date" style="padding: 5px;" required>
                 </div>
-              </div>
+              </div> --}}
 
               <div class="total_amount_content">
                   <label for="">Amount Requested:</label>

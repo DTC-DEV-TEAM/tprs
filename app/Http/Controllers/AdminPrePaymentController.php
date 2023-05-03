@@ -129,17 +129,20 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$rejected = PrePaymentProcess::select('id')->where('id', '6')->value('id');
 			$ap_record = PrePaymentProcess::select('id')->where('id', '7')->value('id');
 			$for_transmittal = PrePaymentProcess::select('id')->where('id', '8')->value('id');
-
+			$ap_id = CRUDBooster::myId();
 			if(CRUDBooster::myPrivilegeName() == 'Requestor'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $budget_released"];
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $for_transmittal"];
 			}else if(CRUDBooster::myPrivilegeName() == 'Approver'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $requested"];
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $budget_released && [created_by] == $ap_id"];
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $for_transmittal && [created_by] == $ap_id"];
+			}else if(CRUDBooster::myPrivilegeName() == 'AP Checker'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $ap_record"];
-			}else if(CRUDBooster::myPrivilegeName() == 'Treasury' || CRUDBooster::myPrivilegeName() == 'Cashier'){
-				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $approved"];
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $validate_receipts"];
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $for_transmittal"];
+			}else if(CRUDBooster::myPrivilegeName() == 'Treasury' || CRUDBooster::myPrivilegeName() == 'Cashier'){
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $approved"];
 			}else{
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $requested"];
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $approved"];
@@ -173,8 +176,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 	        | @type    = warning,success,danger,info        
 	        | 
 	        */
-	        $this->alert        = array();
-	                
+	        $this->alert = array();
 
 	        
 	        /* 
@@ -212,7 +214,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 	        |
 	        */
 	        $this->index_statistic = array();
-
+			$this->index_statistic[] = ['label'=>'Request may take up to 1 to 3 working days before release of funds.', 'label1'=>'To ensure proper record keeping, all receipts should be submitted formally to the accounting department.', 'color'=>'light-blue', 'width'=>'col-sm-12', 'icon'=>'fa fa-file-text-o'];
 
 
 	        /*
@@ -325,10 +327,13 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			if (CRUDBooster::myPrivilegeName() == 'Requestor'){
 				$query->where('pre_payment.created_by', CRUDBooster::myId())->orderByDesc('pre_payment.reference_number');
 			}else if (CRUDBooster::myPrivilegeName() == 'Approver'){
-				$query->where('pre_payment.status_id', $requested)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
-				$query->orWhere('pre_payment.status_id', $for_recording)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
+				$query->whereIn('pre_payment.sub_department_id', $approver_sub_department)->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
+				// $query->where('pre_payment.status_id', $requested)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
+				// $query->orWhere('pre_payment.status_id', $for_recording)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
 				// $query->whereIn('pre_payment.sub_department_id', $approver_sub_department);
 				// $query->orWhere('status_id', $requested);
+			}else if (CRUDBooster::myPrivilegeName() == 'AP Checker'){
+				$query->orderByDesc('pre_payment.reference_number')->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
 			}else{
 				$query->orderByDesc('pre_payment.reference_number')->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
 			}

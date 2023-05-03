@@ -279,7 +279,7 @@
             <hr>
             <div class="total_amount_content">
               <label for=""><span class="required">*</span> Request Amount:</label>
-              <input type="number" id="total_amount" name="requested_amount" value="0" min="0" required>
+              <input type="number" id="total_amount" name="requested_amount" value="0" min="1" required>
             </div>
             <div class="additional_notes">
               <label for="">Comment: </label>
