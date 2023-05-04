@@ -7,7 +7,7 @@
     <div class="budget">
       <div class="budget_description">
         <label for="">Description</label>
-        <input class="input_description" type="text"  name="description[]" required>
+        <input class="input_description" type="text"  name="description[]" oninput="this.value = this.value.toUpperCase()" required>
       </div>
       <div class="budget_description">
         <label for="">Brand</label>
@@ -105,7 +105,7 @@
                 <div class="budget">
                   <div class="budget_description">
                     <label for="">Description</label>
-                    <input class="input_description" type="text"  value="{{ $budget->description }}" name="description[]" style="background-color: #eeeeee" readonly>
+                    <input class="input_description" type="text"  value="{{ $budget->description }}" name="description[]" style="background-color: #eeeeee" oninput="this.value = this.value.toUpperCase()" readonly>
                   </div>
                   <div class="budget_description">
                     <label for="">Brand</label>
