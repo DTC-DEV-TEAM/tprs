@@ -182,9 +182,9 @@
     outline-color: #007bff;
   }
 
-  .input_description{
+  .input_description {
     width: 100%;
-    /* width: 500px; */
+    padding: 5px;
   }
 
   .add_row{
@@ -520,6 +520,8 @@
       box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
       
   }
+
+  
 
 </style>
 
@@ -981,6 +983,11 @@
     add_select2($('.budget').eq(i+1));
   }
   
+  $(document).ready(function() {
+    $('.input_description').hover(function() {
+      $(this).attr('title', $(this).val());
+    });
+  });
 
 
 </script>
