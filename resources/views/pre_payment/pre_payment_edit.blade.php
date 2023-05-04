@@ -226,7 +226,7 @@
   .total_amount_content label{
     font-size: 15px;
     margin-right: 10px;
-    width: 150px;
+    width: 155px;
   }
 
   .total_amount_content input{
