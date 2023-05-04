@@ -331,7 +331,7 @@
     </div> --}}
     <div class="typewriter" style="display: none;">
       <div class="typewriter_middle">
-        <div class="slide"><i></i></div>
+        <div class="slide"></div>
         <div class="paper"></div>
         <div class="keyboard"></div>    
         <h4 style="position: absolute; left: -58px; width: 260px; color: white; font-weight: bold;">TRANSACTION IS ON PROCESS...</h4>
@@ -344,19 +344,19 @@
           <div class="request_content">
             <div class="receipts_per_department">
               <div class="receipts_request_department">
-                  <label for="">Department <span class="required">*</span></label>
+                  <label for="">Department</label>
                   <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
                       <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
                   </select>   
               </div>       
               <div class="receipts_request_department">
-                  <label for="">Sub Department <span class="required">*</span></label>
+                  <label for="">Sub Department</label>
                   <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
                       <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
                   </select>                           
               </div>   
               <div class="receipts_request_department r_full_name">
-                  <label for="">Requestor Full Name <span class="required">*</span></label>
+                  <label for="">Requestor Full Name</label>
                   <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
               </div>
               <div class="receipts_request_department">
