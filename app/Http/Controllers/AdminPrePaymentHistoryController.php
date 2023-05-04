@@ -329,6 +329,9 @@ use App\Store;
 	    */    
 	    public function hook_row_index($column_index,&$column_value) {	        
 	    	//Your code here
+			if($column_index == '10' && $column_value){
+				$column_value = date('Y-m-d', strtotime($column_value));
+			}
 			if($column_index == '3'){
 
 				if($column_value == '1'){
