@@ -85,11 +85,11 @@
                   </div>
                   <div class="ap_recording_content">
                     <div class="total_amount_content">
-                      <label for="">BEACH pre-payment#:</label>
+                      <label for="">BEACH Pre Payment#: <span class="required">*</span></label>
                       <input type="text" placeholder="Enter ref#" name="system_reference_number" required>
                     </div>
                     <div class="total_amount_content">
-                      <label for="">Cheque Date:</label>
+                      <label for="">Cheque Date: <span class="required">*</span></label>
                       <input type="date" name="check_date" style="padding: 5px;" required>
                     </div>
                   </div>
