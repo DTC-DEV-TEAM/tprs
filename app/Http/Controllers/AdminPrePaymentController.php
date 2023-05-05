@@ -322,12 +322,12 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$for_recording = PrePaymentProcess::select('id')->where('id', '7')->value('id');
 			$for_transmittal = PrePaymentProcess::select('id')->where('id', '8')->value('id');
 			$approver_id = DB::table('cms_users')->where('id', CRUDBooster::myId())->first();
-			$approver_sub_department = explode(',',$approver_id->approver_sub_department_id);
-
+			$approver_sub_department = explode(',',$approver_id->approver_department_id);
+			
 			if (CRUDBooster::myPrivilegeName() == 'Requestor'){
 				$query->where('pre_payment.created_by', CRUDBooster::myId())->orderByDesc('pre_payment.reference_number');
 			}else if (CRUDBooster::myPrivilegeName() == 'Approver'){
-				$query->whereIn('pre_payment.sub_department_id', $approver_sub_department)->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
+				$query->whereIn('pre_payment.department_id', $approver_sub_department)->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
 				// $query->where('pre_payment.status_id', $requested)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
 				// $query->orWhere('pre_payment.status_id', $for_recording)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
 				// $query->whereIn('pre_payment.sub_department_id', $approver_sub_department);
