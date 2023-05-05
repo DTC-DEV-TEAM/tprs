@@ -215,7 +215,7 @@
     <div class='panel-heading'>Request Cash Advance</div>
     <div class='panel-body'>
       {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
-        <form method="POST" action="{{ route('add_request') }}">
+        <form method="POST" action="{{ route('add_request') }}" autocomplete="off">
         {{ csrf_field() }}
         <div class='form-group'>
           <div class="request_content">
