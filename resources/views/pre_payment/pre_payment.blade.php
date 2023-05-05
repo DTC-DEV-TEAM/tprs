@@ -192,6 +192,7 @@
 
   .total_amount_content label{
     font-size: 15px;
+    width: 130px;
   }
 
   .total_amount_content input{
