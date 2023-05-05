@@ -555,7 +555,7 @@
                           <div class="budget">
                             <div class="budget_description">
                               <label for="">Description</label>
-                              <input class="input_description" type="text"  value="{{ $budget->description }}" name="description[]" disabled>
+                              <input class="input_description" type="text"  value="{{ $budget->description }}" name="description[]" readonly>
                             </div>
                             <div class="budget_description">
                               <label for="">Brand</label>
@@ -1110,6 +1110,13 @@ function get_all_sum(){
     }
   });
   // End of Image modal
+  
+    
+  $(document).ready(function() {
+    $('.input_description').hover(function() {
+      $(this).attr('title', $(this).val());
+    });
+  });
 
 </script>
 @endsection
