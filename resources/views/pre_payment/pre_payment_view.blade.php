@@ -523,23 +523,23 @@
                 <div class="request_content">
                   <div class="receipts_per_department">
                     <div class="receipts_request_department">
-                        <label for="">Department <span class="required">*</span></label>
+                        <label for="">Department</label>
                         <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
                             <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
                         </select>   
                     </div>       
                     <div class="receipts_request_department">
-                        <label for="">Sub Department <span class="required">*</span></label>
+                        <label for="">Sub Department</label>
                         <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
                             <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
                         </select>                           
                     </div>   
                     <div class="receipts_request_department r_full_name">
-                        <label for="">Requestor Full Name <span class="required">*</span></label>
+                        <label for="">Requestor Full Name</label>
                         <input type="text" id="req_full_name" name="full_name" disabled value="{{ $row->full_name }}" required>
                     </div>
                     <div class="receipts_request_department">
-                        <label for="">Mode of Payment <span class="required">*</span></label>
+                        <label for="">Mode of Payment</label>
                         <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" disabled required>
                             <option value="{{ $mode_of_payment->id }}" selected>{{ $mode_of_payment->mode_of_payment_name }}</option>
                         </select>            
@@ -805,6 +805,46 @@
                               {{ $row->accounting_closed_note }}
                           </span>
                       </div>
+                    </div>
+                    <div class="request_department">
+                      @if ($row->payee_name)
+                        <div class="request_information start">
+                            <label for="">Payee Name:</label>
+                            <span>{{ $row->payee_name }}</span>
+                        </div>
+                      @endif
+                      @if($row->bank_name)
+                        <div class="request_information start">
+                            <label for="">Bank Name:</label>
+                            <span>{{ $row->bank_name }}</span>
+                        </div>
+                        <div class="request_information">
+                            <label for="">Bank Branch Name:</label>
+                            <span>
+                                {{ $row->bank_branch_name }}
+                            </span>
+                        </div>
+                        <div class="request_information">
+                            <label for="">Bank Account Name:</label>
+                            <span>
+                                {{ $row->bank_account_name }}
+                            </span>
+                        </div>
+                        <div class="request_information">
+                            <label for="">Bank Account #:</label>
+                            <span>
+                                {{ $row->bank_account_number }}
+                            </span>
+                        </div>
+                      @endif
+                      @if($row->gcash_number)
+                        <div class="request_information start">
+                            <label for="">Gcash #:</label>
+                            <span>
+                                {{ $row->gcash_number }}
+                            </span>
+                        </div>
+                      @endif
                     </div>
                   </div>
                 </div>
