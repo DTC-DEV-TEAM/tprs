@@ -9,15 +9,21 @@
                 <div class="by_department">
                   <div class="request_department">
                     <label for="">Department</label>
-                    <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
-                        <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
-                    </select>   
+                    <div class="select_with_icon">
+                      <i class="fa fa-sticky-note select_icon"></i>
+                      <select class="js-example-basic-single" name="department" class="department" id="req_department" disabled required>
+                          <option selected value="{{ $department->id }}">{{ $department->department_name }}</option>
+                      </select>   
+                    </div>
                   </div>       
                   <div class="request_department">
                         <label for="">Sub Department</label>
-                        <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
-                            <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
-                        </select>                           
+                        <div class="select_with_icon">
+                          <i class="fa fa-sticky-note select_icon"></i>
+                          <select class="js-example-basic-single" name="sub_department" class="department" id="sub_department" disabled required>
+                              <option value="{{ $sub_department->id }}" selected>{{ $sub_department->sub_department_name }}</option>
+                          </select>  
+                        </div>                         
                   </div> 
                   <div class="request_department r_full_name">
                         <label for="">Requestor Full Name</label>

@@ -66,7 +66,7 @@
   .select2-container--default .select2-selection--single {
     height: 35px;
     text-align: center;
-    
+    border-radius: 0;
   }
   /* End of Select2 */
 
@@ -521,7 +521,20 @@
       
   }
 
-  
+  /* select with icon */
+  .select_with_icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .select_icon{
+    padding: 9.8px 12px;
+    font-size: 14px;
+    color: #555;
+    border: 1px solid #ccc;
+  }
+
 
 </style>
 
