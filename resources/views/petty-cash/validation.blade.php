@@ -1,4 +1,22 @@
 @extends('crudbooster::admin_template')
+
+@push('head')
+    <style>
+        .table-responsive::-webkit-scrollbar {
+            height: 10px !important;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background: #f1f1f1; /* set the background color of the scrollbar track */
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background-color: #868686; /* set the color of the scrollbar thumb */
+            border-radius: 5px; /* set the border radius of the scrollbar thumb */
+        }
+    </style>
+@endpush
+
 @section('content')
 
 @if(g('return_url'))
@@ -15,37 +33,10 @@
         <input type="hidden" value="{{csrf_token()}}" name="_token" id="token">
             <div class='panel-body'>
 
-            <?php   $sub_departmentID = $Header->sub_department_id; ?>
-
-            <div class="row">  
-
-                <label class="control-label col-md-2">{{ trans('message.form-label.reference_number') }}:</label>
-                <div class="col-md-4">
-                        <p>{{$Header->reference_number}}</p>
-                </div>
-
-                <label class="control-label col-md-2">{{ trans('message.form-label.status_id') }}:</label>
-                <div class="col-md-4">
-                        <b>{{$Header->status_name}}</b>
-                </div>
-            </div>
-            
-            <div class="row">                           
-
-                <label class="control-label col-md-2">{{ trans('message.form-label.created_at') }}:</label>
-                <div class="col-md-4">
-                        <p>{{$Header->requested_date}}</p>
-                </div>
-
-            </div>
-
-                <hr/>
-
                 <div class="row">
-
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label require">*{{ trans('message.form-label.department_id') }}</label>
+                            <label class="control-label require">{{ trans('message.form-label.department_id') }}</label>
                             <div class="input-group date">
                                 <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
                                     <select class="form-control select2" style="width: 100%;" required name="department_id" id="department_id">
@@ -64,12 +55,11 @@
                                     </select>
                             </div>
                         </div>
-
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label require">*{{ trans('message.form-label.sub_department_id') }}</label>
+                            <label class="control-label require">{{ trans('message.form-label.sub_department_id') }}</label>
                             <div class="input-group date">
                                 <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
                                     <select class="form-control select2" style="width: 100%;" required name="sub_department_id" id="sub_department_id">
@@ -79,29 +69,31 @@
                         </div>
                     </div>
 
-
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label require">{{ trans('message.form-label.requestor_name') }}</label>
+                            <input type="text" class="form-control"  id="requestor_name" name="requestor_name"  required value="{{$Header->requestor_name}}">                                   
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label require">*{{ trans('message.form-label.requestor_name') }}</label>
-                                <input type="text" class="form-control"  id="requestor_name" name="requestor_name"  required value="{{$Header->requestor_name}}">                                   
-                            </div>
-                    </div>
+
                 </div>
-                
+
+                <?php   $sub_departmentID = $Header->sub_department_id; ?>
+
                 <hr/>
 
                     <div class="row">
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label require">*{{ trans('message.form-label.interco_id') }}</label>
                                 
                                 <div class="input-group date">
                                     <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
-                                    <select class="form-control select2" style="width: 80%;" required name="interco_id" id="interco_id">
+                                    <select class="form-control select2" required name="interco_id" id="interco_id">
                                         <option value="">-- {{ trans('message.form-label.interco_id') }} --</option>
                                             @foreach($Interco as $data)
                                             
@@ -122,13 +114,11 @@
 
                     @if($Header->si_or_number != null)
                     <div class="row">
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label require">*{{ trans('message.form-label.si_or_number') }}</label>
                                 <input type="text" class="form-control"  id="si_or_number" name="si_or_number"  required value="{{$Header->si_or_number}}" >   
                             </div>
-
                         </div>
 
 
@@ -141,11 +131,9 @@
                                 </div>
                             </div>
                         </div>
-
                     </div> 
 
                     <div class="row">
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label require">*{{ trans('message.form-label.address') }}</label>
@@ -153,7 +141,6 @@
                             </div>
 
                         </div>
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label require">*{{ trans('message.form-label.tin_number') }}</label>
@@ -161,28 +148,23 @@
                             </div>
 
                         </div>
-
                     </div> 
 
                     <div class="row">
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label require">*{{ trans('message.form-label.payee') }}</label>
                                 <input type="text" class="form-control"  id="payee" name="payee"  required  value="{{$Header->payee}}" >   
                             </div>
-
                         </div>
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label require">*{{ trans('message.form-label.vat_amount') }}</label>
                                 <input type="number" step="0.01" min="0"  class="form-control"  id="vat_amount" name="vat_amount"  required  value="{{$Header->vat_amount}}" >   
                             </div>
-
                         </div>
+                    </div>   
 
-                    </div>                    
                     @endif
 
                     @if($Header->paid_date != null)
@@ -206,23 +188,20 @@
 
                         <div class="col-md-12">
                             
-                            <p style="color:red;">Please limit request to 100 lines.</p>
+                            <p style="color:red; font-weight: bold;">Please limit request to 100 lines.</p>
 
                             <div class="box-header text-center">
                             <h3 class="box-title"><b>{{ trans('message.form-label.items') }}</b></h3>
                             </div>
                             <div class="box-body no-padding">
                                 <div class="table-responsive">
-                                    <div class="container">
-                                        <div class="hack1" style="  display: table;
-                                        table-layout: fixed;
-                                        width: 250%;">
-                                        <div class="hack2" style="  display: table-cell;
-                                        overflow-x: auto;
-                                        width: 250%;"> 
-                                        <table class="table table-bordered" id="requestTable" style="  width: 250%;
-                                        border-collapse: collapse;">
-                                        <tbody id="bodyTable">
+                                    <div class="container-fluid">
+                                        <div class="hack1" style=" display: table; table-layout: fixed; width: 170%;">
+                                        <div class="hack2" style=" display: table-cell;"> 
+                                        <table class="table" id="requestTable" style=" background-color: rgb(255, 250, 250); width: 100%;
+                                        border-collapse: collapse; box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;">
+                                            <tbody id="bodyTable">
+    
 
                                             <tr class="tbl_header_color dynamicRows">
 
@@ -454,24 +433,42 @@
                 
                         </div>
                 
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>{{ trans('message.table.note') }}:</label>
-                                <p>{{ $Header->requestor_comments }}</p>
-                            </div>
-                        </div>
+
                 
                     </div>
 
-                    <hr/>
                     <div class="row">  
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>{{ trans('message.table.approver_comments') }}:</label>
-                                <p>{{ $Header->approver_comments }}</p>
-                            </div>
+                        <label class="control-label col-md-2">{{ trans('message.form-label.reference_number') }}:</label>
+                        <div class="col-md-2">
+                                <p>{{$Header->reference_number}}</p>
+                        </div>
+    
+                        <label class="control-label col-md-2">{{ trans('message.form-label.status_id') }}:</label>
+                        <div class="col-md-2">
+                                <b>{{$Header->status_name}}</b>
                         </div>
                     </div>
+                
+                    <div class="row">                           
+                        <label class="control-label col-md-2">{{ trans('message.form-label.created_at') }}:</label>
+                        <div class="col-md-2">
+                                <p>{{$Header->requested_date}}</p>
+                        </div>
+    
+                        <label class="control-label col-md-2">{{ trans('message.table.note') }}:</label>
+                        <div class="col-md-2">
+                            <p>{{ $Header->requestor_comments }}</p>
+                        </div>
+                    </div>
+    
+                    <div class="row">  
+                        <label class="control-label col-md-2">{{ trans('message.table.approver_comments') }}:</label>
+                        <div class="col-md-2">
+                            <p>{{ $Header->approver_comments }}</p>
+                        </div>
+                    </div>
+                    <hr/>
+            
 
             </div>
 

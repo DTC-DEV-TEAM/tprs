@@ -1,4 +1,35 @@
 @extends('crudbooster::admin_template')
+
+@push('head')
+    <style>
+         /* Select2 */
+        .select2 {
+            height: 35px;
+            border: 1px solid #aaa;
+        }
+        /* End of Select2 */
+
+        .input-group-addon{
+            border: 1px solid #aaa !important;
+        }
+        
+        /* Required */
+        .required{
+            color: red;
+        }
+        /* End of Required */
+
+        input, textarea{
+            border: 1px solid #aaa !important;
+        }
+
+        textarea:focus{
+            border: 1px solid black !important;
+        }
+
+    </style>
+@endpush
+
 @section('content')
 
 @if(g('return_url'))
@@ -17,12 +48,12 @@
 
                     <div class="row">
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label require">*{{ trans('message.form-label.department_id') }}</label>
+                                <label class="control-label require">{{ trans('message.form-label.department_id') }} <span class="required">*</span> </label>
                                 <div class="input-group date">
-                                    <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
-                                        <select class="form-control select2" style="width: 100%;" required name="department_id" id="department_id">
+                                    <div class="input-group-addon" ><i class="fa fa-sticky-note"></i></div>
+                                        <select class="form-control select2" required name="department_id" id="department_id">
                                             <!--<option value="">-- Select Department --</option>-->
                                             @foreach($Departments as $data)
                                                 <option value="{{$data->id}}" >{{$data->department_name}}</option>
@@ -33,12 +64,12 @@
 
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label require">*{{ trans('message.form-label.sub_department_id') }}</label>
+                                <label class="control-label require">{{ trans('message.form-label.sub_department_id') }} <span class="required">*</span></label>
                                 <div class="input-group date">
                                     <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
-                                        <select class="form-control select2" style="width: 100%;" required name="sub_department_id" id="sub_department_id">
+                                        <select class="form-control select2" required name="sub_department_id" id="sub_department_id">
                                             <option value="">-- Select Sub Department --</option>
                                             @foreach($SubDepartments as $data)
                                                 <option value="{{$data->id}}">{{$data->sub_department_name}}</option>
@@ -85,9 +116,9 @@
                             </div>
                         </div> -->
                         
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label require">*{{ trans('message.form-label.requestor_name') }}</label>
+                                <label class="control-label require">{{ trans('message.form-label.requestor_name') }} <span class="required">*</span></label>
                                 <input type="text" class="form-control"  id="requestor_name" name="requestor_name"  required>                                   
                             </div>
                         </div>
@@ -96,41 +127,35 @@
                     </div>                    
 
                     <hr/>
-                    <div class="row">
-                       
-                
+                    <div class="row" >
                         <div class="col-md-12">
-                            <p style="color:red;">Please limit request to 100 lines.</p>
+                            <p style="color:red; font-weight: bold;">Please limit request to 100 lines.</p>
                             
                             <div class="box-header text-center">
                             <h3 class="box-title"><b>{{ trans('message.form-label.items') }}</b></h3>
                             </div>
                             <div class="box-body no-padding">
                                 <div class="table-responsive" >
-                                    <div class="container">
-                                    <div class="hack1" style="  display: table;
-                                    table-layout: fixed;
-                                    width: 140%;">
-                                    <div class="hack2" style="  display: table-cell;
-                                    overflow-x: auto;
-                                    width: 140%;"> 
-                                    <table class="table table-bordered" id="requestTable" style="  width: 140%;
-                                    border-collapse: collapse;">
+                                    <div class="container-fluid">
+                                    <div class="hack1" style=" display: table; table-layout: fixed; width: 100%;">
+                                    <div class="hack2" style=" display: table-cell; overflow-x: auto;"> 
+                                    <table class="table" id="requestTable" style=" background-color: rgb(255, 250, 250); width: 100%;
+                                    border-collapse: collapse; box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;">
                                         <tbody id="bodyTable">
 
-                                            <tr class="tbl_header_color dynamicRows">
-                                                <th width="20%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
-                                                <th width="12%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
+                                            <tr class="tbl_header_color dynamicRows" style="font-size: 15px;">
+                                                <th width="15%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
+                                                <th width="10%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
 
-                                                <th width="14%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
+                                                <th width="12%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
 
                                                 <th width="12%" class="text-center">{{ trans('message.table.category_id_text') }}</th>
                                                 <th width="15%" class="text-center">{{ trans('message.table.account_id_text') }}</th>
-                                                <th width="7%" class="text-center">{{ trans('message.table.currency_id_text') }}</th>
-                                                <th width="5%" class="text-center">{{ trans('message.table.quantity_text') }}</th>
-                                                <th width="8%" class="text-center">{{ trans('message.table.line_value_text') }}</th>
-                                                <th width="15%" class="text-center">{{ trans('message.table.total_value_text') }}</th>
-                                                <th width="" class="text-center">{{ trans('message.table.action') }}</th>
+                                                <th width="11.5%" class="text-center">{{ trans('message.table.currency_id_text') }}</th>
+                                                <th width="7%" class="text-center">{{ trans('message.table.quantity_text') }}</th>
+                                                <th width="7%" class="text-center">{{ trans('message.table.line_value_text') }}</th>
+                                                <th width="7%" class="text-center">{{ trans('message.table.total_value_text') }}</th>
+                                                {{-- <th width="" class="text-center">{{ trans('message.table.action') }}</th> --}}
                                             </tr>
 
                                             <tr id="tr-table">
@@ -146,10 +171,10 @@
                                             <tr id="tr-table1" class="bottom">
 
                                                 <td>
-                                                    <input type="button" id="add-Row" name="add-Row" class="btn btn-primary add" value='Add' />
+                                                    <input type="button" id="add-Row" name="add-Row" class="btn btn-primary add" value='Add Row' />
                                                 </td>
 
-                                                <td colspan="6" align="right"><strong>{{ trans('message.table.total_value_order_text') }}</strong></td>
+                                                <td colspan="6" align="right" style="vertical-align: middle;"><strong>{{ trans('message.table.total_value_order_text') }}</strong></td>
                                                 <td align="left" colspan="1">
                                                     <input type='number' name="total_value_order" class="form-control text-center" id="tValue2" readonly></td>
                                                 </td>
@@ -172,7 +197,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>{{ trans('message.table.note') }}</label>
-                                <textarea placeholder="{{ trans('message.table.comments') }} ..." rows="3" class="form-control" name="requestor_comments"></textarea>
+                                <textarea placeholder="{{ trans('message.table.comments') }} ..." rows="4" class="form-control" name="requestor_comments"></textarea>
                             </div>
                         </div>
                 
@@ -290,11 +315,12 @@ $('#requestor_name').keyup(function() {
 
 
     $("#add-Row").click(function() {
+      $('#requestTable').css('box-shadow', 'none');
       tableRow++;
       var newrow =
-        '<tr>' +
+        '<tr style="box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;">' +
         '<td >' +
-        '  <input type="text" onkeyup="this.value = this.value.toUpperCase();" class="form-control itemDesc" data-id="' + tableRow + '" id="itemDesc' + tableRow + '"  name="particulars[]"  required maxlength="100">' +
+        '  <input type="text" onkeyup="this.value = this.value.toUpperCase();" class="form-control itemDesc" data-id="' + tableRow + '" id="itemDesc' + tableRow + '"  name="particulars[]"  required maxlength="100" style="border-radius: 5px;">' +
         '</td>' +                
         '<td>'+
         '<select class="form-control" name="brand_id[]" id="brand_id" required>' +
@@ -331,13 +357,13 @@ $('#requestor_name').keyup(function() {
         '         @endforeach'+
         '</select></td>' +   
         '<td>' +
-        '  <input type="number" class="form-control quantity text-center" data-id="' + tableRow + '" id="quantity' + tableRow + '" step="any" name="quantity[]" min="0" required maxlength="100">' +
+        '  <input type="number" class="form-control quantity text-center" data-id="' + tableRow + '" id="quantity' + tableRow + '" step="any" name="quantity[]" min="0" required maxlength="100" style="border-radius: 5px;">' +
         '</td>' +
         '<td>' +
-        '  <input type="number" class="form-control vvalue text-center" data-id="' + tableRow + '" id="value' + tableRow + '" name="line_value[]" step="0.01" min="0" onchange="setTwoNumberDecimal(this)" required maxlength="100">' +
+        '  <input type="number" class="form-control vvalue text-center" data-id="' + tableRow + '" id="value' + tableRow + '" name="line_value[]" step="0.01" min="0" onchange="setTwoNumberDecimal(this)" required maxlength="100" style="border-radius: 5px;">' +
         '</td>' +
         '<td>' +
-        '  <input type="text" class="form-control totalV text-center" id="totalValue' + tableRow + '" name="total_value[]" readonly="readonly" step="0.01" required maxlength="100">' +
+        '  <input type="text" class="form-control totalV text-center" id="totalValue' + tableRow + '" name="total_value[]" readonly="readonly" step="0.01" required maxlength="100" style="border-radius: 5px;">' +
         '</td>' +
         '<td>' +
         '<button id="deleteRow" name="removeRow" class="btn btn-danger removeRow"><i class="glyphicon glyphicon-trash"></i></button>' +

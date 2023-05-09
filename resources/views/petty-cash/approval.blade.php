@@ -1,6 +1,32 @@
 @extends('crudbooster::admin_template')
 @section('content')
 
+@push('head')
+    <style>
+         /* Select2 */
+        .select2 {
+            height: 35px;
+            border: 1px solid #aaa;
+        }
+        /* End of Select2 */
+
+        .input-group-addon{
+            border: 1px solid #aaa !important;
+        }
+        
+        /* Required */
+        .required{
+            color: red;
+        }
+        /* End of Required */
+
+        table{
+            border: 1px solid #ddd !important;
+        }
+
+    </style>
+@endpush
+
 @if(g('return_url'))
 	<p class="noprint"><a title='Return' href='{{g("return_url")}}'><i class='fa fa-chevron-circle-left '></i> &nbsp; {{trans("crudbooster.form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>       
 @else
@@ -14,16 +40,51 @@
         <form action='{{CRUDBooster::mainpath('edit-save/'.$Header->id)}}' method="POST" id="PettyCashApprovalForm" enctype="multipart/form-data">
         <input type="hidden" value="{{csrf_token()}}" name="_token" id="token">
         <input type="hidden" value="" name="approval_action" id="approval_action">
-            <div class='panel-body'>
+            <div class='panel-body'>        
 
             <div class="row">                           
-                <label class="control-label col-md-2">{{ trans('message.form-label.created_by') }}:</label>
                 <div class="col-md-4">
+                    {{-- <p>{{$Header->department_name}}</p> --}}
+                    <div class="form-group">
+                        <label class="control-label">{{ trans('message.form-label.department_id') }}</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
+                            <select class="form-control select2" required name="sub_department_id" id="sub_department_id" disabled>
+                                <option value="">-- Select Sub Department --</option>
+                                @foreach($department as $data)
+                                    <option {{ $Header->department_name == $data->department_name ? 'selected' : ''}}  value="{{$data->id}}">{{$data->department_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    {{-- <p>{{$Header->sub_department_name}}</p> --}}
+                    <div class="form-group">
+                        <label class="control-label">{{ trans('message.form-label.sub_department_id') }}</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
+                            <select class="form-control select2" required name="sub_department_id" id="sub_department_id" disabled>
+                                <option value="">-- Select Sub Department --</option>
+                                @foreach($sub_department as $data)
+                                    {{-- <option {{ $Header->subdepartment_name == $data->sub_department_name ? 'selected' : ''}}  value="{{$data->id}}">{{$data->sub_department_name}}</option> --}}
+                                    <option {{ $Header->sub_department_name == $data->sub_department_name ? 'selected' : '' }} value="{{ $data->id }}">{{ $data->sub_department_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">                           
+                <label class="control-label col-md-2">{{ trans('message.form-label.created_by') }}:</label>
+                <div class="col-md-2">
                         <p>{{$Header->requestor_name}}</p>
                 </div>
 
                 <label class="control-label col-md-2">{{ trans('message.form-label.created_at') }}:</label>
-                <div class="col-md-4">
+                <div class="col-md-2">
                         <p>{{$Header->requested_date}}</p>
                 </div>
             </div>
@@ -31,30 +92,22 @@
             <div class="row">  
 
                 <label class="control-label col-md-2">{{ trans('message.form-label.reference_number') }}:</label>
-                <div class="col-md-4">
+                <div class="col-md-2">
                         <p>{{$Header->reference_number}}</p>
                 </div>
 
                 <label class="control-label col-md-2">{{ trans('message.form-label.status_id') }}:</label>
-                <div class="col-md-4">
+                <div class="col-md-2">
                         <b>{{$Header->status_name}}</b>
                 </div>
-            </div>           
+            </div>   
 
-            <div class="row">                           
-                <label class="control-label col-md-2">{{ trans('message.form-label.department_id') }}:</label>
-                <div class="col-md-4">
-                        <p>{{$Header->department_name}}</p>
-                </div>
-
-                <label class="control-label col-md-2">{{ trans('message.form-label.sub_department_id') }}:</label>
-                <div class="col-md-4">
-                        <p>{{$Header->sub_department_name}}</p>
+            <div class="row">
+                <label class="control-label col-md-2">{{ trans('message.table.note') }}:</label>
+                <div class="col-md-2">
+                    <p>{{ $Header->requestor_comments }}</p>
                 </div>
             </div>
-            
-        
-
 
                 <hr/>
 
@@ -64,46 +117,68 @@
                         <div class="box-header text-center">
                         <h3 class="box-title"><b>{{ trans('message.form-label.items') }}</b></h3>
                         </div>
-                        <div class="box-body no-padding">
-                            <div class="table-responsive">
-                                    <div class="container">
-                                    <div class="hack1" style="  display: table;
-                                    table-layout: fixed;
-                                    width: 100%;">
-                                    <div class="hack2" style="  display: table-cell;
-                                    overflow-x: auto;
-                                    width: 100%;">
-                                <table class="table table-bordered" id="requestTable">
-                                    <tbody id="bodyTable">
+                            <div class="box-body no-padding">
+                                <div class="table-responsive" >
+                                    <div class="container-fluid">
+                                    <div class="hack1" style=" display: table; table-layout: fixed; width: 100%;">
+                                    <div class="hack2" style=" display: table-cell; overflow-x: auto;"> 
+                                    <table class="table" id="requestTable" style=" background-color: rgb(255, 250, 250); width: 100%;
+                                    border-collapse: collapse; box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;">
+                                        <tbody id="bodyTable">
 
-                                        <tr class="tbl_header_color dynamicRows">
-                                            <th width="20%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
-                                            <th width="15%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
+                                        <tr class="tbl_header_color dynamicRows" style="font-size: 15px;">
+                                            <th width="15%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
+                                            <th width="10%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
 
-                                            <th width="14%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
+                                            <th width="12%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
 
-                                            <th width="15%" class="text-center">{{ trans('message.table.category_id_text') }}</th>
+                                            <th width="12%" class="text-center">{{ trans('message.table.category_id_text') }}</th>
                                             <th width="15%" class="text-center">{{ trans('message.table.account_id_text') }}</th>
-                                            <th width="10%" class="text-center">{{ trans('message.table.currency_id_text') }}</th>
+                                            <th width="11.5%" class="text-center">{{ trans('message.table.currency_id_text') }}</th>
                                             <th width="7%" class="text-center">{{ trans('message.table.quantity_text') }}</th>
-                                            <th width="8%" class="text-center">{{ trans('message.table.line_value_text') }}</th>
-                                            <th width="15%" class="text-center">{{ trans('message.table.total_value_text') }}</th>
+                                            <th width="7%" class="text-center">{{ trans('message.table.line_value_text') }}</th>
+                                            <th width="7%" class="text-center">{{ trans('message.table.total_value_text') }}</th>
+                                            {{-- <th width="" class="text-center">{{ trans('message.table.action') }}</th> --}}
                                         </tr>
 
 
                                         @foreach($Body as $rowresult)
                                             <tr>
-                                                <td style="text-align:center" height="10">{{$rowresult->particulars}}</td>
-                                                <td style="text-align:center" height="10">{{$rowresult->brand_name}}</td>
-
-                                                <td style="text-align:center" height="10">{{$rowresult->store_name}}</td>
-                                                
-                                                <td style="text-align:center" height="10">{{$rowresult->category_name}}</td>
-                                                <td style="text-align:center" height="10">{{$rowresult->account_name}}</td>
-                                                <td style="text-align:center" height="10">{{$rowresult->currency_name}}</td>
-                                                <td style="text-align:center" height="10">{{$rowresult->quantity}}</td>
-                                                <td style="text-align:center" height="10">{{$rowresult->line_value}}</td>
-                                                <td style="text-align:center" height="10">{{$rowresult->total_value	}}</td>                    
+                                                {{-- <td style="text-align:center; border: 1px solid #ddd;" height="10">{{$rowresult->particulars}}</td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">{{$rowresult->brand_name}}</td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">{{$rowresult->store_name}}</td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">{{$rowresult->category_name}}</td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">{{$rowresult->account_name}}</td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">{{$rowresult->currency_name}}</td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">{{$rowresult->quantity}}</td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">{{$rowresult->line_value}}</td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">{{$rowresult->total_value	}}</td>                     --}}
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">
+                                                <input type="text" class="form-control itemDesc" value="{{$rowresult->particulars}}" style="border-radius: 5px; text-align: center; min-width: 215px;" readonly></td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">
+                                                <input type="text" class="form-control itemDesc" value="{{$rowresult->brand_name}}" style="text-align: center; min-width: 127px;" readonly>
+                                                </td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">
+                                                <input type="text" class="form-control itemDesc" value="{{$rowresult->store_name}}" style="text-align: center; min-width: 210px;" readonly>                                          
+                                                </td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">
+                                                <input type="text" class="form-control itemDesc" value="{{$rowresult->category_name}}" style="text-align: center; min-width: 160px;" readonly> 
+                                                </td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">
+                                                <input type="text" class="form-control itemDesc" value="{{$rowresult->account_name}}" style="text-align: center; min-width: 245px;" readonly> 
+                                                </td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">
+                                                <input type="text" class="form-control itemDesc" value="{{$rowresult->currency_name}}" style="text-align: center; min-width: 100px;" readonly> 
+                                                </td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">
+                                                <input type="text" class="form-control itemDesc" value="{{$rowresult->quantity}}" style="border-radius: 5px; text-align: center; min-width: 50px;" readonly>
+                                                </td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">
+                                                <input type="text" class="form-control itemDesc" value="{{$rowresult->line_value}}" style="border-radius: 5px; text-align: center; min-width: 50px;" readonly>
+                                                </td>
+                                                <td style="text-align:center; border: 1px solid #ddd;" height="10">
+                                                <input type="text" class="form-control itemDesc" value="{{$rowresult->total_value}}" style="border-radius: 5px; text-align: center; min-width: 50px;" readonly>
+                                                </td>                    
                                             </tr>
                                         @endforeach
 
@@ -131,13 +206,6 @@
                             <br>
                         </div>
             
-                    </div>
-            
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>{{ trans('message.table.note') }}:</label>
-                            <p>{{ $Header->requestor_comments }}</p>
-                        </div>
                     </div>
             
                 </div>

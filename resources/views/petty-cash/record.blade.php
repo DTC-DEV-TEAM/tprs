@@ -1,6 +1,18 @@
 @extends('crudbooster::admin_template')
-@section('content')
 
+@push('head')
+    <style>
+        .required{
+            color: red;
+        }
+        
+        th, td{
+            border: 1px solid #ddd;
+        }
+    </style>
+@endpush
+
+@section('content')
 @if(g('return_url'))
 	<p class="noprint"><a title='Return' href='{{g("return_url")}}'><i class='fa fa-chevron-circle-left '></i> &nbsp; {{trans("crudbooster.form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>       
 @else
@@ -46,7 +58,7 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="control-label require">*{{ trans('message.form-label.address') }}</label>
+                            <label class="control-label require">{{ trans('message.form-label.address') }} <span class="required">*</span></label>
                             <input type="text" class="form-control"  id="address" name="address"  required >   
                         </div>
 
@@ -54,7 +66,7 @@
                     
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="control-label require">*{{ trans('message.form-label.tin_number') }}</label>
+                            <label class="control-label require">{{ trans('message.form-label.tin_number') }} <span class="required">*</span></label>
                             <input type="text" class="form-control"  id="tin_number" name="tin_number"  required >   
                         </div>
 
@@ -67,7 +79,7 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="control-label require">*{{ trans('message.form-label.payee') }}</label>
+                            <label class="control-label require">{{ trans('message.form-label.payee') }} <span class="required">*</span></label>
                             <input type="text" class="form-control"  id="payee" name="payee"  required >   
                         </div>
 
@@ -75,7 +87,7 @@
                     
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="control-label require">*{{ trans('message.form-label.vat_amount') }}</label>
+                            <label class="control-label require">{{ trans('message.form-label.vat_amount') }} <span class="required">*</span></label>
                             <input type="number" step="0.01" min="0"  class="form-control"  id="vat_amount" name="vat_amount"  required >   
                         </div>
 
@@ -121,7 +133,13 @@
                         <p>{{$Header->sub_department_name}}</p>
                 </div>
             </div>
-            
+
+            <div class="row">                           
+                <label class="control-label col-md-2">{{ trans('message.table.note') }}:</label>
+                <div class="col-md-4">
+                    <p>{{ $Header->requestor_comments }}</p>
+                </div>
+            </div>
        
 
                 <hr/>
@@ -134,24 +152,18 @@
                         </div>
                         <div class="box-body no-padding">
                             <div class="table-responsive">
-                                    <div class="container">
-                                    <div class="hack1" style="  display: table;
-                                    table-layout: fixed;
-                                    width: 100%;">
-                                    <div class="hack2" style="  display: table-cell;
-                                    overflow-x: auto;
-                                    width: 100%;">
-                                <table class="table table-bordered" id="requestTable">
+                                <div class="container-fluid">
+                                <div class="hack1" style="  display: table;table-layout: fixed;width: 100%;">
+                                <div class="hack2" style="  display: table-cell; overflow-x: auto; width: 100%;">
+                                <table class="table" id="requestTable" style=" background-color: rgb(255, 250, 250); width: 100%;
+                                border-collapse: collapse; box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;">
                                     <tbody id="bodyTable">
 
                                         <tr class="tbl_header_color dynamicRows">
-
                                             
-
-
-                                            <th width="15%" class="text-center">{{ trans('message.table.invoice_type_id') }}</th>
-                                            <th width="15%" class="text-center">{{ trans('message.table.vat_type_id') }}</th>
-                                            <th width="15%" class="text-center">{{ trans('message.table.payment_status_id') }}</th>
+                                            <th width="12%" class="text-center">{{ trans('message.table.invoice_type_id') }}</th>
+                                            <th width="12%" class="text-center">{{ trans('message.table.vat_type_id') }}</th>
+                                            <th width="12%" class="text-center">{{ trans('message.table.payment_status_id') }}</th>
 
                                             <th width="8%" class="text-center">{{ trans('message.table.si_or_number') }}</th>
                                             <th width="8%" class="text-center">{{ trans('message.table.si_or_date') }}</th>
@@ -159,10 +171,10 @@
                                             <th width="20%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
                                             <th width="15%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
 
-                                            <th width="14%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
+                                            <th width="18%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
 
                                             <th width="15%" class="text-center">{{ trans('message.table.category_id_text') }}</th>
-                                            <th width="15%" class="text-center">{{ trans('message.table.account_id_text') }}</th>
+                                            <th width="18%" class="text-center">{{ trans('message.table.account_id_text') }}</th>
                                             <th width="10%" class="text-center">{{ trans('message.table.currency_id_text') }}</th>
                                             <th width="7%" class="text-center">{{ trans('message.table.quantity_text') }}</th>
                                             <th width="8%" class="text-center">{{ trans('message.table.line_value_text') }}</th>
@@ -218,13 +230,7 @@
                         </div>
             
                     </div>
-            
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>{{ trans('message.table.note') }}:</label>
-                            <p>{{ $Header->requestor_comments }}</p>
-                        </div>
-                    </div>
+
             
                 </div>
 
@@ -243,11 +249,9 @@
                 </div>
 
                 <div class="row">  
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>{{ trans('message.table.approver_comments') }}:</label>
-                            <p>{{ $Header->approver_comments }}</p>
-                        </div>
+                    <label class="control-label col-md-2">{{ trans('message.table.approver_comments') }}:</label>
+                    <div class="col-md-4">
+                        <p>{{ $Header->approver_comments }}</p>
                     </div>
                 </div>
 

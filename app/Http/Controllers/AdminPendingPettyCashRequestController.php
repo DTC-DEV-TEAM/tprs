@@ -753,8 +753,10 @@ use App\Currency;
 							  ->where('petty_cash_body.row_deleted', null)
 							  ->get();
 
-							  
+			$data['department'] = Department::select('id', 'department_name')->where('status', 'ACTIVE')->get();
 
+			$data['sub_department'] = SubDepartment::select('id', 'sub_department_name')->where('status', 'ACTIVE')->get();
+			
 
 			$this->cbView("petty-cash.approval", $data);
 

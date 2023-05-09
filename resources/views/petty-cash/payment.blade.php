@@ -70,6 +70,12 @@
                 </div>
             </div>
             
+            <div class="row">                           
+                <label class="control-label col-md-2">{{ trans('message.table.note') }}:</label>
+                <div class="col-md-4">
+                    <p>{{ $Header->requestor_comments }}</p>
+                </div>
+            </div>
 
 
                 <hr/>
@@ -82,20 +88,21 @@
                         </div>
                         <div class="box-body no-padding">
                             <div class="table-responsive">
-                                    <div class="container">
+                                    <div class="container-fluid">
                                     <div class="hack1" style="  display: table;
                                     table-layout: fixed;
                                     width: 100%;">
                                     <div class="hack2" style="  display: table-cell;
                                     overflow-x: auto;
                                     width: 100%;">
-                                <table class="table table-bordered" id="requestTable">
-                                    <tbody id="bodyTable">
+                                    <table class="table" id="requestTable" style=" background-color: rgb(255, 250, 250); width: 100%;
+                                    border-collapse: collapse; box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;">
+                                        <tbody id="bodyTable">
 
                                         <tr class="tbl_header_color dynamicRows">
-                                            <th width="15%" class="text-center">{{ trans('message.table.invoice_type_id') }}</th>
-                                            <th width="15%" class="text-center">{{ trans('message.table.vat_type_id') }}</th>
-                                            <th width="15%" class="text-center">{{ trans('message.table.payment_status_id') }}</th>
+                                            <th width="12%" class="text-center">{{ trans('message.table.invoice_type_id') }}</th>
+                                            <th width="12%" class="text-center">{{ trans('message.table.vat_type_id') }}</th>
+                                            <th width="12%" class="text-center">{{ trans('message.table.payment_status_id') }}</th>
                                             
                                             <th width="8%" class="text-center">{{ trans('message.table.si_or_number') }}</th>
                                             <th width="8%" class="text-center">{{ trans('message.table.si_or_date') }}</th>
@@ -103,7 +110,7 @@
                                             <th width="20%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
                                             <th width="15%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
 
-                                            <th width="14%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
+                                            <th width="15%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
 
                                             <th width="15%" class="text-center">{{ trans('message.table.category_id_text') }}</th>
                                             <th width="15%" class="text-center">{{ trans('message.table.account_id_text') }}</th>
@@ -163,13 +170,6 @@
             
                     </div>
             
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>{{ trans('message.table.note') }}:</label>
-                            <p>{{ $Header->requestor_comments }}</p>
-                        </div>
-                    </div>
-            
                 </div>
 
                 <hr/>
@@ -187,11 +187,9 @@
                 </div>
 
                 <div class="row">  
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>{{ trans('message.table.approver_comments') }}:</label>
-                            <p>{{ $Header->approver_comments }}</p>
-                        </div>
+                    <label class="control-label col-md-2">{{ trans('message.table.approver_comments') }}:</label>
+                    <div class="col-md-4">
+                        <p>{{ $Header->approver_comments }}</p>
                     </div>
                 </div>
 
