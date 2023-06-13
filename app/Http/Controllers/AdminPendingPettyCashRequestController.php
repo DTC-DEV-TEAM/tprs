@@ -758,7 +758,7 @@ use App\Currency;
 			$data['sub_department'] = SubDepartment::select('id', 'sub_department_name')->where('status', 'ACTIVE')->get();
 			
 
-			$this->cbView("petty-cash.approval", $data);
+			return view("petty-cash.approval", $data);
 
 		}
 
@@ -846,7 +846,7 @@ use App\Currency;
 			$data['PaymentStatus'] = PaymentStatus::where('status', 'ACTIVE')->orderby('payment_status_name', 'ASC')->get();
 			$data['VatType'] = VatType::where('status', 'ACTIVE')->orderby('vat_type_name', 'ASC')->get();				  
 			
-			$this->cbView("petty-cash.validation", $data);
+			return view("petty-cash.validation", $data);
 
 		}
 
@@ -921,7 +921,7 @@ use App\Currency;
 			$data['PaymentStatus'] = PaymentStatus::where('status', 'ACTIVE')->orderby('payment_status_name', 'ASC')->get();
 			$data['VatType'] = VatType::where('status', 'ACTIVE')->orderby('vat_type_name', 'ASC')->get();				  
 			
-			$this->cbView("petty-cash.payment", $data);
+			return view("petty-cash.payment", $data);
 
 		}
 
@@ -995,7 +995,7 @@ use App\Currency;
 			$data['PaymentStatus'] = PaymentStatus::where('status', 'ACTIVE')->orderby('payment_status_name', 'ASC')->get();
 			$data['VatType'] = VatType::where('status', 'ACTIVE')->orderby('vat_type_name', 'ASC')->get();				  
 			
-			$this->cbView("petty-cash.record", $data);
+			return view("petty-cash.record", $data);
 
 		}
 

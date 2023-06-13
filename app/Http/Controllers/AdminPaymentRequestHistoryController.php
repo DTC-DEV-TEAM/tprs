@@ -736,7 +736,7 @@ use App\ModeOfPayment;
 							  
 
 
-			$this->cbView("prf.detail", $data);
+			return view("prf.detail", $data);
 
 		}
 

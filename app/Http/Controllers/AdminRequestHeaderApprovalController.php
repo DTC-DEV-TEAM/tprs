@@ -772,7 +772,7 @@ class AdminRequestHeaderApprovalController extends \crocodicstudio\crudbooster\c
 		// }
 
 		// dd($data['datas']);
-		$this->cbView("customview.request-edit", $data);
+		return view("customview.request-edit", $data);
 		//return cbview('customview.request-edit', $data)->render();
 
 	}

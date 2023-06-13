@@ -469,7 +469,7 @@
 								->first();
 								
 			$data['store_lists'] = $this->storeListing($data['approval_details']['store_list']);
-			$this->cbView("approval-matrix.approval_detail", $data);
+			return view("approval-matrix.approval_detail", $data);
 		}
 		
 		public function importTemplate() {

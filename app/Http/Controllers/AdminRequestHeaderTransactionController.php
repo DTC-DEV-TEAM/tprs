@@ -506,7 +506,7 @@ class AdminRequestHeaderTransactionController extends \crocodicstudio\crudbooste
 		$data['categorys'] = DB::table('category')->where('category_status', 'ACTIVE')->orderby('category_description', 'ASC')->get();
 
 		//Please use cbView method instead view method from laravel
-		$this->cbView('customview.request', $data);
+		return view('customview.request', $data);
 	}
 
 
@@ -733,20 +733,20 @@ class AdminRequestHeaderTransactionController extends \crocodicstudio\crudbooste
 
 		//Please use cbView method instead view method from laravel
 		if (CRUDBooster::myPrivilegeName() == 'Requestor') {
-			$this->cbView('customview.request_transaction', $data);
+			return view('customview.request_transaction', $data);
 		} else if (CRUDBooster::myPrivilegeName() == 'OIC') {
-			$this->cbView('customview.request_transaction', $data);
+			return view('customview.request_transaction', $data);
 		} else if (in_array(CRUDBooster::myPrivilegeName(), ["AP Receiver", "AP Checker", "Treasury"])) {
-			$this->cbView('customview.request_transaction', $data);
+			return view('customview.request_transaction', $data);
 		} else if (CRUDBooster::myPrivilegeName() == 'Admin' || CRUDBooster::isSuperadmin()) {
 			$status = $data['datas'];
 
 			for ($i = 0; $i < $status; $i++) {
 				if ($status[$i]->status === 'REQUESTED' || $status[$i]->status === 'DISAPPROVED') {
 
-					$this->cbView('customview.request_transaction', $data);
+					return view('customview.request_transaction', $data);
 				} else if ($status[$i]->status === 'AUDITED' || $status[$i]->status === 'RECEIPTED') {
-					$this->cbView('customview.request_transaction', $data);
+					return view('customview.request_transaction', $data);
 				}
 			}
 		}

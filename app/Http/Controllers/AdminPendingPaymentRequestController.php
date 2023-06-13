@@ -712,7 +712,7 @@ use App\ModeOfPayment;
 							  
 
 
-			$this->cbView("prf.approval", $data);
+			return view("prf.approval", $data);
 
 		}
 
@@ -801,7 +801,7 @@ use App\ModeOfPayment;
 			$data['PaymentStatus'] = PaymentStatus::where('status', 'ACTIVE')->orderby('payment_status_name', 'ASC')->get();
 			$data['VatType'] = VatType::where('status', 'ACTIVE')->orderby('vat_type_name', 'ASC')->get();				  
 			
-			$this->cbView("prf.validation", $data);
+			return view("prf.validation", $data);
 
 		}
 
@@ -874,7 +874,7 @@ use App\ModeOfPayment;
 							  ->get();
 
 							  
-			$this->cbView("prf.print", $data);
+			return view("prf.print", $data);
 
 		}
 
@@ -953,7 +953,7 @@ use App\ModeOfPayment;
 			$data['PaymentStatus'] = PaymentStatus::where('status', 'ACTIVE')->orderby('payment_status_name', 'ASC')->get();
 			$data['VatType'] = VatType::where('status', 'ACTIVE')->orderby('vat_type_name', 'ASC')->get();				  
 			
-			$this->cbView("prf.payment", $data);
+			return view("prf.payment", $data);
 
 		}
 
@@ -1049,7 +1049,7 @@ use App\ModeOfPayment;
 							  
 
 
-			$this->cbView("prf.close", $data);
+			return view("prf.close", $data);
 
 		}
 

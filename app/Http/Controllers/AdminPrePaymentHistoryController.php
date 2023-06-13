@@ -537,7 +537,7 @@ use App\Store;
 				->get();
 			
 			//Please use view method instead view method from laravel
-			$this->cbView("pre_payment.pre_payment_view", $data);
+			return view("pre_payment.pre_payment_view", $data);
 		}
 
 

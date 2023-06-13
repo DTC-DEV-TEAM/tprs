@@ -795,7 +795,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$data = [];
 			$data['page_title'] = 'Add Data';
 			//Please use view method instead view method from laravel
-			$this->cbView("pre_payment.pre_payment", $data);
+			return view("pre_payment.pre_payment", $data);
 		}
 
 		public function add_request(Request $request){
@@ -1069,7 +1069,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				->get();
 
 			//Please use view method instead view method from laravel
-			$this->cbView("pre_payment.pre_payment_edit", $data);
+			return view("pre_payment.pre_payment_edit", $data);
 
 		}
 
@@ -1177,7 +1177,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				->get();
 			
 			//Please use view method instead view method from laravel
-			$this->cbView("pre_payment.pre_payment_view", $data);
+			return view("pre_payment.pre_payment_view", $data);
 		}
 
 	}

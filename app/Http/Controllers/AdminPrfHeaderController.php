@@ -783,7 +783,7 @@ use App\ModeOfPayment;
 
 			$data['ModeOfPayments'] = ModeOfPayment::where('status', 'ACTIVE')->orderby('mode_of_payment_name', 'ASC')->get();
 			
-			$this->cbView("prf.add", $data);
+			return view("prf.add", $data);
 		}
 
 
@@ -867,7 +867,7 @@ use App\ModeOfPayment;
 							  
 
 
-			$this->cbView("prf.detail", $data);
+			return view("prf.detail", $data);
 
 		}
 
@@ -942,7 +942,7 @@ use App\ModeOfPayment;
 			$data['ModeOfPayments'] = ModeOfPayment::where('status', 'ACTIVE')->orderby('mode_of_payment_name', 'ASC')->get();
 
 
-			$this->cbView("prf.edit", $data);
+			return view("prf.edit", $data);
 
 		}
 

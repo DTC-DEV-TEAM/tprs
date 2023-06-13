@@ -732,7 +732,7 @@ use App\Currency;
 							  
 
 
-			$this->cbView("petty-cash.detail", $data);
+			return view("petty-cash.detail", $data);
 
 		}
 
@@ -855,7 +855,7 @@ use App\Currency;
 			$data['PaymentStatus'] = PaymentStatus::where('status', 'ACTIVE')->orderby('payment_status_name', 'ASC')->get();
 			$data['VatType'] = VatType::where('status', 'ACTIVE')->orderby('vat_type_name', 'ASC')->get();	
 			
-			$this->cbView("petty-cash.edit_history", $data);
+			return view("petty-cash.edit_history", $data);
 
 		}
 

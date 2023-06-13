@@ -667,7 +667,7 @@
 
 			$data['Currencies'] = Currency::where('status', 'ACTIVE')->where('id', 1)->orderby('currency_name', 'ASC')->get();
 
-			$this->cbView("petty-cash.add", $data);
+			return view("petty-cash.add", $data);
 		}
 
 		public function getRequestDetail($id){
@@ -739,7 +739,7 @@
 							  
 
 
-			$this->cbView("petty-cash.detail", $data);
+			return view("petty-cash.detail", $data);
 
 		}
 
@@ -852,7 +852,7 @@
 							  ->get();
 
 
-			$this->cbView("petty-cash.edit", $data);
+			return view("petty-cash.edit", $data);
 
 		}
 
