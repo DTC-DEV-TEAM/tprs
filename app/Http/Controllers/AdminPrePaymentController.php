@@ -209,7 +209,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 	        |
 	        */
 	        $this->index_statistic = array();
-			// $this->index_statistic[] = ['label'=>'Request may take up to 1 to 3 working days before release of funds.', 'label1'=>'To ensure proper record keeping, all receipts should be submitted formally to the accounting department.', 'color'=>'light-blue', 'width'=>'col-sm-12', 'icon'=>'fa fa-file-text-o'];
+			$this->index_statistic[] = ['label'=>'Request may take up to 1 to 3 working days before release of funds.', 'label1'=>'To ensure proper record keeping, all receipts should be submitted formally to the accounting department.', 'color'=>'light-blue', 'width'=>'col-sm-12', 'icon'=>'fa fa-file-text-o'];
 
 
 	        /*
