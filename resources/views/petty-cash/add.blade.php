@@ -48,7 +48,7 @@
 
                     <div class="row">
 
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label require">{{ trans('message.form-label.department_id') }} <span class="required">*</span> </label>
                                 <div class="input-group date">
@@ -64,7 +64,7 @@
 
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label require">{{ trans('message.form-label.sub_department_id') }} <span class="required">*</span></label>
                                 <div class="input-group date">
@@ -116,13 +116,19 @@
                             </div>
                         </div> -->
                         
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label require">{{ trans('message.form-label.requestor_name') }} <span class="required">*</span></label>
+                                <label class="control-label require">{{ trans('message.form-label.requestor_name') }}<span class="required">*</span></label>
                                 <input type="text" class="form-control"  id="requestor_name" name="requestor_name"  required>                                   
                             </div>
                         </div>
                         
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label require">*Need By Date</label>
+                                <input type="date" class="form-control" id="need_by_date" name="need_by_date" required>                                   
+                            </div> 
+                        </div>
                         
                     </div>                    
 

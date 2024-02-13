@@ -158,6 +158,16 @@ img {vertical-align: middle;}
         
                             <td></td>
                         </tr>
+
+                        <tr>
+                            <td  width="17%"><label>Need By Date:</label></td>
+        
+                            <td width="34%">{{$Header->need_by_date}}</td>
+        
+                            <td width="17%"> </td>
+        
+                            <td></td>
+                        </tr>
         
                     </table>
                 </div>

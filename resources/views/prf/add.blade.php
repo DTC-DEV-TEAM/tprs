@@ -1,13 +1,28 @@
 @extends('crudbooster::admin_template')
 @push('head')
 <style type="text/css">   
-#image_preview {
-    display: none;
-}
 
-#galeria{
+    .table-responsive::-webkit-scrollbar {
+        height: 10px !important;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+        background: #f1f1f1; /* set the background color of the scrollbar track */
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+        background-color: #868686; /* set the color of the scrollbar thumb */
+        border-radius: 5px; /* set the border radius of the scrollbar thumb */
+    }
+
+    #image_preview {
+        display: none;
+    }
+
+    #galeria{
         display: flex;
     }
+
     #galeria img{
         width: 150px;
         height: 150px;
@@ -16,6 +31,30 @@
         opacity: 85%;
     }
 
+     /* Select2 */
+    .select2 {
+        height: 35px;
+        border: 1px solid #aaa;
+    }
+    /* End of Select2 */
+
+    .input-group-addon{
+        border: 1px solid #aaa !important;
+    }
+    
+    /* Required */
+    .required{
+        color: red;
+    }
+    /* End of Required */
+
+    input, textarea{
+        border: 1px solid #aaa !important;
+    }
+
+    textarea:focus{
+        border: 1px solid black !important;
+    }
 
 </style>
 @endpush
@@ -34,197 +73,140 @@
         <form action="{{ CRUDBooster::mainpath('add-save') }}" method="POST" id="PettyCashForm" enctype="multipart/form-data">
         <input type="hidden" value="{{csrf_token()}}" name="_token" id="token">
             <div class='panel-body'>
-
-                    <table width="100%" id="Jtable" style="table-layout: fixed;">
-
-                        <tr>
-                            <td width="50%">
-                                  
-                                
-                            </td>
-
-                            <td rowspan="5" style="vertical-align: top;" height="310px" width="50%">
-                                <p style="color:red">*IF PDF, LIMIT TO 1 FILE.</p>
-                                <p style="color:red">*IF PNG/JPEG, UNLIMITED NUMBER OF FILES.</p>
-                                <div class="form-group" style="margin-top: 15px;">
-                                    <label class="control-label require">*{{ trans('message.form-label.receipt') }}</label>
-                                    <div class="input-group date">
-                                      <!--  <div class="input-group-addon"><i class="fa fa-file-image-o"></i></div> -->
-                                      
-                                        
-                                        
-                                        <input type="file" name="receipt[]" id="image" class="image" style="width: 100%;" required accept="application/pdf,image/*" multiple onchange="previewMultiple(event)">
-                                        
-
-                                        <div id="pdf"><img src="{{asset("vendor/crudbooster/pdf.png")}}" style="width:100px;height:100px;"></div>
-
-
-                                        <div id="galeria" style="width: 600px;
-                                       
-                                        overflow: auto;
-                                        overflow-y: hidden;
-                                        margin: 0 auto;
-                                        white-space: nowrap">
-
-
-                                        </div>
-
-                                        
-
-                                       
-                                       
-                                        <!--<div id="image_preview">
-                                            <img src="#" id="image-preview" style="width:200px;height:250px;" /><br />
-                                            <a id="image_remove" href="#">Remove</a>
-                                        </div> -->
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <div class="form-group">
-                                    <label class="control-label require">*{{ trans('message.form-label.department_id') }}</label>
-                                    <div class="input-group date">
-                                        <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
-                                            <select class="form-control select2" style="width: 90%;" required name="department_id" id="department_id">
-                                                <!--<option value="">-- Select Department --</option>-->
-                                                @foreach($Departments as $data)
-                                                    <option value="{{$data->id}}" >{{$data->department_name}}</option>
-                                                @endforeach
-                                            </select>
-                                    </div>
-                                </div>                                
-                            </td>
-
-                            
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <div class="form-group">
-                                    <label class="control-label require">*{{ trans('message.form-label.sub_department_id') }}</label>
-                                    <div class="input-group date">
-                                        <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
-                                            <select class="form-control select2" style="width: 90%;" required name="sub_department_id" id="sub_department_id">
-                                          
-                                            </select>
-                                    </div>
-                                </div>                               
-                            </td>
-
-                            <td>
-                                
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <div class="form-group">
-                                    <label class="control-label require">*{{ trans('message.form-label.requestor_name') }}</label>
-                                    <input type="text" class="form-control"  id="requestor_name" name="requestor_name"  required style="width: 90%;">                                   
-                                </div>                               
-                            </td>
-
-                            <td>
-                                
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <div class="form-group">
-                                    <label class="control-label require">*{{ trans('message.form-label.mode_of_payment_id') }}</label>
-                               
-                                    <select class="form-control select2" style="width: 90%;" required name="mode_of_payment_id" id="mode_of_payment_id">
-                                        <option value="">-- Select Mode Of Payment --</option>
-                                        @foreach($ModeOfPayments as $data)
-                                            <option value="{{$data->id}}" >{{$data->mode_of_payment_name}}</option>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label require">*{{ trans('message.form-label.department_id') }}</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
+                                    <select class="form-control select2" required name="department_id" id="department_id">
+                                        <!--<option value="">-- Select Department --</option>-->
+                                        @foreach($Departments as $data)
+                                            <option value="{{$data->id}}" >{{$data->department_name}}</option>
                                         @endforeach
                                     </select>
-                                     
-                                </div>     
-                                <br>                             
-                            </td>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label require">*{{ trans('message.form-label.sub_department_id') }}</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
+                                    <select class="form-control select2" required name="sub_department_id" id="sub_department_id">
+                                    </select>
+                            </div>
+                        </div>      
+                    </div>
+                </div>
 
-                            <td>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label require">*{{ trans('message.form-label.requestor_name') }}</label>
+                            <input type="text" class="form-control"  id="requestor_name" name="requestor_name"  required>                                   
+                        </div>  
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label require">*{{ trans('message.form-label.mode_of_payment_id') }}</label>
+                            <select class="form-control select2" required name="mode_of_payment_id" id="mode_of_payment_id">
+                                <option value="">-- Select Mode Of Payment --</option>
+                                @foreach($ModeOfPayments as $data)
+                                    <option value="{{$data->id}}" >{{$data->mode_of_payment_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>  
+                    </div>
+                </div>
 
-                            </td>
-                        </tr>
+                <div class="row hide" id="mop-check-payment">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label require">*{{ trans('message.form-label.payee_name') }}</label>
+                            <input type="text" class="form-control mop-input" id="payee_name" name="payee_name">                                   
+                        </div>   
+                    </div>
+                </div>
 
-                       
-                        <tr id="bank_details_1">
-                            <td>
-                                <div class="form-group">
-                                    <label class="control-label require">*{{ trans('message.form-label.bank_name') }}</label>
-                                    <input type="text" class="form-control"  id="bank_name" name="bank_name"  required style="width: 90%;">                                   
-                                </div>                                
-                            </td>
+                <div class="row hide" id="mop-cc">
+                    <div class="col-md-6">
+                        <div class="form-group" >
+                            <label class="control-label require">*Payee Name:</label>
+                            <input type="text" class="form-control mop-input" id="cc_payee_name" name="cc_payee_name">                                   
+                        </div>  
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label require">*Last 4 digits of card</label>
+                            <input type="text" class="form-control mop-input" id="cc_credit_card" name="cc_credit_card">                                   
+                        </div>  
+                    </div>
+                </div>
 
-                            <td>
-                                <div class="form-group">
-                                    <label class="control-label require">*{{ trans('message.form-label.bank_branch_name') }}</label>
-                                    <input type="text" class="form-control"  id="bank_branch_name" name="bank_branch_name"  required style="width: 90%;">                                   
-                                </div>  
-                            </td>
-                        </tr>
+                <div class="hide" id="mop-direct-deposit">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label require">*{{ trans('message.form-label.bank_name') }}</label>
+                                <input type="text" class="form-control mop-input"  id="bank_name" name="bank_name">                                   
+                            </div>   
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label require">*{{ trans('message.form-label.bank_branch_name') }}</label>
+                                <input type="text" class="form-control mop-input"  id="bank_branch_name" name="bank_branch_name" >                                   
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label require">*{{ trans('message.form-label.bank_account_name') }}</label>
+                                <input type="text" class="form-control mop-input"  id="bank_account_name" name="bank_account_name" >                                   
+                            </div>  
+                        </div>
 
-                        <tr id="bank_details_2">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label require">*{{ trans('message.form-label.bank_account_number') }}</label>
+                                <input type="text" class="form-control mop-input"  id="bank_account_number" name="bank_account_number" >                                   
+                            </div>  
+                        </div>
+                    </div>
+                </div>
 
-                            <td>
-                                <div class="form-group">
-                                    <label class="control-label require">*{{ trans('message.form-label.bank_account_name') }}</label>
-                                    <input type="text" class="form-control"  id="bank_account_name" name="bank_account_name"  required style="width: 90%;">                                   
-                                </div>                                
-                            </td>
+                <div class="row hide" id="mop-gcash">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label require">*{{ trans('message.form-label.gcash_number') }}</label>
+                            <input type="text" class="form-control mop-input" id="gcash_number" name="gcash_number">                                   
+                        </div>  
+                    </div>
+                </div>
 
-                            <td>
-                                <div class="form-group">
-                                    <label class="control-label require">*{{ trans('message.form-label.bank_account_number') }}</label>
-                                    <input type="text" class="form-control"  id="bank_account_number" name="bank_account_number"  required style="width: 90%;">                                   
-                                </div>  
-                            </td>
-
-                        </tr>
-
-                        <tr id="gcash_div">
-
-                            <td>
-                                <div class="form-group">
-                                    <label class="control-label require">*{{ trans('message.form-label.gcash_number') }}</label>
-                                    <input type="text" class="form-control"  id="gcash_number" name="gcash_number"  required style="width: 90%;">                                   
-                                </div>                                
-                            </td>
-
-                        </tr>
-
-
-                        <tr id="check_payment_div">
-
-                            <td>
-                                <div class="form-group">
-                                    <label class="control-label require">*{{ trans('message.form-label.payee_name') }}</label>
-                                    <input type="text" class="form-control"  id="payee_name" name="payee_name"  required style="width: 90%;">                                   
-                                </div>                                
-                            </td>
-
-                        </tr>
-
-
-                        <tr id="credit_card_div">
-
-                            <td>
-                                <div class="form-group" >
-                                    <label class="control-label require">*{{ trans('message.form-label.credit_card') }}:</label>
-                                   <P style="background-color: #3c8dbc; color:white; width: 90%;  text-align: center;">PLEASE COORDINATE TO ACCOUNTING MANAGER</P>                                   
-                                </div>                                
-                            </td>
-
-                        </tr>
-                     
-
-                    </table>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label require">*Need By Date</label>
+                            <input type="date" class="form-control" id="need_by_date" name="need_by_date" required>                                   
+                        </div> 
+                    </div>
+                    <div class="col-md-6">
+                        <p style="color:red; font-weight: bold;">*IF PDF, LIMIT TO 1 FILE.</p>
+                        <p style="color:red; font-weight: bold;">*IF PNG/JPEG, UNLIMITED NUMBER OF FILES.</p>
+                        <div class="" style="margin-top: 15px;">
+                            <label class="control-label require">*{{ trans('message.form-label.receipt') }}</label>
+                            <div class="date">
+                                <input type="file" name="receipt[]" id="image" class="form-control image" required accept="application/pdf,image/*" multiple onchange="previewMultiple(event)">
+                                <div style="margin: 1rem 0;">
+                                    <div id="pdf"><img src="{{asset("vendor/crudbooster/pdf.png")}}" style="width:100px;height:100px;"></div>
+                                    <div id="galeria" style="width: 100%; overflow: auto; overflow-y: hidden; margin: 0 auto; white-space: nowrap"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                     <hr/>
                     <div class="row">
@@ -238,30 +220,26 @@
                             </div>
                             <div class="box-body no-padding">
                                 <div class="table-responsive" >
-                                    <div class="container">
-                                    <div class="hack1" style="  display: table;
-                                    table-layout: fixed;
-                                    width: 150%;">
-                                    <div class="hack2" style="  display: table-cell;
-                                    overflow-x: auto;
-                                    width: 150%;"> 
-                                    <table class="table table-bordered" id="requestTable" style="  width: 150%;
-                                    border-collapse: collapse;">
+                                    <div class="container-fluid">
+                                    <div class="hack1" style=" display: table; table-layout: fixed; width: 100%;">
+                                    <div class="hack2" style=" display: table-cell; overflow-x: auto;"> 
+                                    <table class="table" id="requestTable" style=" background-color: rgb(255, 250, 250); width: 100%;
+                                    border-collapse: collapse; box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;">
                                         <tbody id="bodyTable">
 
-                                            <tr class="tbl_header_color dynamicRows">
-                                                <th width="18%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
+                                            <tr class="tbl_header_color dynamicRows" style="font-size: 15px;">
+                                                <th width="15%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
                                                 <th width="10%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
-                                                
-                                                <th width="14%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
-                                                
+
+                                                <th width="12%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
+
                                                 <th width="12%" class="text-center">{{ trans('message.table.category_id_text') }}</th>
-                                                <th width="17%" class="text-center">{{ trans('message.table.account_id_text') }}</th>
-                                                <th width="9%" class="text-center">{{ trans('message.table.currency_id_text') }}</th>
-                                                <th width="5%" class="text-center">{{ trans('message.table.quantity_text') }}</th>
-                                                <th width="8%" class="text-center">{{ trans('message.table.line_value_text') }}</th>
-                                                <th width="15%" class="text-center">{{ trans('message.table.total_value_text') }}</th>
-                                                <th width="" class="text-center">{{ trans('message.table.action') }}</th>
+                                                <th width="15%" class="text-center">{{ trans('message.table.account_id_text') }}</th>
+                                                <th width="11.5%" class="text-center">{{ trans('message.table.currency_id_text') }}</th>
+                                                <th width="7%" class="text-center">{{ trans('message.table.quantity_text') }}</th>
+                                                <th width="7%" class="text-center">{{ trans('message.table.line_value_text') }}</th>
+                                                <th width="7%" class="text-center">{{ trans('message.table.total_value_text') }}</th>
+                                                {{-- <th width="" class="text-center">{{ trans('message.table.action') }}</th> --}}
                                             </tr>
 
                                             <tr id="tr-table">
@@ -277,10 +255,10 @@
                                             <tr id="tr-table1" class="bottom">
 
                                                 <td>
-                                                    <input type="button" id="add-Row" name="add-Row" class="btn btn-primary add" value='Add' />
+                                                    <input type="button" id="add-Row" name="add-Row" class="btn btn-primary add" value='Add Row' />
                                                 </td>
 
-                                                <td colspan="7" align="right"><strong>{{ trans('message.table.total_value_order_text') }}</strong></td>
+                                                <td colspan="6" align="right" style="vertical-align: middle;"><strong>{{ trans('message.table.total_value_order_text') }}</strong></td>
                                                 <td align="left" colspan="1">
                                                     <input type='number' name="total_value_order" class="form-control text-center" id="tValue2" readonly></td>
                                                 </td>
@@ -380,71 +358,26 @@ $('#requestor_name, #bank_name, #bank_branch_name, #bank_account_name, #bank_acc
 
 $('#mode_of_payment_id').change(function(){
 
-    if(this.value == 1){
-        $('#bank_details_1, #bank_details_2').hide();
-        $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required');
-    
-        $('#check_payment_div').hide();
-        $('#payee_name').removeAttr('required');
-
-        $('#credit_card_div').hide();
-
-        $('#gcash_div').show();
-        $('#gcash_number').attr('required', 'required');
-
-    }else if(this.value == 2){
-
-        $('#gcash_div').hide();
-        $('#gcash_number').removeAttr('required');
-
-        $('#check_payment_div').hide();
-        $('#payee_name').removeAttr('required');
-
-        $('#credit_card_div').hide();
-
-        $('#bank_details_1, #bank_details_2').show();
-        $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').attr('required', 'required');
-    }else if(this.value == 3){
-        $('#bank_details_1, #bank_details_2').hide();
-        $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required');
-
-        $('#gcash_div').hide();
-        $('#gcash_number').removeAttr('required');
-
-        $('#credit_card_div').hide();
-
-        $('#check_payment_div').show();
-        $('#payee_name').attr('required', 'required');
-
-    }else if(this.value == 4){
-
-
-        $('#bank_details_1, #bank_details_2').hide();
-        $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required');
-
-        $('#gcash_div').hide();
-        $('#gcash_number').removeAttr('required');
-
-        $('#check_payment_div').hide();
-        $('#payee_name').removeAttr('required');
-
-
-        $('#credit_card_div').show();
-
-    }else{
-
-        $('#bank_details_1, #bank_details_2').hide();
-        $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required');
-
-        $('#gcash_div').hide();
-        $('#gcash_number').removeAttr('required');
-
-        $('#check_payment_div').hide();
-        $('#payee_name').removeAttr('required');
-
-
-        $('#credit_card_div').hide();
-
+    if($(this).val() == 1){
+        resetMop();
+        $('#mop-gcash').removeClass('hide');
+        $('#mop-gcash').find('input').attr('required', true);
+    }
+    else if($(this).val() == 2){
+        resetMop();
+        $('#mop-direct-deposit').removeClass('hide');
+        $('#mop-direct-deposit').find('input').attr('required', true);
+    }else if($(this).val() == 3){
+        resetMop();
+        $('#mop-check-payment').removeClass('hide');
+        $('#mop-check-payment').find('input').attr('required', true);
+    }else if($(this).val() == 7 || $(this).val() == 8){
+        resetMop();
+        $('#mop-cc').removeClass('hide');
+        $('#mop-cc').find('input').attr('required', true);
+    }
+    else{
+        resetMop();
     }
 
 });
@@ -461,13 +394,13 @@ $('#mode_of_payment_id').change(function(){
   var tableRow = 1;
   $(document).ready(function() {
 
-
     $("#add-Row").click(function() {
+      $('#requestTable').css('box-shadow', 'none');
       tableRow++;
       var newrow =
-        '<tr>' +
+        '<tr style="box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;">' +
         '<td >' +
-        '  <input type="text" onkeyup="this.value = this.value.toUpperCase();" class="form-control itemDesc" data-id="' + tableRow + '" id="itemDesc' + tableRow + '"  name="particulars[]"  required maxlength="100">' +
+        '  <input type="text" onkeyup="this.value = this.value.toUpperCase();" class="form-control itemDesc" data-id="' + tableRow + '" id="itemDesc' + tableRow + '"  name="particulars[]"  required maxlength="100" style="border-radius: 5px;">' +
         '</td>' +                
         '<td>'+
         '<select class="form-control" name="brand_id[]" id="brand_id" required>' +
@@ -475,16 +408,16 @@ $('#mode_of_payment_id').change(function(){
         '        @foreach($Brands as $data)'+
         '        <option value="{{$data->id}}">{{$data->brand_name}}</option>'+
         '         @endforeach'+
-        '</select></td>' +    
-
+        '</select></td>' +  
+        
         '<td>'+
         '<select class="form-control" name="location_id[]" id="location_id" required>' +
         '  <option value="">- Select Location -</option>' +
         '        @foreach($Location as $data)'+
         '        <option value="{{$data->id}}">{{$data->store_name}}</option>'+
         '         @endforeach'+
-        '</select></td>' +   
-       
+        '</select></td>' +       
+
         '<td>'+
         '<select class="form-control drop'+ tableRow + '" name="category_id[]" data-id="' + tableRow + '" id="category_id" required>' +
         '  <option value="">- Select Category -</option>' +
@@ -494,23 +427,23 @@ $('#mode_of_payment_id').change(function(){
         '</select></td>' +
         '<td>'+
         '<select class="form-control account'+ tableRow + '" name="account_id[]" id="account_id" required>' +
-  
+
         '</select></td>' + 
         '<td>'+
-        '<select class="form-control valcurrency" name="currency_id[]" id="currency_id" required>' +
+        '<select class="form-control" name="currency_id[]" id="currency_id" required>' +
         '  <option value="">- Select Currency -</option>' +
         '        @foreach($Currencies as $data)'+
         '        <option value="{{$data->id}}">{{$data->currency_name}}</option>'+
         '         @endforeach'+
         '</select></td>' +   
         '<td>' +
-        '  <input type="number" class="form-control quantity text-center" data-id="' + tableRow + '" id="quantity' + tableRow + '" step="any" name="quantity[]" min="0" required maxlength="100">' +
+        '  <input type="number" class="form-control quantity text-center" data-id="' + tableRow + '" id="quantity' + tableRow + '" step="any" name="quantity[]" min="0" required maxlength="100" style="border-radius: 5px;">' +
         '</td>' +
         '<td>' +
-        '  <input type="number" class="form-control vvalue text-center" data-id="' + tableRow + '" id="value' + tableRow + '" name="line_value[]" step="0.01" min="0" onchange="setTwoNumberDecimal(this)" required maxlength="100">' +
+        '  <input type="number" class="form-control vvalue text-center" data-id="' + tableRow + '" id="value' + tableRow + '" name="line_value[]" step="0.01" min="0" onchange="setTwoNumberDecimal(this)" required maxlength="100" style="border-radius: 5px;">' +
         '</td>' +
         '<td>' +
-        '  <input type="text" class="form-control totalV text-center" id="totalValue' + tableRow + '" name="total_value[]" readonly="readonly" step="0.01" required maxlength="100">' +
+        '  <input type="text" class="form-control totalV text-center" id="totalValue' + tableRow + '" name="total_value[]" readonly="readonly" step="0.01" required maxlength="100" style="border-radius: 5px;">' +
         '</td>' +
         '<td>' +
         '<button id="deleteRow" name="removeRow" class="btn btn-danger removeRow"><i class="glyphicon glyphicon-trash"></i></button>' +
@@ -518,10 +451,9 @@ $('#mode_of_payment_id').change(function(){
         '</tr>';
       $(newrow).insertBefore($('table tr#tr-table1:last'));
 
-      $('.account'+tableRow).prop("disabled", true);
+        $('.account'+tableRow).prop("disabled", true);
 
-
-      $('.drop'+tableRow).change(function(){
+        $('.drop'+tableRow).change(function(){
             
             var category = this.value;
             var id_data = $(this).attr("data-id");
@@ -541,7 +473,7 @@ $('#mode_of_payment_id').change(function(){
                     var i;
                     var showData = [];
 
-                    showData[0] = "<option value='' selected disabled>-Please Select Account-</option>";
+                    showData[0] = "<option value='' selected disabled>- Select Account-</option>";
                     for (i = 1; i < result.length; ++i) {
                         var j = i + 1;
                         showData[i] = "<option value='"+result[i].id+"'>"+result[i].account_name+"</option>";
@@ -890,6 +822,12 @@ function previewMultiple(event){
 
         }
 
+    }
+
+    function resetMop(){
+        $('[id^="mop-"]').find('input').attr('required', false);
+        $('[id^="mop-"]').find('input').val('');
+        $('[id^="mop-"]').addClass('hide');
     }
 
 </script>

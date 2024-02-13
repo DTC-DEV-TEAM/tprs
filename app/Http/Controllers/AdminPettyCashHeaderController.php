@@ -355,6 +355,7 @@
 			$postdata['created_by'] 					= CRUDBooster::myId();
 			$postdata['created_at'] 					= date('Y-m-d H:i:s');
 
+			$postdata['need_by_date'] 					= $fields['need_by_date'];
 
 	    }
 

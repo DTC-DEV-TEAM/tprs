@@ -76,6 +76,18 @@
                             </div>
                           </div>
                         </div>
+                        <div id="mode_of_payment_credit_card" style="display: none;">
+                          <div class="flex mode_of_payment_input">
+                            <div class="mode_of_payment_content credit_card" style="margin-right: 5px;">
+                              <label for="">Payee Name <span class="required">*</span></label>
+                              <input type="text" name="cc_payee_name" value="{{ $row->cc_payee_name }}">   
+                            </div>
+                            <div class="mode_of_payment_content credit_card" style="margin-left: 5px;">
+                              <label for="">Last 4 digits of card <span class="required">*</span></label>
+                              <input type="text" name="cc_credit_card" value="{{ $row->cc_last_card_number }}">   
+                            </div>
+                          </div>
+                        </div>
                       </div>
                   </div>
                 </div> 
@@ -115,6 +127,10 @@
                   <div class="request_information start">
                       <label for="">Requested Date:</label>
                       <span>{{ $row->created_at }}</span>
+                  </div>
+                  <div class="request_information">
+                    <label for="">Need by date:</label>
+                    <span>{{ $row->need_by_date }}</span>
                   </div>
                   <div class="request_information">
                       <label for="">Created by:</label>

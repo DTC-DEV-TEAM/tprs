@@ -438,32 +438,36 @@
                     </div>
 
                     <div class="row">  
-                        <label class="control-label col-md-2">{{ trans('message.form-label.reference_number') }}:</label>
-                        <div class="col-md-2">
+                        <label class="control-label col-md-3">{{ trans('message.form-label.reference_number') }}:</label>
+                        <div class="col-md-3">
                                 <p>{{$Header->reference_number}}</p>
                         </div>
     
-                        <label class="control-label col-md-2">{{ trans('message.form-label.status_id') }}:</label>
-                        <div class="col-md-2">
+                        <label class="control-label col-md-3">{{ trans('message.form-label.status_id') }}:</label>
+                        <div class="col-md-3">
                                 <b>{{$Header->status_name}}</b>
                         </div>
                     </div>
                 
                     <div class="row">                           
-                        <label class="control-label col-md-2">{{ trans('message.form-label.created_at') }}:</label>
-                        <div class="col-md-2">
+                        <label class="control-label col-md-3">{{ trans('message.form-label.created_at') }}:</label>
+                        <div class="col-md-3">
                                 <p>{{$Header->requested_date}}</p>
                         </div>
     
-                        <label class="control-label col-md-2">{{ trans('message.table.note') }}:</label>
-                        <div class="col-md-2">
+                        <label class="control-label col-md-3">{{ trans('message.table.note') }}:</label>
+                        <div class="col-md-3">
                             <p>{{ $Header->requestor_comments }}</p>
                         </div>
                     </div>
     
                     <div class="row">  
-                        <label class="control-label col-md-2">{{ trans('message.table.approver_comments') }}:</label>
-                        <div class="col-md-2">
+                        <label class="control-label col-md-3">Need by Date:</label>
+                        <div class="col-md-3">
+                            <p>{{ $Header->need_by_date }}</p>
+                        </div>
+                        <label class="control-label col-md-3">{{ trans('message.table.approver_comments') }}:</label>
+                        <div class="col-md-3">
                             <p>{{ $Header->approver_comments }}</p>
                         </div>
                     </div>

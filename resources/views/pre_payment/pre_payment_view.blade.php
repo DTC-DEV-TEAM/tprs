@@ -744,6 +744,10 @@
                               <span>{{ $row->created_at }}</span>
                           </div>
                           <div class="request_information">
+                            <label for="">Need by date:</label>
+                            <span>{{ $row->need_by_date }}</span>
+                          </div>
+                          <div class="request_information">
                               <label for="">Created by:</label>
                               <span>{{ $row->cms_users_name }}</span>
                           </div>

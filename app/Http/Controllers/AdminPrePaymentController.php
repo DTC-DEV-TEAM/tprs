@@ -354,7 +354,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				}else if($column_value == '3'){
 					$column_value = '<span class="label" style="background-color: #f0ad4e; color: white; font-size: 12px;">For Receipts Validation</span>';
 				}else if($column_value == '4'){
-					$column_value = '<span class="label" style="background-color: #2F4F4F; color: white; font-size: 12px;">For Closing</span>';
+					$column_value = '<span class="label" style="background-color: #2F4F4F; color: white; font-size: 12px;">For Transmittal</span>';
 				}else if($column_value == '5'){
 					$column_value = '<span class="label" style="background-color: #5cb85c; color: white; font-size: 12px;">Closed</span>';
 				}else if($column_value == '6'){
@@ -362,7 +362,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				}else if($column_value == '7'){
 					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For AP Recording</span>';
 				}else if($column_value == '8'){
-					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For Transmittal Recording</span>';
+					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">Receipts Submitted</span>';
 				}
 				
 			}
@@ -422,6 +422,8 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					$postdata['bank_account_name'] = $return_inputs['bank_account_name'];
 					$postdata['bank_account_number'] = $return_inputs['bank_account_number'];
 					$postdata['gcash_number'] = $return_inputs['gcash_number'];
+					$postdata['cc_payee_name'] =  $return_inputs['cc_payee_name'];
+					$postdata['cc_last_card_number'] = $return_inputs['cc_credit_card'];
 				}else{
 					$postdata['status_id'] = 6;
 				}
@@ -603,64 +605,64 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$accounting_closed_note = $return_inputs['additional_notes'];
 				$ar_reference_number = $return_inputs['ar_reference_number'];
 
-				if($submit_btn == 'Save'){
+				// if($submit_btn == 'Save'){
 
 					$postdata['status_id'] = 4;
 					$postdata['transmit_date'] = $transmit_date;
 					$postdata['transmit_received_by'] = $transmit_received_by;
 					$postdata['transmit_submit_date'] = now();
-				}else if($submit_btn == 'Close'){
+				// }else if($submit_btn == 'Close'){
 					
-					$postdata['status_id'] = 5;
-					$postdata['total_amount'] = $total_amount;
-					$postdata['balance_amount'] = abs($balance_amount);
-					$postdata['accounting_closed_note'] = $accounting_closed_note;	
-					$postdata['ar_reference_number'] = $ar_reference_number;
-					$postdata['accounting_closed_by'] = CRUDBooster::myId();
-					$postdata['accounting_closed_date'] = date('Y-m-d H:i:s');
+				// 	$postdata['status_id'] = 5;
+				// 	$postdata['total_amount'] = $total_amount;
+				// 	$postdata['balance_amount'] = abs($balance_amount);
+				// 	$postdata['accounting_closed_note'] = $accounting_closed_note;	
+				// 	$postdata['ar_reference_number'] = $ar_reference_number;
+				// 	$postdata['accounting_closed_by'] = CRUDBooster::myId();
+				// 	$postdata['accounting_closed_date'] = date('Y-m-d H:i:s');
 					
-					$id = $return_inputs['returns_id'];
-					$description = $return_inputs['description'];
-					$brand = $return_inputs['brand'];
-					$location = $return_inputs['location'];
-					$category = $return_inputs['category'];
-					$account = $return_inputs['account'];
-					$currency = $return_inputs['currency'];
-					$qty = $return_inputs['qty'];
-					$receipt_value = $return_inputs['value'];
-					$amount = $return_inputs['amount'];
-					$budget_justification = [$return_inputs['budget_justification']];
-					$pre_payment_id = $return_inputs['project_id'];
+				// 	$id = $return_inputs['returns_id'];
+				// 	$description = $return_inputs['description'];
+				// 	$brand = $return_inputs['brand'];
+				// 	$location = $return_inputs['location'];
+				// 	$category = $return_inputs['category'];
+				// 	$account = $return_inputs['account'];
+				// 	$currency = $return_inputs['currency'];
+				// 	$qty = $return_inputs['qty'];
+				// 	$receipt_value = $return_inputs['value'];
+				// 	$amount = $return_inputs['amount'];
+				// 	$budget_justification = [$return_inputs['budget_justification']];
+				// 	$pre_payment_id = $return_inputs['project_id'];
 
-					$requested_project = [];
-					$requested_id = [];
+				// 	$requested_project = [];
+				// 	$requested_id = [];
 					
-					for($i=0; $i<count($description); $i++){
-						$requested_project[] = [
-							'pre_payment_id' => $pre_payment_id[$i],
-							'description' => $description[$i],
-							'brand' => $brand[$i],
-							'location' => $location[$i],
-							'category' => $category[$i],
-							'account' => $account[$i],
-							'currency' => $currency[$i],
-							'qty' => $qty[$i],
-							'value' => $receipt_value[$i],
-							'amount' => $amount[$i],
-							'created_by' => CRUDBooster::myId(),
-							'created_at' => date('Y-m-d H:i:s')
-						];
+				// 	for($i=0; $i<count((array)$description); $i++){
+				// 		$requested_project[] = [
+				// 			'pre_payment_id' => $pre_payment_id[$i],
+				// 			'description' => $description[$i],
+				// 			'brand' => $brand[$i],
+				// 			'location' => $location[$i],
+				// 			'category' => $category[$i],
+				// 			'account' => $account[$i],
+				// 			'currency' => $currency[$i],
+				// 			'qty' => $qty[$i],
+				// 			'value' => $receipt_value[$i],
+				// 			'amount' => $amount[$i],
+				// 			'created_by' => CRUDBooster::myId(),
+				// 			'created_at' => date('Y-m-d H:i:s')
+				// 		];
 						
-						array_push($requested_id, $id[$i]);
-					}
+				// 		array_push($requested_id, $id[$i]);
+				// 	}
 
-					// Insert budget information
-					for($i=0; $i<count($requested_id); $i++){
-						DB::table('pre_payment_body')->updateOrInsert(['id'=>$requested_id[$i]],
-							$requested_project[$i]
-						);
-					}
-				}
+				// 	// Insert budget information
+				// 	for($i=0; $i<count((array)$requested_id); $i++){
+				// 		DB::table('pre_payment_body')->updateOrInsert(['id'=>$requested_id[$i]],
+				// 			$requested_project[$i]
+				// 		);
+				// 	}
+				// }
 
 			}
 			// Closing Step 7
@@ -699,7 +701,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$requested_project = [];
 				$requested_id = [];
 				
-				for($i=0; $i<count($description); $i++){
+				for($i=0; $i<count((array)$description); $i++){
 					$requested_project[] = [
 						'pre_payment_id' => $pre_payment_id[$i],
 						'description' => $description[$i],
@@ -719,7 +721,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				}
 
 				// Insert budget information
-				for($i=0; $i<count($requested_id); $i++){
+				for($i=0; $i<count((array)$requested_id); $i++){
 					DB::table('pre_payment_body')->updateOrInsert(['id'=>$requested_id[$i]],
 						$requested_project[$i]
 					);
@@ -815,9 +817,13 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$bank_account_name = $return_inputs['bank_account_name'];
 			$bank_account_number = $return_inputs['bank_account_number'];
 			$gcash_number = $return_inputs['gcash_number'];
-
+			$cc_payee_name = $return_inputs['cc_payee_name'];
+			$cc_last_digits = $return_inputs['cc_credit_card'];
+			$need_by_date = $return_inputs['need_by_date'];
+			
 			$id = DB::table('pre_payment')->insertGetId( ['department_id' => $department, 
 				'status_id' => 1,
+				'need_by_date' => $need_by_date,
 				'sub_department_id' => $sub_department,
 				'full_name' => $full_name,
 				'accounting_mode_of_release' => $mode_of_payment,
@@ -829,11 +835,11 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				'bank_account_name' => $bank_account_name,
 				'bank_account_number' => $bank_account_number,
 				'gcash_number' => $gcash_number,
+				'cc_payee_name' => $cc_payee_name,
+				'cc_last_card_number' => $cc_last_digits,
 				'created_by' => CRUDBooster::myId(),
 				'created_at' => date('Y-m-d H:i:s')
-				]
-
-			);
+			]);
 
 			// Update reference number
 			DB::table('pre_payment')->where('id', $id)
@@ -861,7 +867,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			
 			$requested_project = [];
 			
-			for($i=0; $i<count($project_name); $i++){
+			for($i=0; $i<count((array)$project_name); $i++){
 
 				$file = $budget_justification[$i];
 				$filename = uniqid() . '.' . $file->getClientOriginalExtension();
@@ -926,14 +932,17 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$results = ModeOfPayment::
 				select('id', 'mode_of_payment_name')
 				->where('status', 'ACTIVE')
-				->where('mode_of_payment_name', 'LIKE', '%'. $request->input('q'). '%')
-				->orWhere('id', 'LIKE', '%'. $request->input('q'). '%')
+				->where(function ($query) use ($request) {
+					$query->where('mode_of_payment_name', 'LIKE', '%'. $request->input('q'). '%')
+						->orWhere('id', 'LIKE', '%'. $request->input('q'). '%');
+				})
 				->orderBy('mode_of_payment_name')
 				->get();
 						
 			return response()->json($results);
-
 		}
+    
+
 
 		// Sub Department
 		public function sub_department(Request $request){
@@ -980,6 +989,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					'approver.name as approver_name',
 					'accounting.name as accounting_name',
 					'pre_payment.status_id',
+					'pre_payment.need_by_date',
 					'pre_payment.id',
 					'pre_payment.department_id',
 					'pre_payment.sub_department_id',
@@ -1004,6 +1014,8 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					'pre_payment.bank_account_name',
 					'pre_payment.bank_account_number',
 					'pre_payment.gcash_number',
+					'pre_payment.cc_payee_name',
+					'pre_payment.cc_last_card_number',
 					'pre_payment.check_date',
 					'pre_payment.system_reference_number',
 					'pre_payment.unused_amount',
@@ -1091,6 +1103,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					'accounting.name as accounting_name',
 					'accounting_closed.name as accounting_closed_by',
 					'pre_payment.status_id',
+					'pre_payment.need_by_date',
 					'pre_payment.id',
 					'pre_payment.department_id',
 					'pre_payment.sub_department_id',

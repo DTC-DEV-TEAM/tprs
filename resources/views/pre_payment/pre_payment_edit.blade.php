@@ -426,11 +426,11 @@
   }
 
 
-  .direct_deposit{
+  .direct_deposit, .credit_card{
     width: 50%;
   }
 
-  .direct_deposit input{
+  .direct_deposit input, .credit_card input{
     width: 100%;
     height: 35px;
     border: 1px solid #aaa;
@@ -803,9 +803,11 @@
   });
 
   // Mode Of Payment
+  let mop = $('#mode_of_payment').val();
   let direct_deposit = $('#mode_of_payment_direct_deposit').find('input').val();
   let check_payment = $('#check_payment').find('input').val();
   let gcash = $('#gcash').find('input').val();
+  
   if(direct_deposit){
     $('#mode_of_payment_direct_deposit').show()
     $('#mode_of_payment_direct_deposit').find('input').attr('required', true);
@@ -817,7 +819,15 @@
     $('#gcash').find('input').attr('required', true);
   }
 
+  if (mop == 7 || mop == 8){
+    console.log(true)
+      // clearModeOfPayment();
+      $('#mode_of_payment_credit_card').show();
+      $('#mode_of_payment_credit_card').find('input').attr('required', true);
+  }
 
+
+  // Mode Of Payment
   $('#mode_of_payment').select2({
     placeholder: "Select mode of payment",
     dropdownAutoWidth: true,
@@ -847,70 +857,59 @@
     },
     id: 'id'
   }).on('change', function(){
+
     let mode_of_payment_val = $('#mode_of_payment').val()
-    // Check Payment
-    if (mode_of_payment_val == '3'){
-      $('#check_payment').show();
-      $('#check_payment').find('input').attr('required', true);
-      $('#credit_card').hide();
-      $('#mode_of_payment_direct_deposit').hide();
-      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
-      $('#mode_of_payment_direct_deposit').find('input').val('');
-      $('#gcash').hide();
-      $('#gcash').find('input').attr('required', false);
-      
+    modeOfPaymentSelect(mode_of_payment_val);
+  });
 
-    // Credit Card
-    }else if(mode_of_payment_val == '4'){
-      $('#credit_card').show();
-      $('#check_payment').hide();
-      $('#check_payment').find('input').attr('required', false);
-      $('#check_payment').find('input').val('');
-      $('#mode_of_payment_direct_deposit').hide();
-      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
-      $('#mode_of_payment_direct_deposit').find('input').val('');
-      $('#gcash').hide();
-      $('#gcash').find('input').attr('required', false);
-      $('#gcash').find('input').val('');
-      
-
-    // Direct Deposit
-    }else if(mode_of_payment_val == '2'){
-      $('#mode_of_payment_direct_deposit').show();
-      $('#mode_of_payment_direct_deposit').find('input').attr('required', true);
-      $('#check_payment').hide();
-      $('#check_payment').find('input').attr('required', false);
-      $('#check_payment').find('input').val('');
-      $('#credit_card').hide();
-      $('#gcash').hide();
-      $('#gcash').find('input').attr('required', false);
-      $('#gcash').find('input').val('');
-
-    // Gcash
-    }else if(mode_of_payment_val == '1'){
+  function modeOfPaymentSelect(mop){
+    if  (mop == 1){
+      clearModeOfPayment();
       $('#gcash').show();
       $('#gcash').find('input').attr('required', true);
-      $('#mode_of_payment_direct_deposit').hide();
-      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
-      $('#mode_of_payment_direct_deposit').find('input').val('');
-      $('#check_payment').hide();
-      $('#check_payment').find('input').attr('required', false);
-      $('#check_payment').find('input').val('');
-      $('#credit_card').hide();
-    }else{
-      $('#check_payment').hide();
-      $('#check_payment').find('input').attr('required', false);
-      $('#check_payment').find('input').val('');
-      $('#credit_card').hide();
-      $('#mode_of_payment_direct_deposit').hide();
-      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
-      $('#mode_of_payment_direct_deposit').find('input').val('');
+    }
+    else if (mop == 2){
+      clearModeOfPayment();
+      $('#mode_of_payment_direct_deposit').show();
+      $('#mode_of_payment_direct_deposit').find('input').attr('required', true);
+    }
+    else if (mop == 3){
+      clearModeOfPayment();
+      $('#check_payment').show();
+      $('#check_payment').find('input').attr('required', true);
+    }
+    else if (mop == 4){
+      clearModeOfPayment();
+      $('#credit_card').show();
+    }
+    else if (mop == 7 || mop == 8){
+      clearModeOfPayment();
+      $('#mode_of_payment_credit_card').show();
+      $('#mode_of_payment_credit_card').find('input').attr('required', true);
+    }
+    else{
+      clearModeOfPayment();
+    }
+  }
+
+  function clearModeOfPayment(){
       $('#gcash').hide();
       $('#gcash').find('input').attr('required', false);
       $('#gcash').find('input').val('');
-
-    };
-  });
+      $('#mode_of_payment_direct_deposit').hide();
+      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#mode_of_payment_direct_deposit').find('input').val('');
+      $('#check_payment').hide();
+      $('#check_payment').find('input').attr('required', false);
+      $('#check_payment').find('input').val('');
+      $('#credit_card').hide();
+      $('#mode_of_payment_direct_deposit').hide();
+      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#mode_of_payment_direct_deposit').find('input').val('');
+      $('#mode_of_payment_credit_card').hide();
+      $('#mode_of_payment_credit_card').find('input').val('');
+      $('#mode_of_payment_credit_card').find('input').attr('required', false);
+  }
 
   // End of Mode of Payment
 

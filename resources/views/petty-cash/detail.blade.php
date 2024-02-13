@@ -50,6 +50,13 @@
                         <p>{{$Header->sub_department_name}}</p>
                 </div>
             </div>
+
+            <div class="row">
+                <label class="control-label col-md-2">Need by Date:</label>
+                <div class="col-md-2">
+                    {{$Header->need_by_date}}
+                </div>
+            </div>
             
             <!--
             <div class="row">                           

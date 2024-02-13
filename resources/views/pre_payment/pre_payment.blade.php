@@ -84,11 +84,11 @@
   }
 
 
-  .direct_deposit{
+  .direct_deposit, .credit_card{
     width: 50%;
   }
 
-  .direct_deposit input{
+  .direct_deposit input, .credit_card input{
     width: 100%;
     height: 35px;
     border: 1px solid #aaa;
@@ -236,10 +236,16 @@
               <label for="">Requestor Full Name <span class="required">*</span></label>
               <input type="text" id="req_full_name" name="full_name" required>
             </div>
-            <div class="requestor_name">
-              <label for="">Mode of Payment <span class="required">*</span></label>
-              <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" required>
-              </select>            
+            <div style="display: flex; flex-wrap: wrap;">
+              <div class="requestor_name" style="margin-right: 30px;">
+                <label for="">Mode of Payment <span class="required">*</span></label>
+                <select class="js-example-basic-single" id="mode_of_payment" name="mode_of_payment" required>
+                </select>            
+              </div>
+              <div class="requestor_name" style="margin-right: 30px;">
+                <label for="">Need by date <span class="required">*</span></label>
+                <input type="date" name="need_by_date" style="padding: 0 15px;" required>          
+              </div>
             </div>
             <div class="mode_of_payment_dropdown">
               <div class="mode_of_payment_content" id="check_payment" style="display: none;">
@@ -273,6 +279,18 @@
                   <div class="mode_of_payment_content direct_deposit" style="margin-left: 5px;">
                     <label for="">Bank Account Number  <span class="required">*</span></label>
                     <input type="text" name="bank_account_number">   
+                  </div>
+                </div>
+              </div>
+              <div id="mode_of_payment_credit_card"  style="display: none;">
+                <div class="flex mode_of_payment_input">
+                  <div class="mode_of_payment_content credit_card" style="margin-right: 5px;">
+                    <label for="">Payee Name <span class="required">*</span></label>
+                    <input type="text" name="cc_payee_name">   
+                  </div>
+                  <div class="mode_of_payment_content credit_card" style="margin-left: 5px;">
+                    <label for="">Last 4 digits of card <span class="required">*</span></label>
+                    <input type="text" name="cc_credit_card">   
                   </div>
                 </div>
               </div>
@@ -451,70 +469,59 @@
     },
     id: 'id'
   }).on('change', function(){
+
     let mode_of_payment_val = $('#mode_of_payment').val()
-    // Check Payment
-    if (mode_of_payment_val == '3'){
-      $('#check_payment').show();
-      $('#check_payment').find('input').attr('required', true);
-      $('#credit_card').hide();
-      $('#mode_of_payment_direct_deposit').hide();
-      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
-      $('#mode_of_payment_direct_deposit').find('input').val('');
-      $('#gcash').hide();
-      $('#gcash').find('input').attr('required', false);
-      
+    modeOfPaymentSelect(mode_of_payment_val);
+  });
 
-    // Credit Card
-    }else if(mode_of_payment_val == '4'){
-      $('#credit_card').show();
-      $('#check_payment').hide();
-      $('#check_payment').find('input').attr('required', false);
-      $('#check_payment').find('input').val('');
-      $('#mode_of_payment_direct_deposit').hide();
-      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
-      $('#mode_of_payment_direct_deposit').find('input').val('');
-      $('#gcash').hide();
-      $('#gcash').find('input').attr('required', false);
-      $('#gcash').find('input').val('');
-      
-
-    // Direct Deposit
-    }else if(mode_of_payment_val == '2'){
-      $('#mode_of_payment_direct_deposit').show();
-      $('#mode_of_payment_direct_deposit').find('input').attr('required', true);
-      $('#check_payment').hide();
-      $('#check_payment').find('input').attr('required', false);
-      $('#check_payment').find('input').val('');
-      $('#credit_card').hide();
-      $('#gcash').hide();
-      $('#gcash').find('input').attr('required', false);
-      $('#gcash').find('input').val('');
-
-    // Gcash
-    }else if(mode_of_payment_val == '1'){
+  function modeOfPaymentSelect(mop){
+    if  (mop == 1){
+      clearModeOfPayment();
       $('#gcash').show();
       $('#gcash').find('input').attr('required', true);
-      $('#mode_of_payment_direct_deposit').hide();
-      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
-      $('#mode_of_payment_direct_deposit').find('input').val('');
-      $('#check_payment').hide();
-      $('#check_payment').find('input').attr('required', false);
-      $('#check_payment').find('input').val('');
-      $('#credit_card').hide();
-    }else{
-      $('#check_payment').hide();
-      $('#check_payment').find('input').attr('required', false);
-      $('#check_payment').find('input').val('');
-      $('#credit_card').hide();
-      $('#mode_of_payment_direct_deposit').hide();
-      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
-      $('#mode_of_payment_direct_deposit').find('input').val('');
+    }
+    else if (mop == 2){
+      clearModeOfPayment();
+      $('#mode_of_payment_direct_deposit').show();
+      $('#mode_of_payment_direct_deposit').find('input').attr('required', true);
+    }
+    else if (mop == 3){
+      clearModeOfPayment();
+      $('#check_payment').show();
+      $('#check_payment').find('input').attr('required', true);
+    }
+    else if (mop == 4){
+      clearModeOfPayment();
+      $('#credit_card').show();
+    }
+    else if (mop == 7 || mop == 8){
+      clearModeOfPayment();
+      $('#mode_of_payment_credit_card').show();
+      $('#mode_of_payment_credit_card').find('input').attr('required', true);
+    }
+    else{
+      clearModeOfPayment();
+    }
+  }
+
+  function clearModeOfPayment(){
       $('#gcash').hide();
       $('#gcash').find('input').attr('required', false);
       $('#gcash').find('input').val('');
-
-    };
-  });
+      $('#mode_of_payment_direct_deposit').hide();
+      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#mode_of_payment_direct_deposit').find('input').val('');
+      $('#check_payment').hide();
+      $('#check_payment').find('input').attr('required', false);
+      $('#check_payment').find('input').val('');
+      $('#credit_card').hide();
+      $('#mode_of_payment_direct_deposit').hide();
+      $('#mode_of_payment_direct_deposit').find('input').attr('required', false);
+      $('#mode_of_payment_direct_deposit').find('input').val('');
+      $('#mode_of_payment_credit_card').hide();
+      $('#mode_of_payment_credit_card').find('input').val('');
+      $('#mode_of_payment_credit_card').find('input').attr('required', false);
+  }
 
 </script>
 @endsection

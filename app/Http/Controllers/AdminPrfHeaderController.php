@@ -438,6 +438,10 @@ use App\ModeOfPayment;
 			$postdata['gcash_number'] = $gcash_number;
 			$postdata['payee_name'] = $payee_name;
 
+			$postdata['cc_payee_name'] = $fields['cc_payee_name'];
+			$postdata['cc_last_card_number'] = $fields['cc_credit_card'];
+			
+			$postdata['need_by_date'] = $fields['need_by_date'];
 	    }
 
 	    /* 
@@ -829,6 +833,7 @@ use App\ModeOfPayment;
 								'validator.name as validatorlevel',
 								'prf_header.created_at as requested_date',
 								'prf_header.id as requested_id',
+								'prf_header.need_by_date as need_by_date',
 								'paidby.name as paidlevel',
 								'printed.name as printedlevel',
 								'mode_of_payment.mode_of_payment_name as mode_of_payment_name',

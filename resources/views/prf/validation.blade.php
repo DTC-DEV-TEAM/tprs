@@ -82,6 +82,16 @@ img {vertical-align: middle;}
         
                         </tr>
 
+                        <tr>
+                            <td  width="17%"><label>Need By Date:</label></td>
+        
+                            <td width="34%">{{$Header->need_by_date}}</td>
+        
+                            <td width="17%"> </td>
+        
+                            <td></td>
+                        </tr>
+
                 </table>
 
                 <hr />
@@ -314,7 +324,22 @@ img {vertical-align: middle;}
                         </td>
 
                     </tr>
-                 
+                    
+                    <tr id="mop-cc">
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label require">*Payee Name</label>
+                                <input type="text" class="form-control"  id="cc_payee_name" name="cc_payee_name" value="{{$Header->cc_payee_name}}" required style="width: 90%;">                                   
+                            </div>                                
+                        </td>
+
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label require">*Last 4 digits of card</label>
+                                <input type="text" class="form-control"  id="cc_credit_card" name="cc_credit_card" value="{{$Header->cc_last_card_number}}" required style="width: 90%;">                                   
+                            </div>  
+                        </td>
+                    </tr>
 
                 </table>
 
@@ -698,9 +723,11 @@ $('#department_id').change(function() {
 
 $( "#datepicker" ).datepicker( { maxDate: 0, dateFormat: 'yy-mm-dd' } );
 
-$('#bank_details_1, #bank_details_2').hide();
+$('#bank_details_1, #bank_details_2, #mop-cc').hide();
 
 $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required');
+
+$('#mop-cc').find('input').removeAttr('required');
 
 $('#gcash_div').hide();
 
@@ -719,6 +746,9 @@ $('#requestor_name, #bank_name, #bank_branch_name, #bank_account_name, #bank_acc
 $('#mode_of_payment_id').change(function(){
 
     if(this.value == 1){
+        $('#mop-cc').hide();
+        $('#mop-cc').find('input').attr('required', false);
+
         $('#bank_details_1, #bank_details_2').hide();
         $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required');
     
@@ -732,6 +762,9 @@ $('#mode_of_payment_id').change(function(){
 
     }else if(this.value == 2){
 
+        $('#mop-cc').hide();
+        $('#mop-cc').find('input').attr('required', false);
+
         $('#gcash_div').hide();
         $('#gcash_number').removeAttr('required');
 
@@ -743,6 +776,10 @@ $('#mode_of_payment_id').change(function(){
         $('#bank_details_1, #bank_details_2').show();
         $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').attr('required', 'required');
     }else if(this.value == 3){
+
+        $('#mop-cc').hide();
+        $('#mop-cc').find('input').attr('required', false);
+
         $('#bank_details_1, #bank_details_2').hide();
         $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required');
 
@@ -756,7 +793,9 @@ $('#mode_of_payment_id').change(function(){
 
     }else if(this.value == 4){
 
-
+        $('#mop-cc').hide();
+        $('#mop-cc').find('input').attr('required', false);
+        
         $('#bank_details_1, #bank_details_2').hide();
         $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required');
 
@@ -768,6 +807,20 @@ $('#mode_of_payment_id').change(function(){
 
 
         $('#credit_card_div').show();
+    }else if(this.value == 7 || this.value == 8){
+        $('#gcash_div').hide();
+        $('#gcash_number').removeAttr('required');
+
+        $('#check_payment_div').hide();
+        $('#payee_name').removeAttr('required');
+
+        $('#credit_card_div').hide();
+
+        $('#bank_details_1, #bank_details_2').hide();
+        $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required', 'required');
+
+        $('#mop-cc').show();
+        $('#mop-cc').find('input').attr('required', true);
     }else{
 
         $('#bank_details_1, #bank_details_2').hide();
@@ -788,6 +841,10 @@ $('#mode_of_payment_id').change(function(){
 
 
 if($('#mode_of_payment_id').val() == 1){
+    
+        $('#mop-cc').hide();
+        $('#mop-cc').find('input').attr('required', false);
+
         $('#bank_details_1, #bank_details_2').hide();
         $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required');
     
@@ -801,6 +858,9 @@ if($('#mode_of_payment_id').val() == 1){
 
     }else if($('#mode_of_payment_id').val() == 2){
 
+        $('#mop-cc').hide();
+        $('#mop-cc').find('input').attr('required', false);
+
         $('#gcash_div').hide();
         $('#gcash_number').removeAttr('required');
 
@@ -812,6 +872,10 @@ if($('#mode_of_payment_id').val() == 1){
         $('#bank_details_1, #bank_details_2').show();
         $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').attr('required', 'required');
     }else if($('#mode_of_payment_id').val() == 3){
+
+        $('#mop-cc').hide();
+        $('#mop-cc').find('input').attr('required', false);
+
         $('#bank_details_1, #bank_details_2').hide();
         $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required');
 
@@ -825,6 +889,8 @@ if($('#mode_of_payment_id').val() == 1){
 
     }else if($('#mode_of_payment_id').val() == 4){
 
+        $('#mop-cc').hide();
+        $('#mop-cc').find('input').attr('required', false);
 
         $('#bank_details_1, #bank_details_2').hide();
         $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required');
@@ -837,6 +903,21 @@ if($('#mode_of_payment_id').val() == 1){
 
 
         $('#credit_card_div').show();
+    }
+    else if ($('#mode_of_payment_id').val() == 7 || $('#mode_of_payment_id').val() == 8 ){
+        $('#gcash_div').hide();
+        $('#gcash_number').removeAttr('required');
+
+        $('#check_payment_div').hide();
+        $('#payee_name').removeAttr('required');
+
+        $('#credit_card_div').hide();
+
+        $('#bank_details_1, #bank_details_2').hide();
+        $('#bank_name, #bank_branch_name, #bank_account_name, #bank_account_number').removeAttr('required', 'required');
+
+        $('#mop-cc').show();
+        $('#mop-cc').find('input').attr('required', true);
     }
 
   function preventBack() {

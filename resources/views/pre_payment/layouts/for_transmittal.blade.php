@@ -1,4 +1,4 @@
-@if(CRUDBooster::myPrivilegeName() == 'Requestor' || CRUDBooster::myPrivilegeName() == 'Approver')
+{{-- @if(CRUDBooster::myPrivilegeName() == 'Requestor' || CRUDBooster::myPrivilegeName() == 'Approver') --}}
 <div class="budget_content" style="display: none;">
   <div class="budget_block">
     <div class="circ_delete">
@@ -234,7 +234,7 @@
               <input type="date" name="transmit_date" style="padding: 5px;" required>
             </div>
             <div class="total_amount_content receipts_total_amount" style="width: 500px;">
-              <label for="">AP Specialist: <span style="color: red; font-weight: bold;">* </span></label>
+              <label for="">Receiver Name: <span style="color: red; font-weight: bold;">* </span></label>
               <input type="text" name="transmit_received_by" style=" width: 310px;" required>
             </div>
           </div>
@@ -248,6 +248,10 @@
                 <div class="request_information start">
                     <label for="">Requested Date:</label>
                     <span>{{ $row->created_at }}</span>
+                </div>
+                <div class="request_information">
+                  <label for="">Need by date:</label>
+                  <span>{{ $row->need_by_date }}</span>
                 </div>
                 <div class="request_information">
                     <label for="">Created by:</label>
@@ -299,7 +303,7 @@
   </div>
   </form>
 </div>
-@else
+{{-- @else
 <div class="budget_content" style="display: none;">
   <div class="budget_block">
     <div class="circ_delete">
@@ -376,8 +380,6 @@
       </div>
       <div class="budget_description" style="display: none;">
         <div class="budget_description_btns">
-          {{-- <button type="button" class="add_row_receipt" style="width: 100px;">Add Row</button>
-          <button type="button" class="delete_row" style="display: none;">Delete</button> --}}
           <input type="id" name="returns_id[]" value="{{ $budget->id }}" style="display: none;">
           <input type="id" name="project_id[]" value="{{ $row->id }}" style="display: none;">
         </div>
@@ -389,7 +391,6 @@
   <div class='panel-heading'>Validate Receipts</div>
   <form id="close" method="POST" action="{{CRUDBooster::mainpath('edit-save/'.$row->id)}}" enctype="multipart/form-data">
   <div class='panel-body'>
-    {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
       {{ csrf_field() }}
       <div class='form-group'>
         <div class="request_content">
@@ -523,8 +524,6 @@
                   </div>
                   <div class="budget_description" style="text-align: center;">
                     <div class="budget_description_btns">
-                      {{-- <button type="button" class="add_row_receipt" style="width: 100px;">Add Row</button>
-                      <button type="button" class="delete_row" style="display: none;">Delete</button> --}}
                       <input type="id" name="returns_id[]" value="{{ $budget->id }}" style="display: none;">
                       <input type="id" name="project_id[]" value="{{ $row->id }}" style="display: none;">
                     </div>
@@ -629,7 +628,6 @@
           </div>
         </div>
       </div>        
-    {{-- </form> --}}
   </div>
   <div class='panel-footer'>
     <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
@@ -638,4 +636,4 @@
   </div>
   </form>
 </div>
-@endif
+@endif --}}

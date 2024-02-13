@@ -228,7 +228,7 @@
                     @endif
 
                 <!--ADD ACTIon-->
-                    @if(count($index_button))
+                    @if(count((array)$index_button))
 
                         @foreach($index_button as $ib)
                             <a href='{{$ib["url"]}}' id='{{str_slug($ib["label"])}}' class='btn {{($ib['color'])?'btn-'.$ib['color']:'btn-primary'}} btn-sm'

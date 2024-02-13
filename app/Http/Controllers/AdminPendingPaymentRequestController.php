@@ -797,7 +797,7 @@ use App\ModeOfPayment;
 							  $data['ModeOfPayments'] = ModeOfPayment::where('status', 'ACTIVE')->orderby('mode_of_payment_name', 'ASC')->get();
 			
 			$data['Interco'] = Interco::where('status', 'ACTIVE')->orderby('interco_name', 'ASC')->get();
-			$data['InvoiceType'] = InvoiceType::where('status', 'ACTIVE')->orderby('invoice_type_name', 'ASC')->get();
+			$data['InvoiceType'] = InvoiceType::where('status', 'ACTIVE')->where('id', '!=', 1)->orderby('invoice_type_name', 'ASC')->get();
 			$data['PaymentStatus'] = PaymentStatus::where('status', 'ACTIVE')->orderby('payment_status_name', 'ASC')->get();
 			$data['VatType'] = VatType::where('status', 'ACTIVE')->orderby('vat_type_name', 'ASC')->get();				  
 			
