@@ -951,7 +951,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				select('id', 'sub_department_name')
 				->where('status', 'ACTIVE')
 				->where('sub_department_name', 'LIKE', '%'. $request->input('q'). '%')
-				->where('department_id', 'LIKE', '%'. $request->input('department_id'). '%')
+				->where('department_id', '=', $request->input('department_id'))
 				->orderBy('sub_department_name')
 				->get()->unique('sub_department_name');
 						
