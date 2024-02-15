@@ -116,14 +116,14 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 	        | 
 	        */
 	        $this->addaction = array();
-			$requested = PrePaymentProcess::select('id')->where('id', '1')->value('id');
-			$approved = PrePaymentProcess::select('id')->where('id', '2')->value('id');
-			$budget_released = PrePaymentProcess::select('id')->where('id', '3')->value('id');
-			$validate_receipts = PrePaymentProcess::select('id')->where('id', '4')->value('id');
-			$close = PrePaymentProcess::select('id')->where('id', '5')->value('id');
-			$rejected = PrePaymentProcess::select('id')->where('id', '6')->value('id');
-			$ap_record = PrePaymentProcess::select('id')->where('id', '7')->value('id');
-			$for_transmittal = PrePaymentProcess::select('id')->where('id', '8')->value('id');
+			$requested = 1; //PrePaymentProcess::select('id')->where('id', '1')->value('id');
+			$approved = 2; //PrePaymentProcess::select('id')->where('id', '2')->value('id');
+			$budget_released = 3; //PrePaymentProcess::select('id')->where('id', '3')->value('id');
+			$validate_receipts = 4; //PrePaymentProcess::select('id')->where('id', '4')->value('id');
+			$close = 5; //PrePaymentProcess::select('id')->where('id', '5')->value('id');
+			$rejected = 6; // PrePaymentProcess::select('id')->where('id', '6')->value('id');
+			$ap_record = 7; //PrePaymentProcess::select('id')->where('id', '7')->value('id');
+			$for_transmittal = 8; //PrePaymentProcess::select('id')->where('id', '8')->value('id');
 			$ap_id = CRUDBooster::myId();
 			if(CRUDBooster::myPrivilegeName() == 'Requestor'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $budget_released"];
