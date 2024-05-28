@@ -202,19 +202,29 @@ Route::group(['middleware' => ['web']], function() {
     
     // Pre Payment Module
     Route::get('/admin/pre_payment/request', 'AdminPrePaymentController@getAdd');
-    Route::post('/admin/pre_payment/add_request', 'AdminPrePaymentController@add_request')->name('add_request');
-    Route::post('/admin/pre_payment/request', 'AdminPrePaymentController@verify_receipt')->name('verify_receipt');
-    Route::post('/admin/department', 'AdminPrePaymentController@department')->name('department');
-    Route::post('/admin/mode_of_payment', 'AdminPrePaymentController@mode_of_payment')->name('payment');
-    Route::post('/admin/sub_department', 'AdminPrePaymentController@sub_department')->name('sub_department');
-    Route::post('/admin/account', 'AdminPrePaymentController@account')->name('account');
+    Route::post('/admin/pre_payment/add_request', 'AdminPrePaymentController@add_request')->name('prepayment_add_request');
+    Route::post('/admin/pre_payment/request', 'AdminPrePaymentController@verify_receipt')->name('prepayment_verify_receipt');
+    Route::post('/admin/pre_payment/department', 'AdminPrePaymentController@department')->name('prepayment_department');
+    Route::post('/admin/pre_payment/mode_of_payment', 'AdminPrePaymentController@mode_of_payment')->name('prepayment_payment');
+    Route::post('/admin/pre_payment/sub_department', 'AdminPrePaymentController@sub_department')->name('prepayment_sub_department');
+    Route::post('/admin/pre_payment/account', 'AdminPrePaymentController@account')->name('prepayment_account');
     Route::get('/admin/pre_payment/request', 'AdminPrePaymentController@getEdit');
     Route::get('/admin/pre_payment/view', 'AdminPrePaymentController@getDetail');
+    
+    // Revolving Fund
+    Route::get('/admin/revolving_fund/request', 'AdminRevolvingFundController@getAdd');
+    Route::post('/admin/revolving_fund/add_request', 'AdminRevolvingFundController@add_request')->name('revolving_fund_add_request');
+    Route::post('/admin/revolving_fund/request', 'AdminRevolvingFundController@verify_receipt')->name('revolving_fund_verify_receipt');
+    Route::post('/admin/revolving_fund/department', 'AdminRevolvingFundController@department')->name('revolving_fund_department');
+    Route::post('/admin/revolving_fund/mode_of_payment', 'AdminRevolvingFundController@mode_of_payment')->name('revolving_fund_payment');
+    Route::post('/admin/revolving_fund/sub_department', 'AdminRevolvingFundController@sub_department')->name('revolving_fund_sub_department');
+    Route::post('/admin/revolving_fund/account', 'AdminRevolvingFundController@account')->name('revolving_fund_account');
+    Route::get('/admin/revolving_fund/request', 'AdminRevolvingFundController@getEdit');
+    Route::get('/admin/revolving_fund/view', 'AdminRevolvingFundController@getDetail');
+
 
     Route::get('/admin/clear-view', function() {
         Artisan::call('view:clear');
         return "View cache is cleared!";
     });
 });
-
-

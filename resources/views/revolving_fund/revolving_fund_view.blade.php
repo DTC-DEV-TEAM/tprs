@@ -531,7 +531,7 @@
   <!-- Your html goes here -->
     <p class="noprint"><a title="Main Module" href="{{ CRUDBooster::mainpath() }}"><i class="fa fa-chevron-circle-left "></i> &nbsp; Back To List Data Pre Payment</a></p> 
     <div class='panel panel-default'>
-        <div class='panel-heading'>Cash Advance View Request</div>
+        <div class='panel-heading'>Revolving Fund View Request</div>
         <div class='panel-body'>            
             <div class='form-group'>
                 <div class="request_content">
@@ -570,7 +570,7 @@
                       <p>Receipts Information Breakdown</p>
                     </div>
                     <div class="budget_content">
-                      @foreach ($pre_payment_body as $budget)
+                      @foreach ($revolving_fund_body as $budget)
                         <div class="budget_block">
                           <div class="budget">
                             <div class="budget_description">
@@ -653,7 +653,7 @@
                                   @if ($receipts_img == null)
                                     <p>No Image Inserted</p>
                                   @else
-                                    <img src="{{ asset('pre_payment/img/'.$receipts_img) }}" alt="No Image Inserted" style="height: 75px; width: 49%; display: inline-block; margin-top: 2px;" id="budget_image" class="modal-trigger">
+                                    <img src="{{ asset('revolving_fund/img/'.$receipts_img) }}" alt="No Image Inserted" style="height: 75px; width: 49%; display: inline-block; margin-top: 2px;" id="budget_image" class="modal-trigger">
                                   @endif
                                 @endforeach
                                 <div class="modal">
@@ -797,7 +797,7 @@
                     <div class="request_department">
                       <div class="request_information start">
                         <label for="">RCT. Breakdown Date:</label>
-                        <span>{{ $pre_payment_body_date->created_at }}</span>
+                        <span>{{ $revolving_fund_body_date->created_at }}</span>
                       </div>
                       <div class="request_information">
                         <label for="">Breakdown Note:</label>
@@ -964,7 +964,7 @@ function get_all_sum(){
     dropdownAutoWidth: true,
     width: '100%',
     ajax: {
-        url: '{{ route('prepayment_department') }}',
+        url: '{{ route('revolving_fund_department') }}',
         dataType: 'json',
         // contentType: "application/json; charset=utf-8",
         delay: 250,
@@ -996,7 +996,7 @@ function get_all_sum(){
     dropdownAutoWidth: true,
     width: '100%',
     ajax: {
-        url: '{{ route('prepayment_sub_department') }}',
+        url: '{{ route('revolving_fund_sub_department') }}',
         dataType: 'json',
         // contentType: "application/json; charset=utf-8",
         delay: 250,
@@ -1028,7 +1028,7 @@ function get_all_sum(){
     dropdownAutoWidth: true,
     width: '100%',
     ajax: {
-        url: '{{ route('prepayment_payment') }}',
+        url: '{{ route('revolving_fund_payment') }}',
         dataType: 'json',
         delay: 250,
         type: 'POST',
@@ -1079,7 +1079,7 @@ function get_all_sum(){
       placeholder: "Select an account",
       width: '150px',
       ajax: {
-        url: "{{ route('prepayment_account') }}",
+        url: "{{ route('revolving_fund_account') }}",
         dataType: "json",
         delay: 250,
         type: "POST",

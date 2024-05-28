@@ -213,10 +213,10 @@
   <!-- Your html goes here -->
   <p class="noprint"><a title="Main Module" href="{{ CRUDBooster::mainpath() }}"><i class="fa fa-chevron-circle-left "></i> &nbsp; Back To List Data Pre Payment</a></p> 
   <div class='panel panel-default'>
-    <div class='panel-heading'>Request Cash Advance</div>
+    <div class='panel-heading'>Request Revolving Fund</div>
     <div class='panel-body'>
       {{-- <form method='POST' action='{{CRUDBooster::mainpath('add-save')}}'> --}}
-        <form method="POST" action="{{ route('prepayment_add_request') }}" autocomplete="off">
+        <form method="POST" action="{{ route('revolving_fund_add_request') }}" autocomplete="off">
         {{ csrf_field() }}
         <div class='form-group'>
           <div class="request_content">
@@ -373,7 +373,7 @@
       dropdownAutoWidth: true,
       width: '100%',
       ajax: {
-          url: '{{ route('prepayment_department') }}',
+          url: '{{ route('revolving_fund_department') }}',
           dataType: 'json',
           delay: 250,
           type: 'POST',
@@ -412,7 +412,7 @@
           dropdownAutoWidth: true,
           width: '100%',
           ajax: {
-              url: '{{ route('prepayment_sub_department') }}',
+              url: '{{ route('revolving_fund_sub_department') }}',
               dataType: 'json',
               delay: 250,
               type: 'POST',
@@ -445,7 +445,7 @@
     dropdownAutoWidth: true,
     width: '100%',
     ajax: {
-        url: '{{ route('prepayment_payment') }}',
+        url: '{{ route('revolving_fund_payment') }}',
         dataType: 'json',
         delay: 250,
         type: 'POST',

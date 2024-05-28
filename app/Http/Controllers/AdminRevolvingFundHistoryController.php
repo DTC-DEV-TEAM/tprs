@@ -14,7 +14,7 @@ use Session;
 	use App\PrePaymentProcess;
 use App\Store;
 
-	class AdminPrePaymentHistoryController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminRevolvingFundHistoryController extends \crocodicstudio\crudbooster\controllers\CBController {
 
         public function __construct() {
 			// Register ENUM type
@@ -40,7 +40,7 @@ use App\Store;
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "pre_payment";
+			$this->table = "revolving_fund";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
@@ -305,15 +305,15 @@ use App\Store;
 			$user_account_department_id = DB::table('cms_users')->where('id', $user)->value('approver_department_id');
 			
 
-			$requested = PrePaymentProcess::select('id')->where('id', '1')->value('id');
-			$approved = PrePaymentProcess::select('id')->where('id', '2')->value('id');
-			$budget_released = PrePaymentProcess::select('id')->where('id', '3')->value('id');
-			$validate_receipts = PrePaymentProcess::select('id')->where('id', '4')->value('id');
-			$close = PrePaymentProcess::select('id')->where('id', '5')->value('id');
-			$rejected = PrePaymentProcess::select('id')->where('id', '6')->value('id');
+			$requested = 1;
+			$approved = 2;
+			$budget_released = 3;
+			$validate_receipts = 4;
+			$close = 5;
+			$rejected = 6;
 
 			if(CRUDBooster::myPrivilegeName() == 'Approver'){
-				$query->whereIn('pre_payment.department_id', explode(',', $user_account_department_id))->orderByDesc('reference_number');
+				$query->whereIn('revolving_fund.department_id', explode(',', $user_account_department_id))->orderByDesc('reference_number');
 			}else{
 				$query->orderByDesc('reference_number');
 			}
@@ -440,69 +440,70 @@ use App\Store;
 			
 			$data = [];
 			$data['page_title'] = 'Detail Data';
-			$data['row'] = DB::table('pre_payment')
-				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
-				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
-				->leftJoin('cms_users as accounting', 'pre_payment.accounting_id', 'accounting.id')
-				->leftJoin('cms_users as accounting_closed', 'pre_payment.accounting_closed_by', 'accounting_closed.id')
+			$data['row'] = DB::table('revolving_fund')
+				->leftJoin('cms_users', 'revolving_fund.created_by', 'cms_users.id')
+				->leftJoin('cms_users as approver', 'revolving_fund.approver_id', 'approver.id')
+				->leftJoin('cms_users as accounting', 'revolving_fund.accounting_id', 'accounting.id')
+				->leftJoin('cms_users as accounting_closed', 'revolving_fund.accounting_closed_by', 'accounting_closed.id')
 				->select('cms_users.name as cms_users_name',
 					'approver.name as approver_name',
 					'accounting.name as accounting_name',
 					'accounting_closed.name as accounting_closed_by',
-					'pre_payment.status_id',
-					'pre_payment.id',
-					'pre_payment.department_id',
-					'pre_payment.sub_department_id',
-					'pre_payment.accounting_mode_of_release',
-					'pre_payment.full_name',
-					'pre_payment.additional_notes',
-					'pre_payment.requested_amount',
-					'pre_payment.created_at',
-					'pre_payment.approver_note',
-					'pre_payment.approver_date',
-					'pre_payment.reference_number',
-					'pre_payment.accounting_date_release',
-					'pre_payment.accounting_note',
-					'pre_payment.accounting_closed_date',
-					'pre_payment.accounting_closed_note',
-					'pre_payment.total_amount',
-					'pre_payment.reference_number',
-					'pre_payment.requested_amount',
-					'pre_payment.balance_amount',
-					'pre_payment.budget_information_notes',
-					'pre_payment.payee_name',
-					'pre_payment.bank_name',
-					'pre_payment.bank_branch_name',
-					'pre_payment.bank_account_name',
-					'pre_payment.bank_account_number',
-					'pre_payment.gcash_number',
-					'pre_payment.check_date',
-					'pre_payment.system_reference_number',
-					'pre_payment.unused_amount',
-					'pre_payment.transmit_date',
-					'pre_payment.transmit_received_by',
-					'pre_payment.ar_reference_number')
-				->where('pre_payment.id',$id)
+					'revolving_fund.status_id',
+					'revolving_fund.need_by_date',
+					'revolving_fund.id',
+					'revolving_fund.department_id',
+					'revolving_fund.sub_department_id',
+					'revolving_fund.accounting_mode_of_release',
+					'revolving_fund.full_name',
+					'revolving_fund.additional_notes',
+					'revolving_fund.requested_amount',
+					'revolving_fund.created_at',
+					'revolving_fund.approver_note',
+					'revolving_fund.approver_date',
+					'revolving_fund.reference_number',
+					'revolving_fund.accounting_date_release',
+					'revolving_fund.accounting_note',
+					'revolving_fund.accounting_closed_date',
+					'revolving_fund.accounting_closed_note',
+					'revolving_fund.total_amount',
+					'revolving_fund.reference_number',
+					'revolving_fund.requested_amount',
+					'revolving_fund.balance_amount',
+					'revolving_fund.budget_information_notes',
+					'revolving_fund.payee_name',
+					'revolving_fund.bank_name',
+					'revolving_fund.bank_branch_name',
+					'revolving_fund.bank_account_name',
+					'revolving_fund.bank_account_number',
+					'revolving_fund.gcash_number',
+					'revolving_fund.check_date',
+					'revolving_fund.system_reference_number',
+					'revolving_fund.unused_amount',
+					'revolving_fund.transmit_date',
+					'revolving_fund.transmit_received_by',
+					'revolving_fund.ar_reference_number')
+				->where('revolving_fund.id',$id)
 				->first();
-			// PrePaymentBody
-			$data['pre_payment_body'] = DB::table('pre_payment_body')
-				->leftJoin('brand as brands' , 'pre_payment_body.brand', 'brands.id')
-				->leftJoin('stores as store', 'pre_payment_body.location', 'store.id')
-				->leftJoin('category as categories', 'pre_payment_body.category', 'categories.id')
-				->leftJoin('account as accounts', 'pre_payment_body.account', 'accounts.id')
-				->leftJoin('currency as currencies', 'pre_payment_body.currency', 'currencies.id')
-				->select('pre_payment_body.*', 
+			// RevolvingFundBody
+			$data['revolving_fund_body'] = DB::table('revolving_fund_body')
+				->leftJoin('brand as brands' , 'revolving_fund_body.brand', 'brands.id')
+				->leftJoin('stores as store', 'revolving_fund_body.location', 'store.id')
+				->leftJoin('category as categories', 'revolving_fund_body.category', 'categories.id')
+				->leftJoin('account as accounts', 'revolving_fund_body.account', 'accounts.id')
+				->leftJoin('currency as currencies', 'revolving_fund_body.currency', 'currencies.id')
+				->select('revolving_fund_body.*', 
 					'brands.brand_name',
 					'store.store_name',
 					'categories.category_name',
 					'accounts.account_name',
 					'accounts.id as account_id',
 					'currencies.currency_name')
-				->where('pre_payment_id',$id)
+				->where('revolving_fund_id',$id)
 				->get();
-			// PrePaymentBodyDate
-			$data['pre_payment_body_date'] = DB::table('pre_payment_body')
-				->where('pre_payment_id',$id)
+			// RevolvingFundBodyDate
+			$data['revolving_fund_body_date'] = DB::table('revolving_fund_body')
+				->where('revolving_fund_id',$id)
 				->first();
 			// Department
 			$data['department'] = DB::table('department')
@@ -537,7 +538,7 @@ use App\Store;
 				->get();
 			
 			//Please use view method instead view method from laravel
-			return view("pre_payment.pre_payment_view", $data);
+			return view("revolving_fund.revolving_fund_view", $data);
 		}
 
 

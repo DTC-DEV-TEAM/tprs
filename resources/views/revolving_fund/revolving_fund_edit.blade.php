@@ -549,27 +549,27 @@
     
     {{-- Approver Privilege --}}
     @if ($row->status_id == 1) 
-      @include('pre_payment.layouts.for_approval')
+      @include('revolving_fund.layouts.for_approval')
     @endif
     {{-- End of Approver Privilege --}}
 
     {{-- Approver Privilege --}}
     @if ($row->status_id == 7) 
-      @include('pre_payment.layouts.ap_recording')
+      @include('revolving_fund.layouts.ap_recording')
     @endif
     {{-- End of Approver Privilege --}}
 
     {{-- Accounting Approval --}}
     {{-- Accounting Budget Releasing --}}
     @if ($row->status_id == 2)
-      @include('pre_payment.layouts.for_budget_release')
+      @include('revolving_fund.layouts.for_budget_release')
     @endif
     {{-- End of Accounting Approval --}}
 
     {{-- Receipts Information Breakdown --}}
     {{-- Requestor Privilege --}}
     @if ($row->status_id == 3)
-      @include('pre_payment.layouts.receipts_breakdown')      
+      @include('revolving_fund.layouts.receipts_breakdown')      
       {{-- <script>
           $('body').addClass('sidebar-collapse');
       </script> --}}
@@ -578,13 +578,13 @@
 
     {{-- For Transmittal --}}
     @if ($row->status_id == 8)
-      @include('pre_payment.layouts.for_transmittal')
+      @include('revolving_fund.layouts.for_transmittal')
     @endif  
     {{-- End of For Transmittal --}}
 
     {{-- Accounting Validating Budget Information --}}
     @if ($row->status_id == 4)
-      @include('pre_payment.layouts.accounting_receipts_validation')
+      @include('revolving_fund.layouts.accounting_receipts_validation')
     @endif
     {{-- End of Accounting Validation Budget Information --}}
 
@@ -746,7 +746,7 @@
     placeholder: "Select a department",
     width: '100%',
     ajax: {
-        url: '{{ route('prepayment_department') }}',
+        url: '{{ route('revolving_fund_department') }}',
         dataType: 'json',
         delay: 250,
         type: 'POST',
@@ -777,7 +777,7 @@
     dropdownAutoWidth: true,
     width: '100%',
     ajax: {
-        url: '{{ route('prepayment_sub_department') }}',
+        url: '{{ route('revolving_fund_sub_department') }}',
         dataType: 'json',
         delay: 250,
         type: 'POST',
@@ -833,7 +833,7 @@
     dropdownAutoWidth: true,
     width: '100%',
     ajax: {
-        url: '{{ route('prepayment_payment') }}',
+        url: '{{ route('revolving_fund_payment') }}',
         dataType: 'json',
         delay: 250,
         type: 'POST',
@@ -952,7 +952,7 @@
       placeholder: "Select an account",
       width: '150px',
       ajax: {
-        url: "{{ route('prepayment_account') }}",
+        url: "{{ route('revolving_fund_account') }}",
         dataType: "json",
         delay: 250,
         type: "POST",

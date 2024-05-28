@@ -21,7 +21,7 @@ use Intervention\Image\Facades\Image;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 
-	class AdminPrePaymentController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminRevolvingFundController extends \crocodicstudio\crudbooster\controllers\CBController {
 
         public function __construct() {
 			// Register ENUM type
@@ -46,7 +46,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "pre_payment";
+			$this->table = "revolving_fund";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
@@ -59,7 +59,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$this->col[] = ["label"=>"Approved By","name"=>"approver_id","join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"Approved Date","name"=>"approver_date"];
 			$this->col[] = ["label"=>"Approved By Accounting","name"=>"accounting_id","join"=>"cms_users,name"];
-			$this->col[] = ["label"=>"Cash Advance Date Released","name"=>"accounting_date_release"];
+			$this->col[] = ["label"=>"Revolving Fund Date Released","name"=>"accounting_date_release"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
@@ -116,14 +116,14 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 	        | 
 	        */
 	        $this->addaction = array();
-			$requested = 1; 
-			$approved = 2; 
-			$budget_released = 3; 
-			$validate_receipts = 4; 
-			$close = 5; 
-			$rejected = 6; 
-			$ap_record = 7; 
-			$for_transmittal = 8; 
+			$requested = 1; //PrePaymentProcess::select('id')->where('id', '1')->value('id');
+			$approved = 2; //PrePaymentProcess::select('id')->where('id', '2')->value('id');
+			$budget_released = 3; //PrePaymentProcess::select('id')->where('id', '3')->value('id');
+			$validate_receipts = 4; //PrePaymentProcess::select('id')->where('id', '4')->value('id');
+			$close = 5; //PrePaymentProcess::select('id')->where('id', '5')->value('id');
+			$rejected = 6; // PrePaymentProcess::select('id')->where('id', '6')->value('id');
+			$ap_record = 7; //PrePaymentProcess::select('id')->where('id', '7')->value('id');
+			$for_transmittal = 8; //PrePaymentProcess::select('id')->where('id', '8')->value('id');
 			$ap_id = CRUDBooster::myId();
 			if(CRUDBooster::myPrivilegeName() == 'Requestor'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $budget_released"];
@@ -185,7 +185,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 	        */
 	        $this->index_button = array();
 			if((CRUDBooster::getCurrentMethod() == 'getIndex') && (CRUDBooster::myPrivilegeName() != 'Treasury')  && (CRUDBooster::myPrivilegeName() != 'AP Checker') ){
-				$this->index_button[] = ['label'=>'Request Cash Advance','url'=>CRUDBooster::mainpath("add"),"icon"=>"fa fa-plus", 'color'=>'success'];
+				$this->index_button[] = ['label'=>'Request Revolving Fund','url'=>CRUDBooster::mainpath("add"),"icon"=>"fa fa-plus", 'color'=>'success'];
 			}
 
 
@@ -320,17 +320,17 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$approver_sub_department = explode(',',$approver_id->approver_department_id);
 			
 			if (CRUDBooster::myPrivilegeName() == 'Requestor'){
-				$query->where('pre_payment.created_by', CRUDBooster::myId())->orderByDesc('pre_payment.reference_number');
+				$query->where('revolving_fund.created_by', CRUDBooster::myId())->orderByDesc('revolving_fund.reference_number');
 			}else if (CRUDBooster::myPrivilegeName() == 'Approver'){
-				$query->whereIn('pre_payment.department_id', $approver_sub_department)->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
-				// $query->where('pre_payment.status_id', $requested)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
-				// $query->orWhere('pre_payment.status_id', $for_recording)->whereIn('pre_payment.sub_department_id', $approver_sub_department);
-				// $query->whereIn('pre_payment.sub_department_id', $approver_sub_department);
+				$query->whereIn('revolving_fund.department_id', $approver_sub_department)->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
+				// $query->where('revolving_fund.status_id', $requested)->whereIn('revolving_fund.sub_department_id', $approver_sub_department);
+				// $query->orWhere('revolving_fund.status_id', $for_recording)->whereIn('revolving_fund.sub_department_id', $approver_sub_department);
+				// $query->whereIn('revolving_fund.sub_department_id', $approver_sub_department);
 				// $query->orWhere('status_id', $requested);
 			}else if (CRUDBooster::myPrivilegeName() == 'AP Checker'){
-				$query->orderByDesc('pre_payment.reference_number')->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
+				$query->orderByDesc('revolving_fund.reference_number')->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
 			}else{
-				$query->orderByDesc('pre_payment.reference_number')->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
+				$query->orderByDesc('revolving_fund.reference_number')->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
 			}
 
 
@@ -402,7 +402,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 	        //Your code here
 			$return_inputs = Input::all();
 
-			$status = DB::table('pre_payment')
+			$status = DB::table('revolving_fund')
 				->select('status_id')
 				->where('id', $id)
 				->value('id');
@@ -459,6 +459,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$postdata['ap_checker_note'] = $approver_note;
 				$postdata['ap_checker_id'] = CRUDBooster::myId();
 				$postdata['ap_checker_date'] = date('Y-m-d H:i:s');
+				
 			}
 
 			// Releasing Step 4
@@ -510,7 +511,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$amount = $return_inputs['amount'];
 				$budget_justification = [$return_inputs['budget_justification']];
 				$requested_project = [];
-				$insert_pre_payment_body = [];
+				$insert_revolving_fund_body = [];
 	
 				if($return_inputs['budget_justification'] == null){
 					$return_inputs['budget_justification'] = null;
@@ -537,11 +538,11 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 						
 						// 	$filename = uniqid().'.'.$value->getClientOriginalExtension();
 						// 	$array_file[$key] = $filename;
-						// 	$value->move(public_path('pre_payment/img'), $filename);
+						// 	$value->move(public_path('revolving_fund/img'), $filename);
 
 						// 	 // Optimize the uploaded image
 						// 	// $optimizerChain = OptimizerChainFactory::create();
-						// 	// $optimizerChain->optimize(public_path('pre_payment/img/' . $filename));
+						// 	// $optimizerChain->optimize(public_path('revolving_fund/img/' . $filename));
 						// }
 						foreach ($array_file as $key => $value) {
 							$filename = uniqid() . '.' . $value->getClientOriginalExtension();
@@ -556,11 +557,11 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 							});
 						
 							// Save the resized image to the public folder
-							$image->save(public_path('pre_payment/img/' . $filename));
+							$image->save(public_path('revolving_fund/img/' . $filename));
 						
 							// Optimize the uploaded image
 							$optimizerChain = OptimizerChainFactory::create();
-							$optimizerChain->optimize(public_path('pre_payment/img/' . $filename));
+							$optimizerChain->optimize(public_path('revolving_fund/img/' . $filename));
 						}
 					}
 					array_push($requested_project, $array_file);
@@ -568,8 +569,8 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 				for($i=0; $i<count($description); $i++){
 					
-					$insert_pre_payment_body[] = [
-						'pre_payment_id' => $id,
+					$insert_revolving_fund_body[] = [
+						'revolving_fund_id' => $id,
 						'description' => $description[$i],
 						'brand' => $brand[$i],
 						'location' => $location[$i],
@@ -586,8 +587,8 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				}
 				
 				// Insert budget information
-				foreach($insert_pre_payment_body  as $budget_information){
-					DB::table('pre_payment_body')->insert(
+				foreach($insert_revolving_fund_body  as $budget_information){
+					DB::table('revolving_fund_body')->insert(
 						$budget_information
 					);
 				}
@@ -631,14 +632,14 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				// 	$receipt_value = $return_inputs['value'];
 				// 	$amount = $return_inputs['amount'];
 				// 	$budget_justification = [$return_inputs['budget_justification']];
-				// 	$pre_payment_id = $return_inputs['project_id'];
+				// 	$revolving_fund_id = $return_inputs['project_id'];
 
 				// 	$requested_project = [];
 				// 	$requested_id = [];
 					
 				// 	for($i=0; $i<count((array)$description); $i++){
 				// 		$requested_project[] = [
-				// 			'pre_payment_id' => $pre_payment_id[$i],
+				// 			'revolving_fund_id' => $revolving_fund_id[$i],
 				// 			'description' => $description[$i],
 				// 			'brand' => $brand[$i],
 				// 			'location' => $location[$i],
@@ -657,7 +658,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 				// 	// Insert budget information
 				// 	for($i=0; $i<count((array)$requested_id); $i++){
-				// 		DB::table('pre_payment_body')->updateOrInsert(['id'=>$requested_id[$i]],
+				// 		DB::table('revolving_fund_body')->updateOrInsert(['id'=>$requested_id[$i]],
 				// 			$requested_project[$i]
 				// 		);
 				// 	}
@@ -695,14 +696,14 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$receipt_value = $return_inputs['value'];
 				$amount = $return_inputs['amount'];
 				$budget_justification = [$return_inputs['budget_justification']];
-				$pre_payment_id = $return_inputs['project_id'];
+				$revolving_fund_id = $return_inputs['project_id'];
 
 				$requested_project = [];
 				$requested_id = [];
 				
 				for($i=0; $i<count((array)$description); $i++){
 					$requested_project[] = [
-						'pre_payment_id' => $pre_payment_id[$i],
+						'revolving_fund_id' => $revolving_fund_id[$i],
 						'description' => $description[$i],
 						'brand' => $brand[$i],
 						'location' => $location[$i],
@@ -721,7 +722,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 				// Insert budget information
 				for($i=0; $i<count((array)$requested_id); $i++){
-					DB::table('pre_payment_body')->updateOrInsert(['id'=>$requested_id[$i]],
+					DB::table('revolving_fund_body')->updateOrInsert(['id'=>$requested_id[$i]],
 						$requested_project[$i]
 					);
 				}
@@ -745,7 +746,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			if(($status_id == '1') && ($submit != 'Reject')){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'The request has been approved.',"success");
 			}else if(($status_id == '2') && ($submit != 'Reject')){
-				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Cash Advance has been released.',"success");
+				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Revolving Fund has been released.',"success");
 			}else if($status_id == '3'){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'You may now proceed to return the receipts and any remaining balance, along with your reference number.',"success");
 			}else if($status_id == '4'){
@@ -792,10 +793,11 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {    
 				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
 			}
+
 			$data = [];
 			$data['page_title'] = 'Add Data';
 			//Please use view method instead view method from laravel
-			return view("pre_payment.pre_payment", $data);
+			return view("revolving_fund.revolving_fund", $data);
 		}
 
 		public function add_request(Request $request){
@@ -819,7 +821,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$cc_last_digits = $return_inputs['cc_credit_card'];
 			$need_by_date = $return_inputs['need_by_date'];
 			
-			$id = DB::table('pre_payment')->insertGetId( ['department_id' => $department, 
+			$id = DB::table('revolving_fund')->insertGetId( ['department_id' => $department, 
 				'status_id' => 1,
 				'need_by_date' => $need_by_date,
 				'sub_department_id' => $sub_department,
@@ -840,9 +842,9 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			]);
 
 			// Update reference number
-			DB::table('pre_payment')->where('id', $id)
+			DB::table('revolving_fund')->where('id', $id)
 			->update(
-				['reference_number' => 'CAF-'.str_pad($id,6,"0", STR_PAD_LEFT)]
+				['reference_number' => 'RVF-'.str_pad($id,6,"0", STR_PAD_LEFT)]
 			);
 
 			CRUDBooster::redirect(CRUDBooster::mainpath(), 'Your request has been added',"success");
@@ -869,9 +871,9 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 				$file = $budget_justification[$i];
 				$filename = uniqid() . '.' . $file->getClientOriginalExtension();
-				$file->move(public_path('pre_payment/img'), $filename);
+				$file->move(public_path('revolving_fund/img'), $filename);
 				$requested_project[] = [
-					'pre_payment_id' => $id,
+					'revolving_fund_id' => $id,
 					'project_name' => $project_name[$i],
 					'budget_category' => $budget_category[$i],
 					'budget_description' => $budget_description[$i],
@@ -885,7 +887,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			
 			// Insert budget information
 			foreach($requested_project as $projects){
-				DB::table('pre_payment_body')->insert(
+				DB::table('revolving_fund_body')->insert(
 					$projects
 				);
 			}
@@ -973,74 +975,76 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 		// Edit
 		public function getEdit($id) {
 			//Create an Auth	
+		
 			if(!CRUDBooster::isUpdate() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
 				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
 			}
 			
 			$data = [];
 			$data['page_title'] = 'Edit Data';
-			$data['row'] = DB::table('pre_payment')
-				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
-				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
-				->leftJoin('cms_users as accounting', 'pre_payment.accounting_id', 'accounting.id')
+			$data['row'] = DB::table('revolving_fund')
+				->leftJoin('cms_users', 'revolving_fund.created_by', 'cms_users.id')
+				->leftJoin('cms_users as approver', 'revolving_fund.approver_id', 'approver.id')
+				->leftJoin('cms_users as accounting', 'revolving_fund.accounting_id', 'accounting.id')
 				->select('cms_users.name as cms_users_name',
 					'approver.name as approver_name',
 					'accounting.name as accounting_name',
-					'pre_payment.status_id',
-					'pre_payment.need_by_date',
-					'pre_payment.id',
-					'pre_payment.department_id',
-					'pre_payment.sub_department_id',
-					'pre_payment.accounting_mode_of_release',
-					'pre_payment.full_name',
-					'pre_payment.additional_notes',
-					'pre_payment.requested_amount',
-					'pre_payment.created_at',
-					'pre_payment.approver_note',
-					'pre_payment.approver_date',
-					'pre_payment.reference_number',
-					'pre_payment.accounting_date_release',
-					'pre_payment.accounting_note',
-					'pre_payment.total_amount',
-					'pre_payment.reference_number',
-					'pre_payment.requested_amount',
-					'pre_payment.balance_amount',
-					'pre_payment.budget_information_notes',
-					'pre_payment.payee_name',
-					'pre_payment.bank_name',
-					'pre_payment.bank_branch_name',
-					'pre_payment.bank_account_name',
-					'pre_payment.bank_account_number',
-					'pre_payment.gcash_number',
-					'pre_payment.cc_payee_name',
-					'pre_payment.cc_last_card_number',
-					'pre_payment.check_date',
-					'pre_payment.system_reference_number',
-					'pre_payment.unused_amount',
-					'pre_payment.transmit_date',
-					'pre_payment.transmit_received_by')
-				->where('pre_payment.id',$id)
+					'revolving_fund.status_id',
+					'revolving_fund.need_by_date',
+					'revolving_fund.id',
+					'revolving_fund.department_id',
+					'revolving_fund.sub_department_id',
+					'revolving_fund.accounting_mode_of_release',
+					'revolving_fund.full_name',
+					'revolving_fund.additional_notes',
+					'revolving_fund.requested_amount',
+					'revolving_fund.created_at',
+					'revolving_fund.approver_note',
+					'revolving_fund.approver_date',
+					'revolving_fund.reference_number',
+					'revolving_fund.accounting_date_release',
+					'revolving_fund.accounting_note',
+					'revolving_fund.total_amount',
+					'revolving_fund.reference_number',
+					'revolving_fund.requested_amount',
+					'revolving_fund.balance_amount',
+					'revolving_fund.budget_information_notes',
+					'revolving_fund.payee_name',
+					'revolving_fund.bank_name',
+					'revolving_fund.bank_branch_name',
+					'revolving_fund.bank_account_name',
+					'revolving_fund.bank_account_number',
+					'revolving_fund.gcash_number',
+					'revolving_fund.cc_payee_name',
+					'revolving_fund.cc_last_card_number',
+					'revolving_fund.check_date',
+					'revolving_fund.system_reference_number',
+					'revolving_fund.unused_amount',
+					'revolving_fund.transmit_date',
+					'revolving_fund.transmit_received_by')
+				->where('revolving_fund.id',$id)
 				->first();
-			// PrePaymentBody
-			$data['pre_payment_body'] = DB::table('pre_payment_body')
-				->leftJoin('brand as brands' , 'pre_payment_body.brand', 'brands.id')
-				->leftJoin('stores as store', 'pre_payment_body.location', 'store.id')
-				->leftJoin('category as categories', 'pre_payment_body.category', 'categories.id')
-				->leftJoin('account as accounts', 'pre_payment_body.account', 'accounts.id')
-				->leftJoin('currency as currencies', 'pre_payment_body.currency', 'currencies.id')
-				->select('pre_payment_body.*', 
+		
+			// RevolvingFundBody
+			$data['revolving_fund_body'] = DB::table('revolving_fund_body')
+				->leftJoin('brand as brands' , 'revolving_fund_body.brand', 'brands.id')
+				->leftJoin('stores as store', 'revolving_fund_body.location', 'store.id')
+				->leftJoin('category as categories', 'revolving_fund_body.category', 'categories.id')
+				->leftJoin('account as accounts', 'revolving_fund_body.account', 'accounts.id')
+				->leftJoin('currency as currencies', 'revolving_fund_body.currency', 'currencies.id')
+				->select('revolving_fund_body.*', 
 					'brands.brand_name',
 					'store.store_name',
 					'categories.category_name',
 					'accounts.account_name',
 					'accounts.id as account_id',
 					'currencies.currency_name')
-				->where('pre_payment_id',$id)
+				->where('revolving_fund_id',$id)
 				// ->orderByDesc('id')
 				->get();
-			// PrePaymentBodyDate
-			$data['pre_payment_body_date'] = DB::table('pre_payment_body')
-				->where('pre_payment_id',$id)
+			// RevolvingFundBodyDate
+			$data['revolving_fund_body_date'] = DB::table('revolving_fund_body')
+				->where('revolving_fund_id',$id)
 				->first();
 			// Department
 			$data['department'] = DB::table('department')
@@ -1079,7 +1083,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				->get();
 
 			//Please use view method instead view method from laravel
-			return view("pre_payment.pre_payment_edit", $data);
+			return view("revolving_fund.revolving_fund_edit", $data);
 
 		}
 
@@ -1091,69 +1095,69 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			
 			$data = [];
 			$data['page_title'] = 'Detail Data';
-			$data['row'] = DB::table('pre_payment')
-				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
-				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
-				->leftJoin('cms_users as accounting', 'pre_payment.accounting_id', 'accounting.id')
-				->leftJoin('cms_users as accounting_closed', 'pre_payment.accounting_closed_by', 'accounting_closed.id')
+			$data['row'] = DB::table('revolving_fund')
+				->leftJoin('cms_users', 'revolving_fund.created_by', 'cms_users.id')
+				->leftJoin('cms_users as approver', 'revolving_fund.approver_id', 'approver.id')
+				->leftJoin('cms_users as accounting', 'revolving_fund.accounting_id', 'accounting.id')
+				->leftJoin('cms_users as accounting_closed', 'revolving_fund.accounting_closed_by', 'accounting_closed.id')
 				->select('cms_users.name as cms_users_name',
 					'approver.name as approver_name',
 					'accounting.name as accounting_name',
 					'accounting_closed.name as accounting_closed_by',
-					'pre_payment.status_id',
-					'pre_payment.need_by_date',
-					'pre_payment.id',
-					'pre_payment.department_id',
-					'pre_payment.sub_department_id',
-					'pre_payment.accounting_mode_of_release',
-					'pre_payment.full_name',
-					'pre_payment.additional_notes',
-					'pre_payment.requested_amount',
-					'pre_payment.created_at',
-					'pre_payment.approver_note',
-					'pre_payment.approver_date',
-					'pre_payment.reference_number',
-					'pre_payment.accounting_date_release',
-					'pre_payment.accounting_note',
-					'pre_payment.accounting_closed_date',
-					'pre_payment.accounting_closed_note',
-					'pre_payment.total_amount',
-					'pre_payment.reference_number',
-					'pre_payment.requested_amount',
-					'pre_payment.balance_amount',
-					'pre_payment.budget_information_notes',
-					'pre_payment.payee_name',
-					'pre_payment.bank_name',
-					'pre_payment.bank_branch_name',
-					'pre_payment.bank_account_name',
-					'pre_payment.bank_account_number',
-					'pre_payment.gcash_number',
-					'pre_payment.check_date',
-					'pre_payment.system_reference_number',
-					'pre_payment.unused_amount',
-					'pre_payment.transmit_date',
-					'pre_payment.transmit_received_by')
-				->where('pre_payment.id',$id)
+					'revolving_fund.status_id',
+					'revolving_fund.need_by_date',
+					'revolving_fund.id',
+					'revolving_fund.department_id',
+					'revolving_fund.sub_department_id',
+					'revolving_fund.accounting_mode_of_release',
+					'revolving_fund.full_name',
+					'revolving_fund.additional_notes',
+					'revolving_fund.requested_amount',
+					'revolving_fund.created_at',
+					'revolving_fund.approver_note',
+					'revolving_fund.approver_date',
+					'revolving_fund.reference_number',
+					'revolving_fund.accounting_date_release',
+					'revolving_fund.accounting_note',
+					'revolving_fund.accounting_closed_date',
+					'revolving_fund.accounting_closed_note',
+					'revolving_fund.total_amount',
+					'revolving_fund.reference_number',
+					'revolving_fund.requested_amount',
+					'revolving_fund.balance_amount',
+					'revolving_fund.budget_information_notes',
+					'revolving_fund.payee_name',
+					'revolving_fund.bank_name',
+					'revolving_fund.bank_branch_name',
+					'revolving_fund.bank_account_name',
+					'revolving_fund.bank_account_number',
+					'revolving_fund.gcash_number',
+					'revolving_fund.check_date',
+					'revolving_fund.system_reference_number',
+					'revolving_fund.unused_amount',
+					'revolving_fund.transmit_date',
+					'revolving_fund.transmit_received_by')
+				->where('revolving_fund.id',$id)
 				->first();
-			// PrePaymentBody
-			$data['pre_payment_body'] = DB::table('pre_payment_body')
-				->leftJoin('brand as brands' , 'pre_payment_body.brand', 'brands.id')
-				->leftJoin('stores as store', 'pre_payment_body.location', 'store.id')
-				->leftJoin('category as categories', 'pre_payment_body.category', 'categories.id')
-				->leftJoin('account as accounts', 'pre_payment_body.account', 'accounts.id')
-				->leftJoin('currency as currencies', 'pre_payment_body.currency', 'currencies.id')
-				->select('pre_payment_body.*', 
+			// Body
+			$data['revolving_fund_body'] = DB::table('revolving_fund_body')
+				->leftJoin('brand as brands' , 'revolving_fund_body.brand', 'brands.id')
+				->leftJoin('stores as store', 'revolving_fund_body.location', 'store.id')
+				->leftJoin('category as categories', 'revolving_fund_body.category', 'categories.id')
+				->leftJoin('account as accounts', 'revolving_fund_body.account', 'accounts.id')
+				->leftJoin('currency as currencies', 'revolving_fund_body.currency', 'currencies.id')
+				->select('revolving_fund_body.*', 
 					'brands.brand_name',
 					'store.store_name',
 					'categories.category_name',
 					'accounts.account_name',
 					'accounts.id as account_id',
 					'currencies.currency_name')
-				->where('pre_payment_id',$id)
+				->where('revolving_fund_id',$id)
 				->get();
-			// PrePaymentBodyDate
-			$data['pre_payment_body_date'] = DB::table('pre_payment_body')
-				->where('pre_payment_id',$id)
+			// RevolvingFundBodyDate
+			$data['revolving_fund_body_date'] = DB::table('revolving_fund_body')
+				->where('revolving_fund_id',$id)
 				->first();
 			// Department
 			$data['department'] = DB::table('department')
@@ -1188,7 +1192,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				->get();
 			
 			//Please use view method instead view method from laravel
-			return view("pre_payment.pre_payment_view", $data);
+			return view("revolving_fund.revolving_fund_view", $data);
 		}
 
 	}

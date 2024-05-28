@@ -6,11 +6,16 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AddApRecordingToPrePaymentTable' => $baseDir . '/database/migrations/2024_05_24_105436_add_ap_recording_to_pre_payment_table.php',
+    'AddApRecordingToRevolvingFundTable' => $baseDir . '/database/migrations/2024_05_27_085235_add_ap_recording_to_revolving_fund_table.php',
+    'AddColumnsNeedByDate' => $baseDir . '/database/migrations/2024_02_13_134555_add_columns_need_by_date.php',
     'AddDeletedAtCmsModuls' => $baseDir . '/database/migrations/2017_06_06_164501_add_deleted_at_cms_moduls.php',
     'AddDetailsCmsLogs' => $baseDir . '/database/migrations/2016_08_07_151211_add_details_cms_logs.php',
     'AddGroupSetting' => $baseDir . '/database/migrations/2016_09_16_035347_add_group_setting.php',
     'AddLabelSetting' => $baseDir . '/database/migrations/2016_09_16_045425_add_label_setting.php',
     'AddMethodTypeApicustom' => $baseDir . '/database/migrations/2016_10_01_141740_add_method_type_apicustom.php',
+    'AddModeOfPaymentInformationToPrePaymentTable' => $baseDir . '/database/migrations/2024_02_11_154501_add_mode_of_payment_information_to_pre_payment_table.php',
+    'AddModeOfPaymentInformationToPrfHeaderTable' => $baseDir . '/database/migrations/2024_02_13_130501_add_mode_of_payment_information_to_prf_header_table.php',
     'AddParametersApicustom' => $baseDir . '/database/migrations/2016_10_01_141846_add_parameters_apicustom.php',
     'AddResponsesApicustom' => $baseDir . '/database/migrations/2016_10_01_141934_add_responses_apicustom.php',
     'AddStatusCmsUsers' => $baseDir . '/database/migrations/2016_08_17_225409_add_status_cms_users.php',
@@ -64,6 +69,8 @@ return array(
     'App\\Http\\Controllers\\AdminRequestHeaderApprovalController' => $baseDir . '/app/Http/Controllers/AdminRequestHeaderApprovalController.php',
     'App\\Http\\Controllers\\AdminRequestHeaderTransactionController' => $baseDir . '/app/Http/Controllers/AdminRequestHeaderTransactionController.php',
     'App\\Http\\Controllers\\AdminRequestTransactionLogsController' => $baseDir . '/app/Http/Controllers/AdminRequestTransactionLogsController.php',
+    'App\\Http\\Controllers\\AdminRevolvingFundController' => $baseDir . '/app/Http/Controllers/AdminRevolvingFundController.php',
+    'App\\Http\\Controllers\\AdminRevolvingFundHistoryController' => $baseDir . '/app/Http/Controllers/AdminRevolvingFundHistoryController.php',
     'App\\Http\\Controllers\\AdminSegmentation50Controller' => $baseDir . '/app/Http/Controllers/AdminSegmentation50Controller.php',
     'App\\Http\\Controllers\\AdminStatusesController' => $baseDir . '/app/Http/Controllers/AdminStatusesController.php',
     'App\\Http\\Controllers\\AdminStoresController' => $baseDir . '/app/Http/Controllers/AdminStoresController.php',
