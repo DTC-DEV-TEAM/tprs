@@ -135,12 +135,12 @@
             </div>
 
             <div class="row">
-                <div class="row">
                     <label class="control-label col-md-2">Need by Date:</label>
                     <div class="col-md-2">
                         {{$Header->need_by_date}}
                     </div>
-                </div>                           
+            </div>
+            <div class="row">
                 <label class="control-label col-md-2">{{ trans('message.table.note') }}:</label>
                 <div class="col-md-4">
                     <p>{{ $Header->requestor_comments }}</p>
