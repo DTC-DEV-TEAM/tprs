@@ -219,10 +219,7 @@
               <label for="">Used Amount:</label>
               <input class="read_only" type="number" id="total_amount" value="{{ $row->total_amount }}" name="total_amount" readonly>
             </div>
-            <div class="total_amount_content receipts_total_amount">
-              <label for="">Unused Amount:</label>
-              <input class="read_only" type="number" id="unused_amount" value="{{ $row->unused_amount }}" name="unused_amount" readonly>
-            </div>
+          
             <div class="total_amount_content receipts_total_amount">
               <label for="">Remaining Balance:</label>
               <input class="read_only" type="number" id="remaining_balance" value="{{ $row->balance_amount }}" name="remaining_balance" readonly>

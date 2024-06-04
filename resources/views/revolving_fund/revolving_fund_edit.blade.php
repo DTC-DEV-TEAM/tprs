@@ -595,7 +595,7 @@
     let total = 0;
     let remaining_balance = 0;
 
-    $('.budget_amount:not(:eq(1))').each(function(){
+    $('.budget_amount').each(function(){
       total += parseFloat($(this).val() || 0);
     });
 
@@ -613,22 +613,37 @@
     
     if (to_be_returned == 0) {
       $('#remaining_balance').css('color', 'green');
-      $('#submit_approve').click(function(){
-        $(this).parents('form').submit(function() {
-          $('.brand').removeAttr('disabled');
-          $('.location').removeAttr('disabled');
-          $('.category').removeAttr('disabled');
-          $('.account').removeAttr('disabled');
-          $('.typewriter').show();
-        });
-      })
-      $('#submit_approve').attr('disabled', false);
-      $('#submit_approve').removeAttr('title');
     }else {
       $('#remaining_balance').css('color', '#d32f2f');
-      $('#submit_approve').attr('title', 'Please ensure that the remaining balance is zero before proceeding.');
-      $('#submit_approve').attr('disabled', true);
     }
+
+    $("#receipts_validation").on('submit', function(event){
+    event.preventDefault(); 
+    var count = $('.budget_content').length;
+    
+    if(count == 1){
+        Swal.fire({
+            title: "Warning",
+            text: "Please make sure you add at least 1 item.",
+            icon: "warning"
+        });
+    } else {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to submit the form',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'Cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#submit_approve').attr('disabled', true); 
+                $("#receipts_validation").off('submit').submit(); 
+            }
+        });
+    }
+});
 
   }
 
@@ -705,6 +720,7 @@
       if (result.isConfirmed) {
         $(this).parents('.budget_content').fadeOut(500, function() {
           $(this).remove();
+          get_all_sum()
         });
         Swal.fire(
           'Deleted!',

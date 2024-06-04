@@ -485,19 +485,16 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			// Upload Receipts Step 5
 			if($status == 3){
 				
-				$submit_btn = $return_inputs['submit'];
 				$total_amount = $return_inputs['total_amount'];
 				$balance_amount = $return_inputs['balance_amount'];
 				$budget_information_notes = $return_inputs['additional_notes'];
 				$unused_amount = $return_inputs['unused_amount'];
 
-				if($submit_btn == 'Liquidate'){
 					$postdata['status_id'] = 8;
 					$postdata['total_amount'] = $total_amount;
 					$postdata['balance_amount'] = abs($balance_amount);
 					$postdata['budget_information_notes'] = $budget_information_notes;
 					$postdata['unused_amount'] = $unused_amount;
-				}
 
 				$id = $return_inputs['returns_id'];
 				$description = $return_inputs['description'];
@@ -512,11 +509,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$budget_justification = [$return_inputs['budget_justification']];
 				$requested_project = [];
 				$insert_revolving_fund_body = [];
-	
-				if($return_inputs['budget_justification'] == null){
-					$return_inputs['budget_justification'] = null;
-				}
-
+				
 				$sort_return_inputs = ksort($return_inputs);
 				
 				$filteredArray = array_filter(
@@ -526,18 +519,18 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					},
 					ARRAY_FILTER_USE_KEY
 				);
-
 				
+			
 				for($i=0;$i<count($filteredArray);$i++){
-
+					
 					$array_file = array_values($filteredArray)[$i];
 					if($array_file == null){
 						$array_file = null;
 					}else{
 						// foreach($array_file as $key=>$value){
 						
-						// 	$filename = uniqid().'.'.$value->getClientOriginalExtension();
-						// 	$array_file[$key] = $filename;
+							// 	$filename = uniqid().'.'.$value->getClientOriginalExtension();
+							// 	$array_file[$key] = $filename;
 						// 	$value->move(public_path('revolving_fund/img'), $filename);
 
 						// 	 // Optimize the uploaded image
@@ -549,16 +542,16 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 							$array_file[$key] = $filename;
 							
 							$image = Image::make($value);
-						
+							
 							// Resize the image to a maximum width of 1024 pixels and a maximum height of 768 pixels
 							$image->resize(1024, 768, function ($constraint) {
 								$constraint->aspectRatio();
 								$constraint->upsize();
 							});
-						
+							
 							// Save the resized image to the public folder
 							$image->save(public_path('revolving_fund/img/' . $filename));
-						
+							
 							// Optimize the uploaded image
 							$optimizerChain = OptimizerChainFactory::create();
 							$optimizerChain->optimize(public_path('revolving_fund/img/' . $filename));
@@ -566,7 +559,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					}
 					array_push($requested_project, $array_file);
 				}
-
+				
 				for($i=0; $i<count($description); $i++){
 					
 					$insert_revolving_fund_body[] = [
