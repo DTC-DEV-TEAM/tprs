@@ -144,28 +144,45 @@
                   </div>
                 </div>
                 <div class="ap_recording_content">
-                    <div class="request_information start">
-                        <label for="">Approved Date:</label>
-                        <span>{{ $row->approver_date }}</span>
-                    </div>
-                    <div class="request_information">
-                        <label for="">Approved by:</label>
-                        <span>{{ $row->approver_name }}</span>
-                    </div>
-                    <div class="request_information">
-                        <label for="">Approver Note:</label>
-                        <span>
-                            {{ $row->approver_note }}
-                        </span>
-                    </div>
-                    <div class="request_information">
-                        <label for="">Cheque Date:</label>
-                        <span>
-                            {{ date('Y-m-d', strtotime($row->check_date)) }}
-                        </span>
-                    </div>
+                  <div class="request_information start">
+                      <label for="">Approved Date:</label>
+                      <span>{{ $row->approver_date }}</span>
+                  </div>
+                  <div class="request_information">
+                      <label for="">Approved by:</label>
+                      <span>{{ $row->approver_name }}</span>
+                  </div>
+                  <div class="request_information">
+                      <label for="">Approver Note:</label>
+                      <span>
+                          {{ $row->approver_note }}
+                      </span>
+                  </div>
+                
+                </div>
+                <div class="ap_recording_content">
+                  <div class="request_information start">
+                      <label for="">AP Approved Date:</label>
+                      <span>{{ $row->supervisor_approval_at }}</span>
+                  </div>
+                  <div class="request_information">
+                      <label for="">AP Approved by:</label>
+                      <span>{{ $row->supervisor_name }}</span>
+                  </div>
+                  <div class="request_information">
+                      <label for="">AP Note:</label>
+                      <span>
+                          {{ $row->ap_supervisor_note }}
+                      </span>
+                  </div>
+                  <div class="request_information">
+                      <label for="">Transmittal Date:</label>
+                      <span>
+                          {{ date('Y-m-d', strtotime($row->ap_transmittal_date)) }}
+                      </span>
                   </div>
                 </div>
+              </div>
                 <br>
                 <div>
                   <span style="font-size: 15px;"><span style="color: red; font-weight: bold;">Note: </span>Click Release button after the requestor received his/her Cash Advance.</span>

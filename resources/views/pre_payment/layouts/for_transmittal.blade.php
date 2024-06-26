@@ -10,9 +10,9 @@
         <input class="input_description" type="text"  name="description[]" oninput="this.value = this.value.toUpperCase()" required>
       </div>
       <div class="budget_description">
-        <label for="">Brand</label>
+        <label for="">Concept</label>
         <select class="js-example-basic-single brand" name="brand[]" required>
-          <option value="" selected disabled>Select Brand</option>
+          <option value="" selected disabled>Select Concept</option>
           @foreach ($brands as $brand)
             <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
           @endforeach
@@ -108,9 +108,9 @@
                     <input class="input_description" type="text"  value="{{ $budget->description }}" name="description[]" style="background-color: #eeeeee" oninput="this.value = this.value.toUpperCase()" readonly>
                   </div>
                   <div class="budget_description">
-                    <label for="">Brand</label>
+                    <label for="">Concept</label>
                     <select class="js-example-basic-single brand" name="brand[]" disabled>
-                      <option value="" selected disabled>Select Brand</option>
+                      <option value="" selected disabled>Select Concept</option>
                       @foreach ($brands as $brand)
                         @if ($budget->brand_name == $brand->brand_name)
                           <option value="{{ $brand->id }}" selected>{{ $brand->brand_name }}</option>
@@ -160,14 +160,6 @@
                         <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
                       @endforeach
                     </select>
-                  </div>
-                  <div class="budget_description">
-                    <label for="">Qty</label>
-                    <input type="number" name="qty[]" min="0" class="budget_qty" value="{{ $budget->qty }}" style="background-color: #eeeeee" readonly>
-                  </div>
-                  <div class="budget_description">
-                    <label for="">Value</label >
-                    <input type="number" name="value[]" min="0" class="budget_value" value="{{ $budget->value }}" style="background-color: #eeeeee" readonly>
                   </div>
                   <div class="budget_description">
                     <label for="">Total Value</label>

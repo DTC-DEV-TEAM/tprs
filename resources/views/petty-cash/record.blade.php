@@ -175,7 +175,7 @@
                                             <th width="8%" class="text-center">{{ trans('message.table.si_or_date') }}</th>
 
                                             <th width="20%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
-                                            <th width="15%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
+                                            <th width="15%" class="text-center">{{ trans('message.table.concept') }}</th>
 
                                             <th width="18%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
 
@@ -260,7 +260,18 @@
                         <p>{{ $Header->approver_comments }}</p>
                     </div>
                 </div>
-
+                <hr>
+                <div class="row">                           
+                    <label class="control-label col-md-2">Transacted By</label>
+                    <div class="col-md-4">
+                            <p>{{$Header->paidbylevel}}</p>
+                    </div>
+    
+                    <label class="control-label col-md-2">Transacted Date:</label>
+                    <div class="col-md-4">
+                            <p>{{$Header->paid_at}}</p>
+                    </div>
+                </div>
                 <hr/>
                 <div class="row">                           
                     <label class="control-label col-md-2">{{ trans('message.form-label.validated_by') }}:</label>
@@ -299,7 +310,7 @@
             <div class='panel-footer'>
                 <a href="{{ CRUDBooster::mainpath() }}" class="btn btn-default">{{ trans('message.form.cancel') }}</a>
                
-                <button class="btn btn-primary pull-right" type="submit" id="btnSubmit"> <i class="fa fa-save" ></i> {{ trans('message.form.new') }}</button>
+                <button class="btn btn-primary pull-right" type="submit" id="btnSubmit"> <i class="fa fa-save" ></i> Record</button>
             </div>
         </form>
 </div>

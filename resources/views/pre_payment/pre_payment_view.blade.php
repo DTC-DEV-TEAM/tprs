@@ -578,9 +578,9 @@
                               <input class="input_description" type="text"  value="{{ $budget->description }}" name="description[]" readonly>
                             </div>
                             <div class="budget_description">
-                              <label for="">Brand</label>
+                              <label for="">Concept</label>
                               <select class="js-example-basic-single brand" name="brand[]" disabled>
-                                <option value="" selected disabled>Select Brand</option>
+                                <option value="" selected disabled>Select Concept</option>
                                 @foreach ($brands as $brand)
                                   @if ($budget->brand_name == $brand->brand_name)
                                     <option value="{{ $brand->id }}" selected>{{ $brand->brand_name }}</option>
@@ -632,14 +632,6 @@
                               </select>
                             </div>
                             <div class="budget_description">
-                              <label for="">Qty</label >
-                              <input type="number" name="qty[]" min="0" class="budget_qty" value="{{ $budget->qty }}" disabled>
-                            </div>
-                            <div class="budget_description">
-                              <label for="">Value</label >
-                              <input type="number" name="value[]" min="0" class="budget_value" value="{{ $budget->value }}" disabled>
-                            </div>
-                            <div class="budget_description">
                               <label for="">Total Value</label >
                               <input type="number" name="amount[]" min="0" class="budget_amount" value="{{ $budget->amount }}" id="cash_in_bank_total_value" disabled>
                             </div>
@@ -674,12 +666,6 @@
                         <input style="border: none; background-color: #fff;" value="{{ $row->reference_number }}" readonly>
                       </div>
                       @if (CRUDBooster::myPrivilegeName() != 'Requestor')
-                        <div class="total_amount_content receipts_total_amount">
-                          <label for="">Cheque Date:</label>
-                          @if (!is_null($row->check_date))
-                            <input style="border: none; background-color: #fff;" value="{{ date('Y-m-d', strtotime($row->check_date)) }}" readonly>
-                          @endif
-                        </div>
                         <div class="total_amount_content receipts_total_amount">
                           <label for="">BEACH pre-payment#:</label>
                           <input style="border: none; background-color: #fff;" value="{{ $row->system_reference_number }}" readonly>
@@ -796,6 +782,28 @@
                   <div class="flex">
                     <div class="request_department">
                       <div class="request_information start">
+                        <label for="">AP Approved Date:</label>
+                        <span>{{ $row->supervisor_approval_at }}</span>
+                    </div>
+                    <div class="request_information">
+                        <label for="">AP Approved by:</label>
+                        <span>{{ $row->supervisor_name }}</span>
+                    </div>
+                    <div class="request_information">
+                        <label for="">AP Note:</label>
+                        <span>
+                            {{ $row->ap_supervisor_note }}
+                        </span>
+                    </div>
+                    <div class="request_information">
+                        <label for="">Transmittal Date:</label>
+                        <span>
+                            {{ date('Y-m-d', strtotime($row->ap_transmittal_date)) }}
+                        </span>
+                    </div>
+                    </div>
+                    <div class="request_department">
+                      <div class="request_information start">
                         <label for="">RCT. Breakdown Date:</label>
                         <span>{{ $pre_payment_body_date->created_at }}</span>
                       </div>
@@ -814,6 +822,8 @@
                         <span>{{ $row->transmit_received_by }}</span>
                       </div>
                     </div>
+                    
+                    
                     <div class="request_department">
                       <div class="request_information start">
                           <label for="">Date Closed:</label>
@@ -821,7 +831,7 @@
                       </div>
                       <div class="request_information">
                           <label for="">Closed By:</label>
-                          <span>{{ $row->accounting_closed_by }}</span>
+                          <span>{{ $row->accounting_closed_name }}</span>
                       </div>
                       <div class="request_information">
                           <label for="">Closed Note:</label>
@@ -830,6 +840,8 @@
                           </span>
                       </div>
                     </div>
+                  </div>
+                  <div class="flex">
                     <div class="request_department">
                       @if ($row->payee_name)
                         <div class="request_information start">
@@ -1056,7 +1068,7 @@ function get_all_sum(){
 
     function add_select2(row){
     row.find(".brand").select2({
-      placeholder: "Select Brand",
+      placeholder: "Select Concept",
       width: '150px',
     })
 

@@ -9,9 +9,9 @@
           <input class="input_description" type="text"  name="description[]" oninput="this.value = this.value.toUpperCase()" required>
         </div>
         <div class="budget_description">
-          <label for="">Brand</label>
+          <label for="">Concept</label>
           <select class="js-example-basic-single brand" name="brand[]" required>
-            <option value="" selected disabled>Select Brand</option>
+            <option value="" selected disabled>Select Concept</option>
             @foreach ($brands as $brand)
               <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
             @endforeach
@@ -55,16 +55,8 @@
           </select>
         </div>
         <div class="budget_description">
-          <label for="">Qty</label >
-          <input type="number" name="qty[]" min="0" class="budget_qty" required>
-        </div>
-        <div class="budget_description">
-          <label for="">Value</label >
-          <input type="number" name="value[]" min="0" class="budget_value" required>
-        </div>
-        <div class="budget_description">
           <label for="">Total Value</label >
-          <input type="number" name="amount[]" min="0" class="budget_amount" style="background-color: #eeeeee" readonly>
+          <input type="number" name="amount[]" min="0" class="budget_amount">
         </div>
         <div class="budget_description" id="step3_budget_justification">
           <label for="">Receipts</label>
@@ -139,9 +131,9 @@
                       <input class="input_description" type="text"  value="{{ $budget->description }}" name="description[]" oninput="this.value = this.value.toUpperCase()" required>
                     </div>
                     <div class="budget_description">
-                      <label for="">Brand</label>
+                      <label for="">Concept</label>
                       <select class="js-example-basic-single brand" name="brand[]">
-                        <option value="" selected disabled>Select Brand</option>
+                        <option value="" selected disabled>Select Concept</option>
                         @foreach ($brands as $brand)
                           @if ($budget->brand_name == $brand->brand_name)
                             <option value="{{ $brand->id }}" selected>{{ $brand->brand_name }}</option>
@@ -193,16 +185,8 @@
                       </select>
                     </div>
                     <div class="budget_description">
-                      <label for="">Qty</label >
-                      <input type="number" name="qty[]" min="0" class="budget_qty" value="{{ $budget->qty }}">
-                    </div>
-                    <div class="budget_description">
-                      <label for="">Value</label >
-                      <input type="number" name="value[]" min="0" class="budget_value" value="{{ $budget->value }}">
-                    </div>
-                    <div class="budget_description">
                       <label for="">Total Value</label >
-                      <input type="number" name="amount[]" min="0" class="budget_amount" id="cash_in_bank_total_value" value="{{ $budget->amount }}" style="background-color: #eeeeee" readonly>
+                      <input type="number" name="amount[]" min="0" class="budget_amount" id="cash_in_bank_total_value" value="{{ $budget->amount }}">
                     </div>
                     <div class="budget_description" id="budget_justification" style="width: 200px;">
                       <div style="width: 200px;">
@@ -250,6 +234,10 @@
               <div class="total_amount_content receipts_total_amount">
                 <label for="">AR reference#:</label>
                 <input type="text" name="ar_reference_number" placeholder="Input AR#" required>
+              </div>
+              <div class="total_amount_content receipts_total_amount">
+                <label for="">Received Transmittal Date:</label>
+                <input type="date" name="r_transmittal_date"  required>
               </div>
             </div>
             <div class="receipts_amount_contents">

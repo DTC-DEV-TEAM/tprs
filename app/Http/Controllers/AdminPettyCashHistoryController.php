@@ -395,16 +395,12 @@ use App\Currency;
 			$Approved =  RequestStatus::where('id', 2)->value('status_name');
 			$Validated =  RequestStatus::where('id', 3)->value('status_name');
 			$Printed =  RequestStatus::where('id', 5)->value('status_name');
-
 			$Paid =  RequestStatus::where('id', 4)->value('status_name');
-
 			$Rejected =  RequestStatus::where('id', 6)->value('status_name');
-
 			$Closed =  RequestStatus::where('id', 8)->value('status_name');
-
 			$Cancelled =  RequestStatus::where('id', 9)->value('status_name');
-
 			$Recorded =  RequestStatus::where('id', 7)->value('status_name');
+			$Released =  RequestStatus::where('id', 10)->value('status_name');
 
 			if($column_index == 2){
 				if($column_value == $Entered){
@@ -425,6 +421,8 @@ use App\Currency;
 					$column_value = '<span class="label label-danger">'.$Cancelled.'</span>';
 				}else if($column_value == $Recorded){
 					$column_value = '<span class="label label-primary">'.$Recorded.'</span>';
+				}else if($column_value == $Released){
+					$column_value = '<span class="label label-primary">'.$Released.'</span>';
 				}
 			}
 
@@ -679,6 +677,8 @@ use App\Currency;
 							  ->leftjoin('sub_department', 'petty_cash_header.sub_department_id', '=', 'sub_department.id')
 							  ->leftjoin('stores', 'petty_cash_header.location_id', '=', 'stores.id')
 							  ->leftjoin('cms_users as requestor', 'petty_cash_header.created_by','=', 'requestor.id')
+							  ->leftjoin('cms_users as paid_by', 'petty_cash_header.paid_by','=', 'paid_by.id')
+							  ->leftjoin('cms_users as recorded_by', 'petty_cash_header.recorded_by','=', 'recorded_by.id')
 							  ->leftjoin('statuses', 'petty_cash_header.status_id','=', 'statuses.id')
 							  ->leftjoin('cms_users as approver', 'petty_cash_header.approved_by','=', 'approver.id')
 							  ->leftjoin('invoice_type', 'petty_cash_header.invoice_type_id','=', 'invoice_type.id')
@@ -692,6 +692,8 @@ use App\Currency;
 								'sub_department.*',
 								'stores.*',
 								'requestor.name as requestorlevel',
+								'paid_by.name as paidbylevel',
+								'recorded_by.name as recordedbylevel',
 								'statuses.*',
 								'petty_cash_header.*',
 								'approver.name as approverlevel',
@@ -983,7 +985,11 @@ use App\Currency;
 								}
 							}
 						}
-						$reimbursedData->where('petty_cash_body.row_deleted', null)->where('petty_cash_header.deleted_at', null)->orderBy('petty_cash_header.id','ASC');
+						if(CRUDBooster::myPrivilegeId() == 4){
+						    $reimbursedData->where('petty_cash_body.row_deleted', null)->where('petty_cash_header.approved_by', CRUDBooster::myId())->where('petty_cash_header.deleted_at', null)->orderBy('petty_cash_header.id','ASC');
+						}else{
+	    					$reimbursedData->where('petty_cash_body.row_deleted', null)->where('petty_cash_header.deleted_at', null)->orderBy('petty_cash_header.id','ASC');
+						}
 						$result = $reimbursedData->get();
 	
 					foreach ($result as $orderRow) {

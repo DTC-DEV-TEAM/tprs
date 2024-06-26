@@ -97,7 +97,7 @@
 
 
                                         <th width="20%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
-                                        <th width="15%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
+                                        <th width="15%" class="text-center">{{ trans('message.table.concept') }}</th>
 
                                         <th width="14%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
 
@@ -192,7 +192,20 @@
                     </div>
                 </div>
             @endif
+            @if ($Header->paidbylevel != null)
+            <hr/>
+            <div class="row">                           
+                <label class="control-label col-md-2">Transacted By</label>
+                <div class="col-md-4">
+                        <p>{{$Header->paidbylevel}}</p>
+                </div>
 
+                <label class="control-label col-md-2">Transacted Date:</label>
+                <div class="col-md-4">
+                        <p>{{$Header->paid_at}}</p>
+                </div>
+            </div>
+            @endif
 
             @if($Header->validated_at != null)
                 <hr/>
@@ -207,6 +220,7 @@
                             <p>{{$Header->validated_at}}</p>
                     </div>
                 </div>
+        
 
               <!--  <div class="row">                           
                     <label class="control-label col-md-2">{{ trans('message.form-label.invoice_type_id') }}:</label>
@@ -228,29 +242,20 @@
                     
                 </div> -->
             @endif
-
-
-            @if($Header->paid_at != null)
-                <hr/>
-                <div class="row">                           
-                    <label class="control-label col-md-2">{{ trans('message.form-label.paid_by') }}:</label>
-                    <div class="col-md-4">
-                            <p>{{$Header->paidlevel}}</p>
-                    </div>
-
-                    <label class="control-label col-md-2">{{ trans('message.form-label.paid_at') }}:</label>
-                    <div class="col-md-4">
-                            <p>{{$Header->paid_at}}</p>
-                    </div>
+            @if ($Header->recordedbylevel != null)
+            <hr/>
+            <div class="row">                           
+                <label class="control-label col-md-2">Recorded By:</label>
+                <div class="col-md-4">
+                        <p>{{$Header->recordedbylevel}}</p>
                 </div>
 
-                <div class="row">                           
-                    <label class="control-label col-md-2">{{ trans('message.form-label.paid_date') }}:</label>
-                    <div class="col-md-4">
-                            <p>{{$Header->paid_date}}</p>
-                    </div>
+                <label class="control-label col-md-2">Recorded Date:</label>
+                <div class="col-md-4">
+                        <p>{{$Header->recorded_at}}</p>
                 </div>
-
+            </div>
+    
             @endif
 
         </div>

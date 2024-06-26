@@ -89,12 +89,12 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label require">*{{ trans('message.form-label.interco_id') }}</label>
+                                <label class="control-label require">*Company</label>
                                 
                                 <div class="input-group date">
                                     <div class="input-group-addon"><i class="fa fa-sticky-note"></i></div>
                                     <select class="form-control select2" required name="interco_id" id="interco_id">
-                                        <option value="">-- {{ trans('message.form-label.interco_id') }} --</option>
+                                        <option value="">-- Company --</option>
                                             @foreach($Interco as $data)
                                             
                                                 @if($Header->interco_id == $data->id)
@@ -170,9 +170,9 @@
                     @if($Header->paid_date != null)
                     <div class="row">
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label require">*{{ trans('message.form-label.paid_date') }}</label>
+                                <label class="control-label require">*Recorded Date</label>
                                 <div class="input-group date">
                                     <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                                     <input type='input' name='paid_date' id="datepicker1" onkeydown="return false" required  autocomplete="off"  class='form-control' placeholder="yyyy-mm-dd"  value="{{$Header->paid_date}}" />     
@@ -215,7 +215,7 @@
 
 
                                                 <th width="13%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
-                                                <th width="8%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
+                                                <th width="8%" class="text-center">{{ trans('message.table.concept') }}</th>
 
                                                 <th width="11%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
                                                 
@@ -310,7 +310,7 @@
 
                                                             <td>
                                                                 <select class="form-control" name="brand_id[]" id="brand_id" required>
-                                                                    <option value="">-Please Select Brand-</option>
+                                                                    <option value="">-Please Select Concept-</option>
                                                                         @foreach($Brands as $data)
                                                                             @if($rowresult->brand_id == $data->id)
                                                                                     <option selected value="{{$data->id}}">{{$data->brand_name}}</option>
@@ -472,13 +472,24 @@
                         </div>
                     </div>
                     <hr/>
-            
+      
+                <div class="row">                           
+                    <label class="control-label col-md-2">Transacted By</label>
+                    <div class="col-md-4">
+                            <p>{{$Header->paidbylevel}}</p>
+                    </div>
+
+                    <label class="control-label col-md-2">Transacted Date:</label>
+                    <div class="col-md-4">
+                            <p>{{$Header->paid_at}}</p>
+                    </div>
+                </div>
 
             </div>
 
             <div class='panel-footer'>
                 <a href="{{ CRUDBooster::mainpath() }}" class="btn btn-default">{{ trans('message.form.cancel') }}</a>
-                <button class="btn btn-primary pull-right" type="submit" id="btnSubmit"> <i class="fa fa-save" ></i> {{ trans('message.form.save') }}</button>
+                <button class="btn btn-primary pull-right" type="submit" id="btnSubmit"> <i class="fa fa-save" ></i> Validate</button>
             </div>
         </form>
 </div>
@@ -591,7 +602,7 @@ $('#requestor_name').keyup(function() {
 
         '<td>'+
             '<select class="form-control" name="brand_id_add[]" id="brand_id_add" required>' +
-            '  <option value="">-Please Select Brand-</option>' +
+            '  <option value="">-Please Select Concept-</option>' +
             '        @foreach($Brands as $data)'+
             '        <option value="{{$data->id}}">{{$data->brand_name}}</option>'+
             '         @endforeach'+

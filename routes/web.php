@@ -210,6 +210,8 @@ Route::group(['middleware' => ['web']], function() {
     Route::post('/admin/pre_payment/account', 'AdminPrePaymentController@account')->name('prepayment_account');
     Route::get('/admin/pre_payment/request', 'AdminPrePaymentController@getEdit');
     Route::get('/admin/pre_payment/view', 'AdminPrePaymentController@getDetail');
+    Route::get('/admin/pre_payment/getRequestPrint/{id}','AdminPrePaymentController@getRequestPrint')->name('print-pre-payment-request');
+    Route::get('/admin/pre_payment/PrePaymentUpdateStatus','AdminPrePaymentController@PrePaymentUpdateStatus');
     
     // Revolving Fund
     Route::get('/admin/revolving_fund/request', 'AdminRevolvingFundController@getAdd');

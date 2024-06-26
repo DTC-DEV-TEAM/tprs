@@ -132,7 +132,7 @@
 
                                     <tr class="tbl_header_color dynamicRows" style="font-size: 15px;">
                                         <th width="15%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
-                                        <th width="10%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
+                                        <th width="10%" class="text-center">{{ trans('message.table.concept') }}</th>
 
                                         <th width="12%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
 

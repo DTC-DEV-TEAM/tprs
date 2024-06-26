@@ -115,6 +115,7 @@ return [
 
         'account_id_text'  =>  'Account',
         'brand_id_text'  =>  'Brand',
+        'concept'  =>  'Concept',
         'currency_id_text'  =>  'Currency',
 
         'invoice_type_id'  =>  'Invoice Type',

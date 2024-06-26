@@ -9,6 +9,7 @@ return array(
     'AddApRecordingToPrePaymentTable' => $baseDir . '/database/migrations/2024_05_24_105436_add_ap_recording_to_pre_payment_table.php',
     'AddApRecordingToRevolvingFundTable' => $baseDir . '/database/migrations/2024_05_27_085235_add_ap_recording_to_revolving_fund_table.php',
     'AddColumnsNeedByDate' => $baseDir . '/database/migrations/2024_02_13_134555_add_columns_need_by_date.php',
+    'AddColumnsToPrepaymentTable' => $baseDir . '/database/migrations/2024_06_13_100456_add_columns_to_prepayment_table.php',
     'AddDeletedAtCmsModuls' => $baseDir . '/database/migrations/2017_06_06_164501_add_deleted_at_cms_moduls.php',
     'AddDetailsCmsLogs' => $baseDir . '/database/migrations/2016_08_07_151211_add_details_cms_logs.php',
     'AddGroupSetting' => $baseDir . '/database/migrations/2016_09_16_035347_add_group_setting.php',

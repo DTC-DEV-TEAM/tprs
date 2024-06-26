@@ -125,7 +125,7 @@
                         
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label require">*Need By Date</label>
+                                <label class="control-label require">Need By Date<span class="required">*</span></label>
                                 <input type="date" class="form-control" id="need_by_date" name="need_by_date" required>                                   
                             </div> 
                         </div>
@@ -151,7 +151,7 @@
 
                                             <tr class="tbl_header_color dynamicRows" style="font-size: 15px;">
                                                 <th width="15%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
-                                                <th width="10%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
+                                                <th width="10%" class="text-center">{{ trans('message.table.concept') }}</th>
 
                                                 <th width="12%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
 
@@ -330,7 +330,7 @@ $('#requestor_name').keyup(function() {
         '</td>' +                
         '<td>'+
         '<select class="form-control" name="brand_id[]" id="brand_id" required>' +
-        '  <option value="">- Select Brand -</option>' +
+        '  <option value="">- Select Concept -</option>' +
         '        @foreach($Brands as $data)'+
         '        <option value="{{$data->id}}">{{$data->brand_name}}</option>'+
         '         @endforeach'+
@@ -434,7 +434,7 @@ $('#requestor_name').keyup(function() {
 $(document).on('keyup', '.quantity', function(ev) {
 
 var id = $(this).attr("data-id");
-var rate = parseFloat($(this).val());
+var rate = parseFloat($(this).val()) || 0;
 var qty = $("#value" + id).val();
 
 
@@ -479,7 +479,7 @@ if(price_checker > 1000){
 }
 */
 var id = $(this).attr("data-id");
-var rate = parseFloat($(this).val());
+var rate = parseFloat($(this).val()) || 0;
 var qty = $("#quantity" + id).val();
 var price = calculatePrice(qty, rate).toFixed(2); // this is for total Value in row
 

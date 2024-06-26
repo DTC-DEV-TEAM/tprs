@@ -559,6 +559,12 @@
     @endif
     {{-- End of Approver Privilege --}}
 
+    {{-- AP Supervisor Privilege --}}
+    @if ($row->status_id == 10) 
+      @include('pre_payment.layouts.for_ap_approval')
+    @endif
+    {{-- End of Approver Privilege --}}
+
     {{-- Accounting Approval --}}
     {{-- Accounting Budget Releasing --}}
     @if ($row->status_id == 2)
@@ -632,26 +638,8 @@
 
   }
 
-  function get_sum(row){
-
-    const qty = row.find('.budget_qty').val();
-    const value = row.find('.budget_value').val();
-    const total = qty * value;
-    row.find('.budget_amount').val(total);
-
+  $(document).on('keyup', '.budget_amount', function() {
     get_all_sum();
-  }
-
-  $(document).on('keyup', '.budget_qty', function() {
-
-    let b_description = $(this).parents('.budget');
-    get_sum(b_description);
-  });
-
-  $(document).on('keyup', '.budget_value', function() {
-
-    let b_description = $(this).parents('.budget');
-    get_sum(b_description);
   });
 
   get_all_sum();
@@ -929,7 +917,7 @@
   
   function add_select2(row){
     row.find(".brand").select2({
-      placeholder: "Select Brand",
+      placeholder: "Select Concept",
       width: '128',
     })
 

@@ -350,6 +350,10 @@ use App\Store;
 					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For AP Recording</span>';
 				}else if($column_value == '8'){
 					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">Receipts Submitted</span>';
+				}else if($column_value == '9'){
+					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For Printing</span>';
+				}else if($column_value == '10'){
+					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For AP Supervisor Approval</span>';
 				}
 				
 			}
@@ -444,44 +448,14 @@ use App\Store;
 				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
 				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
 				->leftJoin('cms_users as accounting', 'pre_payment.accounting_id', 'accounting.id')
+				->leftJoin('cms_users as supervisor', 'pre_payment.ap_supervisor_id', 'supervisor.id')
 				->leftJoin('cms_users as accounting_closed', 'pre_payment.accounting_closed_by', 'accounting_closed.id')
 				->select('cms_users.name as cms_users_name',
 					'approver.name as approver_name',
 					'accounting.name as accounting_name',
-					'accounting_closed.name as accounting_closed_by',
-					'pre_payment.status_id',
-					'pre_payment.id',
-					'pre_payment.department_id',
-					'pre_payment.sub_department_id',
-					'pre_payment.accounting_mode_of_release',
-					'pre_payment.full_name',
-					'pre_payment.additional_notes',
-					'pre_payment.requested_amount',
-					'pre_payment.created_at',
-					'pre_payment.approver_note',
-					'pre_payment.approver_date',
-					'pre_payment.reference_number',
-					'pre_payment.accounting_date_release',
-					'pre_payment.accounting_note',
-					'pre_payment.accounting_closed_date',
-					'pre_payment.accounting_closed_note',
-					'pre_payment.total_amount',
-					'pre_payment.reference_number',
-					'pre_payment.requested_amount',
-					'pre_payment.balance_amount',
-					'pre_payment.budget_information_notes',
-					'pre_payment.payee_name',
-					'pre_payment.bank_name',
-					'pre_payment.bank_branch_name',
-					'pre_payment.bank_account_name',
-					'pre_payment.bank_account_number',
-					'pre_payment.gcash_number',
-					'pre_payment.check_date',
-					'pre_payment.system_reference_number',
-					'pre_payment.unused_amount',
-					'pre_payment.transmit_date',
-					'pre_payment.transmit_received_by',
-					'pre_payment.ar_reference_number')
+					'supervisor.name as supervisor_name',
+					'accounting_closed.name as accounting_closed_name',
+					'pre_payment.*')
 				->where('pre_payment.id',$id)
 				->first();
 			// PrePaymentBody

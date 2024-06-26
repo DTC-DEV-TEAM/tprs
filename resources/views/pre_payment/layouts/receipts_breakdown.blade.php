@@ -256,9 +256,9 @@
         <input class="input_description" type="text"  name="description[]" oninput="this.value = this.value.toUpperCase()" required>
       </div>
       <div class="budget_description">
-        <label for="">Brand</label>
+        <label for="">Concept</label>
         <select class="js-example-basic-single brand" name="brand[]" required>
-          <option value="" selected disabled>Select Brand</option>
+          <option value="" selected disabled>Select Concept</option>
           @foreach ($brands as $brand)
             <option value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
           @endforeach
@@ -302,16 +302,8 @@
         </select>
       </div>
       <div class="budget_description">
-        <label for="">Qty</label >
-        <input type="number" name="qty[]" min="0" class="budget_qty" required>
-      </div>
-      <div class="budget_description">
-        <label for="">Value</label >
-        <input type="number" name="value[]" min="0" step="0.01" class="budget_value" required>
-      </div>
-      <div class="budget_description">
         <label for="">Total Value</label >
-        <input type="number" name="amount[]" min="0" step="0.01" class="budget_amount" style="background-color: #eeeeee" readonly>
+        <input type="number" name="amount[]" min="0" step="0.01" class="budget_amount">
       </div>
       <div class="budget_description" id="step3_budget_justification">
         <label for="">Receipts</label>
@@ -419,6 +411,7 @@
                     <span>{{ $row->accounting_note }}</span>
                 </div>
             </div>
+            
           </div>
           <hr>
           <div class="budget_info">
@@ -432,9 +425,9 @@
                   <input class="input_description" type="text" value="UNUSED AMOUNT" name="description[]" style="background-color: #eeeeee;" readonly>
                 </div>
                 <div class="budget_description">
-                  <label for="">Brand</label>
+                  <label for="">Concept</label>
                   <select class="js-example-basic-single brand" id="brand" name="brand[]" disabled>
-                    <option value="" selected disabled>Select Brand</option>
+                    <option value="" selected disabled>Select Concept</option>
                     @foreach ($brands as $brand)
                       <option {{ ($brand->id == 31) ? "selected": "" }} value="{{ $brand->id }}">{{ $brand->brand_name }}</option>
                     @endforeach
@@ -477,17 +470,10 @@
                     @endforeach
                   </select>
                 </div>
-                <div class="budget_description">
-                  <label for="">Qty</label >
-                  <input type="number" name="qty[]" min="0" value="1" class="budget_qty" required>
-                </div>
-                <div class="budget_description">
-                  <label for="">Value</label >
-                  <input type="number" name="value[]" min="0" step="0.01" value="0" class="budget_value" required>
-                </div>
+            
                 <div class="budget_description">
                   <label for="">Total Value</label >
-                  <input type="number" name="amount[]" min="0" step="0.01" class="budget_amount" value="0" id="cash_in_bank_total_value" style="background-color: #eeeeee" readonly>
+                  <input type="number" name="amount[]" min="0" step="0.01" class="budget_amount" value="0" id="cash_in_bank_total_value">
                 </div>
                 <div class="budget_description" id="step3_budget_justification">
                   <label for="">Receipts</label>
@@ -510,10 +496,10 @@
                 <label for="">Reference Number:</label>
                 <input style="border: none;" value="{{ $row->reference_number }}" readonly>
               </div>
-              <div class="total_amount_content receipts_total_amount">
+             {{-- <div class="total_amount_content receipts_total_amount">
                 <label for="">Cheque Date:</label>
                 <input style="border: none;" value="{{ date('Y-m-d', strtotime($row->check_date)) }}" readonly>
-              </div>
+              </div>  --}}
               <div class="total_amount_content receipts_total_amount">
                 <label for="">BEACH pre-payment#:</label>
                 <input style="border: none;" value="{{ $row->system_reference_number }}" readonly>

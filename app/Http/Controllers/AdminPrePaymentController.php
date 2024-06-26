@@ -1,4 +1,5 @@
 <?php namespace App\Http\Controllers;
+namespace App\Http\Controllers;
 
 use App\Account;
 use App\Brand;
@@ -7,6 +8,7 @@ use App\Currency;
 use App\Department;
 use App\ModeOfPayment;
 use App\PrePayment;
+use App\PrePaymentBody;
 use App\PrePaymentProcess;
 use App\Store;
 use App\SubDepartment;
@@ -124,6 +126,8 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$rejected = 6; 
 			$ap_record = 7; 
 			$for_transmittal = 8; 
+			$for_printing = 9;
+			$for_ap_approval = 10;
 			$ap_id = CRUDBooster::myId();
 			if(CRUDBooster::myPrivilegeName() == 'Requestor'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $budget_released"];
@@ -136,6 +140,9 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $ap_record"];
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $validate_receipts"];
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $for_transmittal"];
+				$this->addaction[] = ['title'=>'Print','url'=>CRUDBooster::mainpath('getRequestPrint/[id]'),'icon'=>'fa fa-print', "showIf"=>"[status_id] == $for_printing"];
+			}else if(CRUDBooster::myPrivilegeName() == 'AP Supervisor'){
+				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $for_ap_approval"];
 			}else if(CRUDBooster::myPrivilegeName() == 'Treasury' || CRUDBooster::myPrivilegeName() == 'Cashier'){
 				$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $approved"];
 			}else{
@@ -220,7 +227,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 	        | $this->script_js = "function() { ... }";
 	        |
 	        */
-	        $this->script_js = "NULL";
+	        $this->script_js = "";
 
 
             /*
@@ -316,6 +323,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$rejected = PrePaymentProcess::select('id')->where('id', '6')->value('id');
 			$for_recording = PrePaymentProcess::select('id')->where('id', '7')->value('id');
 			$for_transmittal = PrePaymentProcess::select('id')->where('id', '8')->value('id');
+			$for_ap_approval = PrePaymentProcess::select('id')->where('id', '10')->value('id');
 			$approver_id = DB::table('cms_users')->where('id', CRUDBooster::myId())->first();
 			$approver_sub_department = explode(',',$approver_id->approver_department_id);
 			
@@ -329,6 +337,8 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				// $query->orWhere('status_id', $requested);
 			}else if (CRUDBooster::myPrivilegeName() == 'AP Checker'){
 				$query->orderByDesc('pre_payment.reference_number')->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
+			}else if (CRUDBooster::myPrivilegeName() == 'AP Supervisor'){
+				$query->orderByDesc('pre_payment.reference_number')->where('status_id', '!=', $close)->where('status_id', '!=', $rejected)->where('status_id', $for_ap_approval);
 			}else{
 				$query->orderByDesc('pre_payment.reference_number')->where('status_id', '!=', $close)->where('status_id', '!=', $rejected);
 			}
@@ -363,7 +373,12 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For AP Recording</span>';
 				}else if($column_value == '8'){
 					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">Receipts Submitted</span>';
+				}else if($column_value == '9'){
+					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For Printing</span>';
+				}else if($column_value == '10'){
+					$column_value = '<span class="label" style="background-color: #214E34; color: white; font-size: 12px;">For AP Supervisor Approval</span>';
 				}
+				
 				
 			}
 	    }
@@ -442,7 +457,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$accounting_mode_of_release = $return_inputs['mode_of_payment'];
 
 				if($submit_btn == 'Save'){
-					$postdata['status_id'] = 2;
+					$postdata['status_id'] = 9;
 					$postdata['accounting_mode_of_release'] = $accounting_mode_of_release;
 					$postdata['payee_name'] = $return_inputs['payee_name'];
 					$postdata['bank_name'] = $return_inputs['bank_name'];
@@ -460,7 +475,27 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$postdata['ap_checker_id'] = CRUDBooster::myId();
 				$postdata['ap_checker_date'] = date('Y-m-d H:i:s');
 			}
+			
+			// AP Supervisor Step 5
+			if($status == 10){
 
+				$submit_btn = $return_inputs['submit'];
+				$ap_supervisor_note = $return_inputs['additional_notes'];
+				$accounting_mode_of_release = $return_inputs['mode_of_payment'];
+
+				if($submit_btn == 'Approve'){
+					$postdata['status_id'] = 2;
+					$postdata['ap_transmittal_date'] = $return_inputs['ap_transmittal_date'];
+				}else{
+					$postdata['status_id'] = 6;
+				}
+
+				$postdata['ap_supervisor_note'] = $ap_supervisor_note;
+				$postdata['ap_supervisor_id'] = CRUDBooster::myId();
+				$postdata['supervisor_approval_at'] = date('Y-m-d H:i:s');
+			
+			}
+			
 			// Releasing Step 4
 			if($status == 2){
 
@@ -576,8 +611,6 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 						'category' => $category[$i],
 						'account' => $account[$i],
 						'currency' => $currency[$i],
-						'qty' => $qty[$i],
-						'value' => $receipt_value[$i],
 						'amount' => $amount[$i],
 						'budget_justification' => $requested_project[$i] ? implode(", ",$requested_project[$i]) : null,
 						'created_by' => CRUDBooster::myId(),
@@ -673,6 +706,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$balance_amount = $return_inputs['remaining_balance'];
 				$accounting_closed_note = $return_inputs['additional_notes'];
 				$ar_reference_number = $return_inputs['ar_reference_number'];
+				$r_transmittal_date = $return_inputs['r_transmittal_date'];
 
 				if($submit_btn == 'Close'){
 					$postdata['status_id'] = 5;
@@ -680,6 +714,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					$postdata['balance_amount'] = abs($balance_amount);
 					$postdata['accounting_closed_note'] = $accounting_closed_note;	
 					$postdata['ar_reference_number'] = $ar_reference_number;
+					$postdata['r_transmittal_date'] = $r_transmittal_date;
 					$postdata['accounting_closed_by'] = CRUDBooster::myId();
 					$postdata['accounting_closed_date'] = date('Y-m-d H:i:s');
 				}
@@ -691,8 +726,6 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				$category = $return_inputs['category'];
 				$account = $return_inputs['account'];
 				$currency = $return_inputs['currency'];
-				$qty = $return_inputs['qty'];
-				$receipt_value = $return_inputs['value'];
 				$amount = $return_inputs['amount'];
 				$budget_justification = [$return_inputs['budget_justification']];
 				$pre_payment_id = $return_inputs['project_id'];
@@ -742,7 +775,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$status_id = $return_inputs['status_id'];
 			$submit = $return_inputs['submit'];
 			
-			if(($status_id == '1') && ($submit != 'Reject')){
+			if((($status_id == '1') && ($submit != 'Reject')) || (($status_id == '10') && ($submit != 'Reject'))){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'The request has been approved.',"success");
 			}else if(($status_id == '2') && ($submit != 'Reject')){
 				CRUDBooster::redirect(CRUDBooster::mainpath(), 'Cash Advance has been released.',"success");
@@ -849,6 +882,55 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 		}
 
+
+		public function getRequestPrint($id){
+			$this->cbLoader();
+            if(!CRUDBooster::isRead() && $this->global_privilege==FALSE) {    
+                CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+            }   
+
+			$data = array();
+
+
+			$data['page_title'] = 'Print Cash Advance';
+			$data['Header'] = Prepayment::
+							  leftjoin('department', 'pre_payment.department_id', '=', 'department.id')
+							  ->leftjoin('sub_department', 'pre_payment.sub_department_id', '=', 'sub_department.id')
+							  ->leftjoin('cms_users as requestor', 'pre_payment.created_by','=', 'requestor.id')
+							  ->leftjoin('statuses', 'pre_payment.status_id','=', 'statuses.id')
+							  ->leftjoin('cms_users as approver', 'pre_payment.approver_id','=', 'approver.id')
+							  ->leftjoin('mode_of_payment', 'pre_payment.accounting_mode_of_release', '=', 'mode_of_payment.id')
+							  ->select(
+								'department.*',
+								'sub_department.*',
+								'requestor.name as requestorlevel',
+								'statuses.*',
+								'pre_payment.*',
+								'approver.name as approverlevel',
+								'pre_payment.created_at as requested_date',
+								'pre_payment.id as requested_id',
+								'mode_of_payment.mode_of_payment_name'
+							  )
+							  ->where('pre_payment.id', $id)->first();
+			return view("pre_payment.print", $data);
+
+		}
+
+		public function PrePaymentUpdateStatus(){
+			$data = Input::all();	
+			$request_id = $data['id']; 
+			$forApApproval = 10;
+		
+			Prepayment::where('id',$request_id)
+			->update([
+				'status_id'=> $forApApproval,
+				'printed_by'=> CRUDBooster::myId(),
+				'printed_at'=> date('Y-m-d H:i:s')
+			]);
+		
+		}
+
+
 		public function verify_receipt(Request $request){
 
 			//Your code here
@@ -934,6 +1016,7 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 					$query->where('mode_of_payment_name', 'LIKE', '%'. $request->input('q'). '%')
 						->orWhere('id', 'LIKE', '%'. $request->input('q'). '%');
 				})
+				->whereIn('id',[2,3,5])
 				->orderBy('mode_of_payment_name')
 				->get();
 						
@@ -982,43 +1065,13 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 			$data['row'] = DB::table('pre_payment')
 				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
 				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
+				->leftJoin('cms_users as supervisor', 'pre_payment.ap_supervisor_id', 'supervisor.id')
 				->leftJoin('cms_users as accounting', 'pre_payment.accounting_id', 'accounting.id')
 				->select('cms_users.name as cms_users_name',
 					'approver.name as approver_name',
 					'accounting.name as accounting_name',
-					'pre_payment.status_id',
-					'pre_payment.need_by_date',
-					'pre_payment.id',
-					'pre_payment.department_id',
-					'pre_payment.sub_department_id',
-					'pre_payment.accounting_mode_of_release',
-					'pre_payment.full_name',
-					'pre_payment.additional_notes',
-					'pre_payment.requested_amount',
-					'pre_payment.created_at',
-					'pre_payment.approver_note',
-					'pre_payment.approver_date',
-					'pre_payment.reference_number',
-					'pre_payment.accounting_date_release',
-					'pre_payment.accounting_note',
-					'pre_payment.total_amount',
-					'pre_payment.reference_number',
-					'pre_payment.requested_amount',
-					'pre_payment.balance_amount',
-					'pre_payment.budget_information_notes',
-					'pre_payment.payee_name',
-					'pre_payment.bank_name',
-					'pre_payment.bank_branch_name',
-					'pre_payment.bank_account_name',
-					'pre_payment.bank_account_number',
-					'pre_payment.gcash_number',
-					'pre_payment.cc_payee_name',
-					'pre_payment.cc_last_card_number',
-					'pre_payment.check_date',
-					'pre_payment.system_reference_number',
-					'pre_payment.unused_amount',
-					'pre_payment.transmit_date',
-					'pre_payment.transmit_received_by')
+					'supervisor.name as supervisor_name',
+					'pre_payment.*')
 				->where('pre_payment.id',$id)
 				->first();
 			// PrePaymentBody
@@ -1095,46 +1148,18 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 				->leftJoin('cms_users', 'pre_payment.created_by', 'cms_users.id')
 				->leftJoin('cms_users as approver', 'pre_payment.approver_id', 'approver.id')
 				->leftJoin('cms_users as accounting', 'pre_payment.accounting_id', 'accounting.id')
+				->leftJoin('cms_users as supervisor', 'pre_payment.ap_supervisor_id', 'supervisor.id')
 				->leftJoin('cms_users as accounting_closed', 'pre_payment.accounting_closed_by', 'accounting_closed.id')
 				->select('cms_users.name as cms_users_name',
 					'approver.name as approver_name',
+					'supervisor.name as supervisor_name',
 					'accounting.name as accounting_name',
-					'accounting_closed.name as accounting_closed_by',
-					'pre_payment.status_id',
-					'pre_payment.need_by_date',
-					'pre_payment.id',
-					'pre_payment.department_id',
-					'pre_payment.sub_department_id',
-					'pre_payment.accounting_mode_of_release',
-					'pre_payment.full_name',
-					'pre_payment.additional_notes',
-					'pre_payment.requested_amount',
-					'pre_payment.created_at',
-					'pre_payment.approver_note',
-					'pre_payment.approver_date',
-					'pre_payment.reference_number',
-					'pre_payment.accounting_date_release',
-					'pre_payment.accounting_note',
-					'pre_payment.accounting_closed_date',
-					'pre_payment.accounting_closed_note',
-					'pre_payment.total_amount',
-					'pre_payment.reference_number',
-					'pre_payment.requested_amount',
-					'pre_payment.balance_amount',
-					'pre_payment.budget_information_notes',
-					'pre_payment.payee_name',
-					'pre_payment.bank_name',
-					'pre_payment.bank_branch_name',
-					'pre_payment.bank_account_name',
-					'pre_payment.bank_account_number',
-					'pre_payment.gcash_number',
-					'pre_payment.check_date',
-					'pre_payment.system_reference_number',
-					'pre_payment.unused_amount',
-					'pre_payment.transmit_date',
-					'pre_payment.transmit_received_by')
+					'accounting_closed.name as accounting_closed_name',
+					'pre_payment.*')
 				->where('pre_payment.id',$id)
 				->first();
+
+				dd(	$data['row']);
 			// PrePaymentBody
 			$data['pre_payment_body'] = DB::table('pre_payment_body')
 				->leftJoin('brand as brands' , 'pre_payment_body.brand', 'brands.id')

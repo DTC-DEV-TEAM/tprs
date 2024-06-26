@@ -20,7 +20,7 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="control-label require">*{{ trans('message.form-label.paid_date') }}</label>
+                            <label class="control-label require">*Recorded Date</label>
                             <div class="input-group date">
                                 <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                                 <input type='input' name='paid_date' id="datepicker" onkeydown="return false" required  autocomplete="off"  class='form-control' placeholder="yyyy-mm-dd" />     
@@ -108,7 +108,7 @@
                                             <th width="8%" class="text-center">{{ trans('message.table.si_or_date') }}</th>
 
                                             <th width="20%" class="text-center">{{ trans('message.table.particulars_text') }}</th>
-                                            <th width="15%" class="text-center">{{ trans('message.table.brand_id_text') }}</th>
+                                            <th width="15%" class="text-center">{{ trans('message.table.concept') }}</th>
 
                                             <th width="15%" class="text-center">{{ trans('message.table.location_id_text') }}</th>
 
@@ -192,21 +192,8 @@
                         <p>{{ $Header->approver_comments }}</p>
                     </div>
                 </div>
-
-                <hr/>
-                <div class="row">                           
-                    <label class="control-label col-md-2">{{ trans('message.form-label.validated_by') }}:</label>
-                    <div class="col-md-4">
-                            <p>{{$Header->validatorlevel}}</p>
-                    </div>
-
-                    <label class="control-label col-md-2">{{ trans('message.form-label.validated_at') }}:</label>
-                    <div class="col-md-4">
-                            <p>{{$Header->validated_at}}</p>
-                    </div>
-                </div>
-
-                <hr/>
+                
+                {{-- <hr/>
                 <div class="row">                           
                     <label class="control-label col-md-2">{{ trans('message.form-label.recorded_by') }}:</label>
                     <div class="col-md-4">
@@ -254,6 +241,20 @@
                             <p>{{$Header->vat_amount}}</p>
                     </div>
                 </div>
+
+                <hr/>
+                <div class="row">                           
+                    <label class="control-label col-md-2">{{ trans('message.form-label.validated_by') }}:</label>
+                    <div class="col-md-4">
+                            <p>{{$Header->validatorlevel}}</p>
+                    </div>
+
+                    <label class="control-label col-md-2">{{ trans('message.form-label.validated_at') }}:</label>
+                    <div class="col-md-4">
+                            <p>{{$Header->validated_at}}</p>
+                    </div>
+                </div> --}}
+
                 <!--
                 <div class="row">                           
                     <label class="control-label col-md-2">{{ trans('message.form-label.invoice_type_id') }}:</label>
@@ -280,7 +281,7 @@
             <div class='panel-footer'>
                 <a href="{{ CRUDBooster::mainpath() }}" class="btn btn-default">{{ trans('message.form.cancel') }}</a>
                
-                <button class="btn btn-primary pull-right" type="submit" id="btnSubmit"> <i class="fa fa-save" ></i> {{ trans('message.form.new') }}</button>
+                <button class="btn btn-primary pull-right" type="submit" id="btnSubmit"> <i class="fa fa-save" ></i> Release</button>
             </div>
         </form>
 </div>

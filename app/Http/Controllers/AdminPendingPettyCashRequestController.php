@@ -109,12 +109,13 @@ use App\Currency;
 					$Approved =  RequestStatus::where('id', 2)->value('id');
 					$Validated =  RequestStatus::where('id', 3)->value('id');
 					$Recorded =  RequestStatus::where('id', 7)->value('id');
+					$Released =  RequestStatus::where('id', 10)->value('id');
 
-					$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('getRequestValidation/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $Approved"];
+					$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('getRequestValidation/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $Released"];
 					
 					$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('getRequestRecord/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $Validated"];
 					
-					$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('getRequestPayment/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $Recorded"];
+					$this->addaction[] = ['title'=>'Edit','url'=>CRUDBooster::mainpath('getRequestPayment/[id]'),'icon'=>'fa fa-pencil', "showIf"=>"[status_id] == $Approved"];
 				}
 			}
 
@@ -306,10 +307,12 @@ use App\Currency;
 					$Validated =  RequestStatus::where('id', 3)->value('id');
 
 					$Recorded =  RequestStatus::where('id', 7)->value('id');
+					$Released =  RequestStatus::where('id', 10)->value('id');
 
 					$sub_query->where('petty_cash_header.status_id', $Approved)->whereNull('petty_cash_header.deleted_at'); 
 					$sub_query->orwhere('petty_cash_header.status_id', $Validated)->whereNull('petty_cash_header.deleted_at'); 
 					$sub_query->orwhere('petty_cash_header.status_id', $Recorded)->whereNull('petty_cash_header.deleted_at'); 
+					$sub_query->orwhere('petty_cash_header.status_id', $Released)->whereNull('petty_cash_header.deleted_at'); 
 				});
 
 				$query->orderBy('petty_cash_header.status_id', 'DESC')->orderBy('petty_cash_header.id', 'ASC');
@@ -333,6 +336,7 @@ use App\Currency;
 			$Paid =  RequestStatus::where('id', 4)->value('status_name');
 			$Rejected =  RequestStatus::where('id', 6)->value('status_name');
 			$Recorded =  RequestStatus::where('id', 7)->value('status_name');
+			$Released =  RequestStatus::where('id', 10)->value('status_name');
 
 			if($column_index == 2){
 				if($column_value == $Entered){
@@ -343,6 +347,8 @@ use App\Currency;
 					$column_value = '<span class="label label-primary">'.$Validated.'</span>';
 				}else if($column_value == $Recorded){
 					$column_value = '<span class="label label-primary">'.$Recorded.'</span>';
+				}else if($column_value == $Released){
+					$column_value = '<span class="label label-primary">'.$Released.'</span>';
 				}else if($column_value == $Printed){
 					$column_value = '<span class="label label-info">'.$Printed.'</span>';
 				}else if($column_value == $Paid){
@@ -432,20 +438,20 @@ use App\Currency;
 					$postdata['payee'] 			= $payee;
 					$postdata['vat_amount'] 	= $vat_amount;
 
-					$postdata['status_id'] 		= RequestStatus::where('id', 7)->value('id');
+					$postdata['status_id'] 		= RequestStatus::where('id', 4)->value('id');
 					$postdata['recorded_by'] 	= CRUDBooster::myId();
 					$postdata['recorded_at'] 	= date('Y-m-d H:i:s');
 					
 
 
-				}else if($petty_cash_header->status_id == 7){
+				}else if($petty_cash_header->status_id == 2){
 
 					$fields = Input::all();
 
 					$paid_date 	= $fields['paid_date'];
 
 					$postdata['paid_date'] 	= $paid_date;
-					$postdata['status_id'] 		= RequestStatus::where('id', 4)->value('id');
+					$postdata['status_id'] 		= RequestStatus::where('id', 10)->value('id');
 					$postdata['paid_by'] 	= CRUDBooster::myId();
 					$postdata['paid_at'] 	= date('Y-m-d H:i:s');
 					
@@ -796,6 +802,7 @@ use App\Currency;
 							  ->leftjoin('sub_department', 'petty_cash_header.sub_department_id', '=', 'sub_department.id')
 							  ->leftjoin('stores', 'petty_cash_header.location_id', '=', 'stores.id')
 							  ->leftjoin('cms_users as requestor', 'petty_cash_header.created_by','=', 'requestor.id')
+							  ->leftjoin('cms_users as paid_by', 'petty_cash_header.paid_by','=', 'paid_by.id')
 							  ->leftjoin('statuses', 'petty_cash_header.status_id','=', 'statuses.id')
 							  ->leftjoin('cms_users as approver', 'petty_cash_header.approved_by','=', 'approver.id')
 							  ->leftjoin('invoice_type', 'petty_cash_header.invoice_type_id','=', 'invoice_type.id')
@@ -808,6 +815,7 @@ use App\Currency;
 								'sub_department.*',
 								'stores.*',
 								'requestor.name as requestorlevel',
+								'paid_by.name as paidbylevel',
 								'statuses.*',
 								'approver.name as approverlevel',
 								'invoice_type.*',
@@ -818,7 +826,6 @@ use App\Currency;
 								'petty_cash_header.created_at as requested_date'
 							  )
 							  ->where('petty_cash_header.id', $id)->first();
-
 			$data['Body'] = PettyCashBody::
 							  leftjoin('category', 'petty_cash_body.category_id', '=', 'category.id')
 							  ->leftjoin('account', 'petty_cash_body.account_id', '=', 'account.id')
@@ -943,6 +950,7 @@ use App\Currency;
 							  ->leftjoin('sub_department', 'petty_cash_header.sub_department_id', '=', 'sub_department.id')
 							  ->leftjoin('stores', 'petty_cash_header.location_id', '=', 'stores.id')
 							  ->leftjoin('cms_users as requestor', 'petty_cash_header.created_by','=', 'requestor.id')
+							  ->leftjoin('cms_users as paid_by', 'petty_cash_header.paid_by','=', 'paid_by.id')
 							  ->leftjoin('statuses', 'petty_cash_header.status_id','=', 'statuses.id')
 							  ->leftjoin('cms_users as approver', 'petty_cash_header.approved_by','=', 'approver.id')
 							  ->leftjoin('invoice_type', 'petty_cash_header.invoice_type_id','=', 'invoice_type.id')
@@ -955,6 +963,7 @@ use App\Currency;
 								'sub_department.*',
 								'stores.*',
 								'requestor.name as requestorlevel',
+								'paid_by.name as paidbylevel',
 								'statuses.*',
 								'petty_cash_header.*',
 								'approver.name as approverlevel',
