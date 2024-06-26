@@ -96,17 +96,6 @@
             }
 
             /*  */
-
-            .row-eq-height {
-                display: flex;
-                flex-wrap: wrap;
-            }
-
-            .row-eq-height [class*="col-"] {
-                display: flex;
-                flex-direction: column;
-            }
-
             /* Ensure equal height for detail-container and receipt-container */
             .detail-container,
             .receipt-container {
@@ -249,6 +238,48 @@
                 font-weight: bold;
                 text-align: center;
             }
+
+            /*  */
+            .status-container {
+                border: 1px solid #ddd;
+                padding: 20px;
+                margin-bottom: 20px;
+                background-color: #fff;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+
+            .status-header {
+                font-size: 1.5em;
+                margin-bottom: 10px;
+                color: #333;
+                border-bottom: 2px solid #f0f2f5;
+                padding-bottom: 10px;
+            }
+
+            .status-item,
+            .comments {
+                margin-bottom: 10px;
+            }
+
+            .comments {
+                max-height: 100px;
+                overflow-y: auto;
+            }
+
+            .status-label {
+                font-weight: bold;
+            }
+
+            .row {
+                display: flex;
+                flex-wrap: wrap;
+                margin: -10px;
+                margin-bottom: 20px;
+            }
         </style>
     @endpush
     @if (g('return_url'))
@@ -264,13 +295,32 @@
         <div class='panel-heading'>
             Petty Cash Form
         </div>
-        <form action='{{ CRUDBooster::mainpath('edit-save/' . $Header->id) }}' method="POST" id="PettyCashApprovalForm"
-            enctype="multipart/form-data">
+        <form action='{{ CRUDBooster::mainpath('edit-save/' . $Header->requested_id) }}' method="POST"
+            id="PettyCashApprovalForm" enctype="multipart/form-data">
             <input type="hidden" value="{{ csrf_token() }}" name="_token" id="token">
             <input type="hidden" value="" name="approval_action" id="approval_action">
             <div class='panel-body'>
 
+
+
+
                 <div class="container-fluid mt-4">
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label
+                                    class="control-label require">*{{ trans('message.form-label.transmittal_date') }}</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                    <input type='input' name='transmittal_date' id="datepicker" onkeydown="return false"
+                                        required autocomplete="off" class='form-control' placeholder="yyyy-mm-dd" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
                     <div class="row row-eq-height">
                         <div class="col-lg-6 mb-4">
                             <div class="detail-container">
@@ -299,54 +349,9 @@
                                     <span>{{ $Header->status_name }}</span>
                                 </div>
                                 <div class="detail-row">
-                                    <label>Mode Of Payment:</label>
-                                    <span>{{ $Header->mode_of_payment_name }}</span>
+                                    <label>{{ trans('message.form-label.company_id') }}:</label>
+                                    <span>{{ $Header->intercolevel }}</span>
                                 </div>
-                                @if ($Header->mode_of_payment_id == 1)
-                                    <div class="detail-row">
-                                        <label>GCash#:</label>
-                                        <span>
-                                            <p>{{ $Header->gcash_number }}</p>
-                                        </span>
-                                    </div>
-                                @elseif ($Header->mode_of_payment_id == 2)
-                                    <div class="detail-row">
-                                        <div class="bank-details-group">
-                                            <div class="bank-detail">
-                                                <label>Bank Name:</label>
-                                                <span>{{ $Header->bank_name }}</span>
-                                            </div>
-                                            <div class="bank-detail">
-                                                <label>Bank Branch Name:</label>
-                                                <span>{{ $Header->bank_branch_name }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="bank-details-group">
-                                            <div class="bank-detail">
-                                                <label>Bank Account Name:</label>
-                                                <span>{{ $Header->bank_account_name }}</span>
-                                            </div>
-                                            <div class="bank-detail">
-                                                <label>Bank Account Number:</label>
-                                                <span>{{ $Header->bank_account_number }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @elseif ($Header->mode_of_payment_id == 3)
-                                    <div class="detail-row">
-                                        <div class="payee-details-group">
-                                            <div class="payee-detail">
-                                                <label>Payee Name:</label>
-                                                <span>{{ $Header->payee_name }}</span>
-                                            </div>
-                                            <div class="payee-detail">
-                                                <label>Bank Account Number:</label>
-                                                <span>{{ $Header->bank_account_number }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-
                                 <div class="detail-row">
                                     <label>Need By Date:</label>
                                     <span>{{ $Header->need_by_date }}</span>
@@ -394,7 +399,7 @@
                             <td width="17%"><label>{{ trans('message.form-label.created_at') }}:</label> </td>
 
                             <td>
-                                <p>{{ $Header->created_at }}</p>
+                                <p>{{ $Header->requested_date }}</p>
                             </td>
 
 
@@ -434,17 +439,8 @@
                             </td>
 
                         </tr>
-                        <!--
-                            <tr>
-                                <td  width="17%"><label>{{ trans('message.form-label.location_id') }}:</label></td>
-            
-                                <td width="34%">  <p>{{ $Header->store_name }}</p></td>
-            
-                                <td width="17%"> </td>
-            
-                                <td></td>
-                            </tr>
-                            -->
+
+
 
                         <tr>
                             <td width="17%"><label>{{ trans('message.form-label.department_id') }}:</label></td>
@@ -481,55 +477,6 @@
                         </tr>
 
                         <tr>
-
-                            <td width="17%"><label>Mode Of Payment:</label></td>
-
-                            <td width="34%">
-                                <p>{{ $Header->mode_of_payment_name }}</p>
-                            </td>
-
-                        </tr>
-
-                        @if ($Header->mode_of_payment_id == 1)
-                            <tr>
-
-                                <td width="17%"><label>GCash#:</label></td>
-
-                                <td width="34%">
-                                    <p>{{ $Header->gcash_number }}</p>
-                                </td>
-
-                            </tr>
-                        @elseif($Header->mode_of_payment_id == 2)
-                            <tr>
-                                <td width="17%"><label>Bank Name:</label></td>
-
-                                <td width="34%">{{ $Header->bank_name }}</td>
-
-                                <td width="17%"><label>Bank Branch Name:</label></td>
-
-                                <td>{{ $Header->bank_branch_name }}</td>
-                            </tr>
-
-                            <tr>
-                                <td width="17%"><label>Bank Account Name:</label></td>
-
-                                <td width="34%">{{ $Header->bank_account_name }}</td>
-
-                                <td width="17%"><label>Bank Account Number:</label></td>
-
-                                <td>{{ $Header->bank_account_number }}</td>
-                            </tr>
-                        @elseif($Header->mode_of_payment_id == 3)
-                            <tr>
-                                <td width="17%"><label>Payee Name:</label></td>
-
-                                <td width="34%">{{ $Header->payee_name }}</td>
-
-                            </tr>
-                        @endif
-
-                        <tr>
                             <td width="17%"><label>Need By Date:</label></td>
 
                             <td width="34%">{{ $Header->need_by_date }}</td>
@@ -539,14 +486,13 @@
                             <td></td>
                         </tr>
 
-
                     </table>
-                </div>
+                </div> --}}
 
-                <hr /> --}}
 
                 <div class="container-fluid" style="margin-top: 20px">
-                    <div class="row" style="margin-top: 20px;">
+
+                    <div class="row">
 
                         <div class="col-md-12">
                             <div class="box-header text-center">
@@ -561,7 +507,16 @@
                                                 <tbody id="bodyTable">
 
                                                     <tr class="tbl_header_color dynamicRows">
-
+                                                        <th class="text-center">
+                                                            {{ trans('message.table.invoice_number') }}</th>
+                                                        <th class="text-center">
+                                                            {{ trans('message.table.invoice_date') }}</th>
+                                                        <th class="text-center">
+                                                            {{ trans('message.table.invoice_type_id') }}</th>
+                                                        <th class="text-center">
+                                                            {{ trans('message.table.vat_type_id') }}</th>
+                                                        {{-- <th class="text-center">
+                                                            {{ trans('message.table.payment_status_id') }}</th> --}}
 
                                                         <th class="text-center">
                                                             {{ trans('message.table.particulars_text') }}</th>
@@ -589,7 +544,16 @@
 
                                                     @foreach ($Body as $rowresult)
                                                         <tr>
-
+                                                            <td style="text-align:center" height="10">
+                                                                {{ $rowresult->invoice_number }}</td>
+                                                            <td style="text-align:center" height="10">
+                                                                {{ $rowresult->invoice_date }}</td>
+                                                            <td style="text-align:center" height="10">
+                                                                {{ $rowresult->invoice_type_name }}</td>
+                                                            <td style="text-align:center" height="10">
+                                                                {{ $rowresult->vat_type_name }}</td>
+                                                            {{-- <td style="text-align:center" height="10">
+                                                                {{ $rowresult->payment_status_name }}</td> --}}
                                                             <td style="text-align:center" height="10">
                                                                 {{ $rowresult->particulars }}</td>
                                                             <td style="text-align:center" height="10">
@@ -620,7 +584,7 @@
                                                     <tr id="tr-table1" class="bottom">
 
 
-                                                        <td colspan="8" align="right">
+                                                        <td colspan="12" align="right">
                                                             <strong>{{ trans('message.table.total_value_order_text') }}</strong>
                                                         </td>
                                                         <td align="center" colspan="1">
@@ -657,6 +621,16 @@
                                                 <tbody id="bodyTable">
 
                                                     <tr class="tbl_header_color dynamicRows">
+                                                        <th width="15%" class="text-center">
+                                                            {{ trans('message.table.invoice_number') }}</th>
+                                                        <th width="15%" class="text-center">
+                                                            {{ trans('message.table.invoice_date') }}</th>
+                                                        <th width="15%" class="text-center">
+                                                            {{ trans('message.table.invoice_type_id') }}</th>
+                                                        <th width="15%" class="text-center">
+                                                            {{ trans('message.table.vat_type_id') }}</th>
+                                                        <th width="15%" class="text-center">
+                                                            {{ trans('message.table.payment_status_id') }}</th>
                                                         <th width="20%" class="text-center">
                                                             {{ trans('message.table.particulars_text') }}</th>
                                                         <th width="15%" class="text-center">
@@ -675,13 +649,23 @@
                                                             {{ trans('message.table.quantity_text') }}</th>
                                                         <th width="8%" class="text-center">
                                                             {{ trans('message.table.line_value_text') }}</th>
-                                                        <th width="15%" class="text-center">
+                                                        <th width="10%" class="text-center">
                                                             {{ trans('message.table.total_value_text') }}</th>
                                                     </tr>
 
 
                                                     @foreach ($Body as $rowresult)
                                                         <tr>
+                                                            <td style="text-align:center" height="10">
+                                                                {{ $rowresult->invoice_number }}</td>
+                                                            <td style="text-align:center" height="10">
+                                                                {{ $rowresult->invoice_date }}</td>
+                                                            <td style="text-align:center" height="10">
+                                                                {{ $rowresult->invoice_type_name }}</td>
+                                                            <td style="text-align:center" height="10">
+                                                                {{ $rowresult->vat_type_name }}</td>
+                                                            <td style="text-align:center" height="10">
+                                                                {{ $rowresult->payment_status_name }}</td>
                                                             <td style="text-align:center" height="10">
                                                                 {{ $rowresult->particulars }}</td>
                                                             <td style="text-align:center" height="10">
@@ -712,7 +696,7 @@
                                                     <tr id="tr-table1" class="bottom">
 
 
-                                                        <td colspan="8" align="right">
+                                                        <td colspan="11" align="right">
                                                             <strong>{{ trans('message.table.total_value_order_text') }}</strong>
                                                         </td>
                                                         <td align="center" colspan="1">
@@ -731,43 +715,162 @@
                             <br>
                         </div> --}}
 
-                    </div>
 
-                    <div>
-                        <div class="form-group">
-                            <label>{{ trans('message.table.note') }}:</label>
-                            <p>{{ $Header->requestor_comments }}</p>
-                        </div>
+
+
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>{{ trans('message.table.comments') }}:</label>
-                                <textarea placeholder="{{ trans('message.table.comments') }} ..." rows="3" class="form-control"
-                                    name="approver_comments">{{ $Header->approver_comments }}</textarea>
+                        <div class="col-md-12 col-flex">
+                            <div class="status-container">
+                                <div class="status-item">
+                                    <div class="status-item">
+                                        <span class="status-label">{{ trans('message.table.note') }}:</span>
+                                        {{ $Header->requestor_comments }}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-flex">
+                            <div class="status-container ">
+                                <div class="status-header">Approval Details</div>
+                                <div class="status-item">
+                                    <span class="status-label">{{ trans('message.form-label.approved_by') }}:</span>
+                                    {{ $Header->approverlevel }}
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">{{ trans('message.form-label.approved_at') }}:</span>
+                                    {{ $Header->approved_at }}
+                                </div>
+                                <div class="comments">
+                                    <span class="status-label">{{ trans('message.table.approver_comments') }}:</span>
+                                    {{ $Header->approver_comments }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-flex">
+                            <div class="status-container ">
+                                <div class="status-header">Validation Details</div>
+                                <div class="status-item">
+                                    <span class="status-label">{{ trans('message.form-label.validated_by') }}:</span>
+                                    {{ $Header->validatorlevel }}
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">{{ trans('message.form-label.validated_at') }}:</span>
+                                    {{ $Header->validated_at }}
+                                </div>
+                                <div class="comments">
+                                    <span class="status-label">Comments:</span>
+                                    {{ $Header->ap_checker_comments }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-flex">
+                            <div class="status-container">
+                                <div class="status-header">Print Details</div>
+                                <div class="status-item">
+                                    <span class="status-label">{{ trans('message.form-label.printed_by') }}:</span>
+                                    {{ $Header->validatorlevel }}
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">{{ trans('message.form-label.printed_at') }}:</span>
+                                    {{ $Header->printed_at }}
+                                </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
 
+                {{-- <hr />
+
+                <div class="row">
+                    <label class="control-label col-md-2">{{ trans('message.form-label.approved_by') }}:</label>
+                    <div class="col-md-4">
+                        <p>{{ $Header->approverlevel }}</p>
+                    </div>
+
+                    <label class="control-label col-md-2">{{ trans('message.form-label.approved_at') }}:</label>
+                    <div class="col-md-4">
+                        <p>{{ $Header->approved_at }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>{{ trans('message.table.approver_comments') }}:</label>
+                            <p>{{ $Header->approver_comments }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="row">
+                    <label class="control-label col-md-2">{{ trans('message.form-label.validated_by') }}:</label>
+                    <div class="col-md-4">
+                        <p>{{ $Header->validatorlevel }}</p>
+                    </div>
+
+                    <label class="control-label col-md-2">{{ trans('message.form-label.validated_at') }}:</label>
+                    <div class="col-md-4">
+                        <p>{{ $Header->validated_at }}</p>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="row">
+                    <label class="control-label col-md-2">{{ trans('message.form-label.printed_by') }}:</label>
+                    <div class="col-md-4">
+                        <p>{{ $Header->printedlevel }}</p>
+                    </div>
+
+                    <label class="control-label col-md-2">{{ trans('message.form-label.printed_at') }}:</label>
+                    <div class="col-md-4">
+                        <p>{{ $Header->printed_at }}</p>
+                    </div>
+                </div> --}}
+                <!--
+                                                                                                                    <div class="row">
+                                                                                                                        <label class="control-label col-md-2">{{ trans('message.form-label.invoice_type_id') }}:</label>
+                                                                                                                        <div class="col-md-4">
+                                                                                                                                <p>{{ $Header->invoice_type_name }}</p>
+                                                                                                                        </div>
+
+                                                                                                                        <label class="control-label col-md-2">{{ trans('message.form-label.payment_status_id') }}:</label>
+                                                                                                                        <div class="col-md-4">
+                                                                                                                                <p>{{ $Header->payment_status_name }}</p>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="row">
+                                                                                                                        <label class="control-label col-md-2">{{ trans('message.form-label.vat_type_id') }}:</label>
+                                                                                                                        <div class="col-md-4">
+                                                                                                                                <p>{{ $Header->vat_type_name }}</p>
+                                                                                                                        </div>
+
+                                                                                                                        
+                                                                                                                    </div> -->
 
             </div>
 
-
-
-    </div>
-
-    <div class='panel-footer'>
-        <a href="{{ CRUDBooster::mainpath() }}" class="btn btn-default">{{ trans('message.form.cancel') }}</a>
-
-        <button class="btn btn-danger pull-right" type="button" id="btnReject" style="margin-left: 5px;"><i
-                class="fa fa-thumbs-down"></i> Reject</button>
-        <button class="btn btn-success pull-right" type="button" id="btnApprove"><i class="fa fa-thumbs-up"></i>
-            Approve</button>
-    </div>
-    </form>
+            <div class='panel-footer'>
+                <a href="{{ CRUDBooster::mainpath() }}" class="btn btn-default">{{ trans('message.form.cancel') }}</a>
+                <button class="btn btn-primary pull-right" type="button" id="btnConfirm"><i class="fa fa-share"
+                        style="margin-right: 5px;"></i>{{ trans('message.form.transmit') }}</button>
+            </div>
+        </form>
     </div>
 @endsection
 
@@ -781,35 +884,34 @@
         };
         setTimeout("preventBack()", 0);
 
-        $('#btnApprove').click(function() {
-
-            var strconfirm = confirm("Are you sure you want to approve this request?");
-            if (strconfirm == true) {
-
-                $(this).attr('disabled', 'disabled');
-                $('#approval_action').val('1');
-                $('#PettyCashApprovalForm').submit();
-
-            } else {
-                return false;
-                window.stop();
-            }
-
+        $("#datepicker").datepicker({
+            maxDate: 0,
+            dateFormat: 'yy-mm-dd'
         });
 
-        $('#btnReject').click(function() {
+        $('#btnConfirm').click(function() {
 
-            var strconfirm = confirm("Are you sure you want to reject this request?");
-            if (strconfirm == true) {
+            var selectedDate = $('#datepicker').val();
 
-                $(this).attr('disabled', 'disabled');
-                $('#approval_action').val('0');
-                $('#PettyCashApprovalForm').submit();
-
+            if (!selectedDate) {
+                alert("Please select a date.");
             } else {
-                return false;
-                window.stop();
+                $('#date-error').hide();
+
+                var strconfirm = confirm("Are you sure you want to proceed?");
+                if (strconfirm == true) {
+
+                    $(this).attr('disabled', 'disabled');
+                    $('#approval_action').val('1');
+                    $('#PettyCashApprovalForm').submit();
+
+                } else {
+                    return false;
+                    window.stop();
+                }
             }
+
+
 
         });
 
@@ -836,9 +938,5 @@
             }
             x[slideIndex[no] - 1].style.display = "block";
         }
-
-        $(document).ready(function() {
-            $('#slideshow').carousel();
-        });
     </script>
 @endpush

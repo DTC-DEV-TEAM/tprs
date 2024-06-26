@@ -55,24 +55,25 @@ return [
     'log_forgot' => 'Someone with IP :ip request a password for :email',
     'log_logout' => ':email logout',
 
-    'alert_petty_cash_add_success'    => ':reference_number has been created successfully!',
+    'alert_petty_cash_add_success' => ':reference_number has been created successfully!',
 
-    'alert_petty_cash_edit_success'    => ':reference_number has been edited successfully!',
+    'alert_petty_cash_edit_success' => ':reference_number has been edited successfully!',
 
-    'alert_petty_cash_reject_success'    => ':reference_number has been rejected successfully!',
+    'alert_petty_cash_reject_success' => ':reference_number has been rejected successfully!',
 
-    'alert_petty_cash_approve_success'    => ':reference_number has been approved successfully!',
+    'alert_petty_cash_approve_success' => ':reference_number has been approved successfully!',
 
-    'alert_petty_cash_validate_success'    => ':reference_number has been validated successfully!',
+    'alert_petty_cash_validate_success' => ':reference_number has been validated successfully!',
 
-    'alert_petty_cash_record_success'    => ':reference_number has been recorded successfully!',
+    'alert_petty_cash_record_success' => ':reference_number has been recorded successfully!',
 
-    'alert_petty_cash_paid_success'    => ':reference_number has been paid successfully!',
+    'alert_petty_cash_paid_success' => ':reference_number has been paid successfully!',
 
 
-    'alert_petty_cash_close_success'    => ':reference_number has been closed successfully!',
-    
-    
+    'alert_petty_cash_close_success' => ':reference_number has been closed successfully!',
+    'alert_petty_cash_confirm_success' => ':reference_number has been confirmed successfully!',
+
+
     'alert_delete_selected' => 'Are you sure want to delete all selected data ?',
     'alert_delete_selected_success' => 'Delete selected success !',
     'alert_bulk_action_button' => 'Are you sure want to',
@@ -85,7 +86,7 @@ return [
     'alert_add_save_order_schedule_failed' => 'Failed to save Order Schedule due to overlapping dates',
     'alert_upload_inventory_success' => 'Upload inventory success !',
     'alert_upload_inventory_failed' => 'Failed to upload inventory! Please check the uploaded file.',
-    'alert_upload_inventory_format_failed'  => 'Failed to upload inventory! Please check your uploaded file.',
+    'alert_upload_inventory_format_failed' => 'Failed to upload inventory! Please check your uploaded file.',
     'alert_upload_inventory_failed_active_order_schedule' => 'Failed to upload inventory due to existing active order schedules! Please deactivate active order schedule.',
     'alert_uploadskulegend_data_success' => 'Total :total_row records uploaded, :success updated successfully and :fail records have the same value !',
     'alert_upload_orderlogic_success' => 'Total :total_row records uploaded, :success uploaded successfully and :fail records have the same value !',
@@ -105,7 +106,7 @@ return [
     'alert_success' => 'Success!',
     'alert_info' => 'Information',
     'alert_primary' => 'Information',
-    'alert_'=>'Success!',
+    'alert_' => 'Success!',
     'alert_session_expired' => 'Your session was expired, please login again !',
     'alert_password_wrong' => 'Sorry your username/password is invalid !',
     'alert_required' => 'Please make sure to fill out all the required fields correctly',
