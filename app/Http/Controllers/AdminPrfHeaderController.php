@@ -78,31 +78,31 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 		# END FORM DO NOT REMOVE THIS LINE
 
 		/* 
-							 | ---------------------------------------------------------------------- 
-							 | Sub Module
-							 | ----------------------------------------------------------------------     
-							 | @label          = Label of action 
-							 | @path           = Path of sub module
-							 | @foreign_key 	  = foreign key of sub table/module
-							 | @button_color   = Bootstrap Class (primary,success,warning,danger)
-							 | @button_icon    = Font Awesome Class  
-							 | @parent_columns = Sparate with comma, e.g : name,created_at
-							 | 
-							 */
+																						 | ---------------------------------------------------------------------- 
+																						 | Sub Module
+																						 | ----------------------------------------------------------------------     
+																						 | @label          = Label of action 
+																						 | @path           = Path of sub module
+																						 | @foreign_key 	  = foreign key of sub table/module
+																						 | @button_color   = Bootstrap Class (primary,success,warning,danger)
+																						 | @button_icon    = Font Awesome Class  
+																						 | @parent_columns = Sparate with comma, e.g : name,created_at
+																						 | 
+																						 */
 		$this->sub_module = array();
 
 
 		/* 
-					   | ---------------------------------------------------------------------- 
-					   | Add More Action Button / Menu
-					   | ----------------------------------------------------------------------     
-					   | @label       = Label of action 
-					   | @url         = Target URL, you can use field alias. e.g : [id], [name], [title], etc
-					   | @icon        = Font awesome class icon. e.g : fa fa-bars
-					   | @color 	   = Default is primary. (primary, warning, succecss, info)     
-					   | @showIf 	   = If condition when action show. Use field alias. e.g : [id] == 1
-					   | 
-					   */
+																				   | ---------------------------------------------------------------------- 
+																				   | Add More Action Button / Menu
+																				   | ----------------------------------------------------------------------     
+																				   | @label       = Label of action 
+																				   | @url         = Target URL, you can use field alias. e.g : [id], [name], [title], etc
+																				   | @icon        = Font awesome class icon. e.g : fa fa-bars
+																				   | @color 	   = Default is primary. (primary, warning, succecss, info)     
+																				   | @showIf 	   = If condition when action show. Use field alias. e.g : [id] == 1
+																				   | 
+																				   */
 		$this->addaction = array();
 		if (CRUDBooster::isUpdate()) {
 			$Rejected = RequestStatus::where('id', 6)->value('id');
@@ -112,39 +112,39 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 		}
 
 		/* 
-					   | ---------------------------------------------------------------------- 
-					   | Add More Button Selected
-					   | ----------------------------------------------------------------------     
-					   | @label       = Label of action 
-					   | @icon 	   = Icon from fontawesome
-					   | @name 	   = Name of button 
-					   | Then about the action, you should code at actionButtonSelected method 
-					   | 
-					   */
+																				   | ---------------------------------------------------------------------- 
+																				   | Add More Button Selected
+																				   | ----------------------------------------------------------------------     
+																				   | @label       = Label of action 
+																				   | @icon 	   = Icon from fontawesome
+																				   | @name 	   = Name of button 
+																				   | Then about the action, you should code at actionButtonSelected method 
+																				   | 
+																				   */
 		$this->button_selected = array();
 
 
 		/* 
-					   | ---------------------------------------------------------------------- 
-					   | Add alert message to this module at overheader
-					   | ----------------------------------------------------------------------     
-					   | @message = Text of message 
-					   | @type    = warning,success,danger,info        
-					   | 
-					   */
+																				   | ---------------------------------------------------------------------- 
+																				   | Add alert message to this module at overheader
+																				   | ----------------------------------------------------------------------     
+																				   | @message = Text of message 
+																				   | @type    = warning,success,danger,info        
+																				   | 
+																				   */
 		$this->alert = array();
 
 
 
 		/* 
-					   | ---------------------------------------------------------------------- 
-					   | Add more button to header button 
-					   | ----------------------------------------------------------------------     
-					   | @label = Name of button 
-					   | @url   = URL Target
-					   | @icon  = Icon from Awesome.
-					   | 
-					   */
+																				   | ---------------------------------------------------------------------- 
+																				   | Add more button to header button 
+																				   | ----------------------------------------------------------------------     
+																				   | @label = Name of button 
+																				   | @url   = URL Target
+																				   | @icon  = Icon from Awesome.
+																				   | 
+																				   */
 		$this->index_button = array();
 		$this->index_button = array();
 		if (CRUDBooster::getCurrentMethod() == 'getIndex') {
@@ -153,95 +153,95 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 
 
 		/* 
-					   | ---------------------------------------------------------------------- 
-					   | Customize Table Row Color
-					   | ----------------------------------------------------------------------     
-					   | @condition = If condition. You may use field alias. E.g : [id] == 1
-					   | @color = Default is none. You can use bootstrap success,info,warning,danger,primary.        
-					   | 
-					   */
+																				   | ---------------------------------------------------------------------- 
+																				   | Customize Table Row Color
+																				   | ----------------------------------------------------------------------     
+																				   | @condition = If condition. You may use field alias. E.g : [id] == 1
+																				   | @color = Default is none. You can use bootstrap success,info,warning,danger,primary.        
+																				   | 
+																				   */
 		$this->table_row_color = array();
 
 
 		/*
-					   | ---------------------------------------------------------------------- 
-					   | You may use this bellow array to add statistic at dashboard 
-					   | ---------------------------------------------------------------------- 
-					   | @label, @count, @icon, @color 
-					   |
-					   */
+																				   | ---------------------------------------------------------------------- 
+																				   | You may use this bellow array to add statistic at dashboard 
+																				   | ---------------------------------------------------------------------- 
+																				   | @label, @count, @icon, @color 
+																				   |
+																				   */
 		$this->index_statistic = array();
 		$this->index_statistic[] = ['label' => 'Request may take up to 3 to 5 working days before release of funds.', 'label1' => 'Use this for transactions above P1,000.00 in total value.', 'color' => 'light-blue', 'width' => 'col-sm-12', 'icon' => 'fa fa-file-text-o'];
 
 
 
 		/*
-					   | ---------------------------------------------------------------------- 
-					   | Add javascript at body 
-					   | ---------------------------------------------------------------------- 
-					   | javascript code in the variable 
-					   | $this->script_js = "function() { ... }";
-					   |
-					   */
+																				   | ---------------------------------------------------------------------- 
+																				   | Add javascript at body 
+																				   | ---------------------------------------------------------------------- 
+																				   | javascript code in the variable 
+																				   | $this->script_js = "function() { ... }";
+																				   |
+																				   */
 		$this->script_js = NULL;
 
 
 		/*
-					| ---------------------------------------------------------------------- 
-					| Include HTML Code before index table 
-					| ---------------------------------------------------------------------- 
-					| html code to display it before index table
-					| $this->pre_index_html = "<p>test</p>";
-					|
-					*/
+																				| ---------------------------------------------------------------------- 
+																				| Include HTML Code before index table 
+																				| ---------------------------------------------------------------------- 
+																				| html code to display it before index table
+																				| $this->pre_index_html = "<p>test</p>";
+																				|
+																				*/
 		$this->pre_index_html = null;
 
 
 
 		/*
-					   | ---------------------------------------------------------------------- 
-					   | Include HTML Code after index table 
-					   | ---------------------------------------------------------------------- 
-					   | html code to display it after index table
-					   | $this->post_index_html = "<p>test</p>";
-					   |
-					   */
+																				   | ---------------------------------------------------------------------- 
+																				   | Include HTML Code after index table 
+																				   | ---------------------------------------------------------------------- 
+																				   | html code to display it after index table
+																				   | $this->post_index_html = "<p>test</p>";
+																				   |
+																				   */
 		$this->post_index_html = null;
 
 
 
 		/*
-					   | ---------------------------------------------------------------------- 
-					   | Include Javascript File 
-					   | ---------------------------------------------------------------------- 
-					   | URL of your javascript each array 
-					   | $this->load_js[] = asset("myfile.js");
-					   |
-					   */
+																				   | ---------------------------------------------------------------------- 
+																				   | Include Javascript File 
+																				   | ---------------------------------------------------------------------- 
+																				   | URL of your javascript each array 
+																				   | $this->load_js[] = asset("myfile.js");
+																				   |
+																				   */
 		$this->load_js = array();
 
 
 
 		/*
-					   | ---------------------------------------------------------------------- 
-					   | Add css style at body 
-					   | ---------------------------------------------------------------------- 
-					   | css code in the variable 
-					   | $this->style_css = ".style{....}";
-					   |
-					   */
+																				   | ---------------------------------------------------------------------- 
+																				   | Add css style at body 
+																				   | ---------------------------------------------------------------------- 
+																				   | css code in the variable 
+																				   | $this->style_css = ".style{....}";
+																				   |
+																				   */
 		$this->style_css = NULL;
 
 
 
 		/*
-					   | ---------------------------------------------------------------------- 
-					   | Include css File 
-					   | ---------------------------------------------------------------------- 
-					   | URL of your css each array 
-					   | $this->load_css[] = asset("myfile.css");
-					   |
-					   */
+																				   | ---------------------------------------------------------------------- 
+																				   | Include css File 
+																				   | ---------------------------------------------------------------------- 
+																				   | URL of your css each array 
+																				   | $this->load_css[] = asset("myfile.css");
+																				   |
+																				   */
 		$this->load_css = array();
 
 
@@ -249,13 +249,13 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 
 
 	/*
-			 | ---------------------------------------------------------------------- 
-			 | Hook for button selected
-			 | ---------------------------------------------------------------------- 
-			 | @id_selected = the id selected
-			 | @button_name = the name of button
-			 |
-			 */
+										   | ---------------------------------------------------------------------- 
+										   | Hook for button selected
+										   | ---------------------------------------------------------------------- 
+										   | @id_selected = the id selected
+										   | @button_name = the name of button
+										   |
+										   */
 	public function actionButtonSelected($id_selected, $button_name)
 	{
 		//Your code here
@@ -264,12 +264,12 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 
 
 	/*
-			 | ---------------------------------------------------------------------- 
-			 | Hook for manipulate query of index result 
-			 | ---------------------------------------------------------------------- 
-			 | @query = current sql query 
-			 |
-			 */
+										   | ---------------------------------------------------------------------- 
+										   | Hook for manipulate query of index result 
+										   | ---------------------------------------------------------------------- 
+										   | @query = current sql query 
+										   |
+										   */
 	public function hook_query_index(&$query)
 	{
 		//Your code here
@@ -281,11 +281,11 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 	}
 
 	/*
-			 | ---------------------------------------------------------------------- 
-			 | Hook for manipulate row of index table html 
-			 | ---------------------------------------------------------------------- 
-			 |
-			 */
+										   | ---------------------------------------------------------------------- 
+										   | Hook for manipulate row of index table html 
+										   | ---------------------------------------------------------------------- 
+										   |
+										   */
 	public function hook_row_index($column_index, &$column_value)
 	{
 		//Your code here
@@ -295,7 +295,7 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 		$Printed = RequestStatus::where('id', 5)->value('status_name');
 		$Paid = RequestStatus::where('id', 4)->value('status_name');
 		$Rejected = RequestStatus::where('id', 6)->value('status_name');
-		$Confirmed = RequestStatus::where('id', 10)->value('status_name');
+		$Transmitted = RequestStatus::where('id', 11)->value('status_name');
 
 		$Closed = RequestStatus::where('id', 8)->value('status_name');
 
@@ -318,20 +318,20 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 				$column_value = '<span class="label label-success">' . $Closed . '</span>';
 			} else if ($column_value == $Cancelled) {
 				$column_value = '<span class="label label-danger">' . $Cancelled . '</span>';
-			} else if ($column_value == $Confirmed) {
-				$column_value = '<span style="background-color: #8a2be2; color: white;" class="label">' . $Confirmed . '</span>';
+			} else if ($column_value == $Transmitted) {
+				$column_value = '<span style="background-color: #8a2be2; color: white;" class="label">' . $Transmitted . '</span>';
 			}
 		}
 
 	}
 
 	/*
-			 | ---------------------------------------------------------------------- 
-			 | Hook for manipulate data input before add data is execute
-			 | ---------------------------------------------------------------------- 
-			 | @arr
-			 |
-			 */
+										   | ---------------------------------------------------------------------- 
+										   | Hook for manipulate data input before add data is execute
+										   | ---------------------------------------------------------------------- 
+										   | @arr
+										   |
+										   */
 	public function hook_before_add(&$postdata)
 	{
 
@@ -340,37 +340,37 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 		//ini_set('upload_max_filesize', '8M');
 		//Your code here
 		/*$fields = Input::all();
-							 $dataLines = array();
+																						 $dataLines = array();
 
-							 $department_id 	= $fields['department_id'];
-							 $sub_department_id 	= $fields['sub_department_id'];
-							 $location_id 	= $fields['location_id'];
-							 $total_value_order 	= $fields['total_value_order'];
-							 $requestor_comments 	= $fields['requestor_comments'];
+																						 $department_id 	= $fields['department_id'];
+																						 $sub_department_id 	= $fields['sub_department_id'];
+																						 $location_id 	= $fields['location_id'];
+																						 $total_value_order 	= $fields['total_value_order'];
+																						 $requestor_comments 	= $fields['requestor_comments'];
 
-							 $files 	= $fields['receipt'];
+																						 $files 	= $fields['receipt'];
 
-							 $count_header = PRFHeader::count();
-							 $header_ref   =  str_pad($count_header + 1, 7, '0', STR_PAD_LEFT);			
-							 $reference_number	= "REF-".$header_ref;
-						 
-							 $extension1 =  time(). '.' .$files->getClientOriginalExtension();
-							 $filename = $extension1;
-							 $files->move('vendor/crudbooster/',$filename);
-							 $images ='vendor/crudbooster/'.$filename;
-								 
-							 $postdata['receipt'] = $images;
+																						 $count_header = PRFHeader::count();
+																						 $header_ref   =  str_pad($count_header + 1, 7, '0', STR_PAD_LEFT);			
+																						 $reference_number	= "REF-".$header_ref;
+																					 
+																						 $extension1 =  time(). '.' .$files->getClientOriginalExtension();
+																						 $filename = $extension1;
+																						 $files->move('vendor/crudbooster/',$filename);
+																						 $images ='vendor/crudbooster/'.$filename;
+																							 
+																						 $postdata['receipt'] = $images;
 
-							 $postdata['reference_number'] = $reference_number;
-							 $postdata['department_id'] = $department_id;
-							 $postdata['sub_department_id'] = $sub_department_id;
-							 $postdata['location_id'] = $location_id;
-							 $postdata['total_value_order'] = $total_value_order;
-							 $postdata['requestor_comments'] = $requestor_comments;
-							 $postdata['status_id'] = 1;
-							 $postdata['created_by'] 					= CRUDBooster::myId();
-							 $postdata['created_at'] 					= date('Y-m-d H:i:s');
-							 */
+																						 $postdata['reference_number'] = $reference_number;
+																						 $postdata['department_id'] = $department_id;
+																						 $postdata['sub_department_id'] = $sub_department_id;
+																						 $postdata['location_id'] = $location_id;
+																						 $postdata['total_value_order'] = $total_value_order;
+																						 $postdata['requestor_comments'] = $requestor_comments;
+																						 $postdata['status_id'] = 1;
+																						 $postdata['created_by'] 					= CRUDBooster::myId();
+																						 $postdata['created_at'] 					= date('Y-m-d H:i:s');
+																						 */
 
 
 		$fields = Input::all();
@@ -399,12 +399,12 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 		$reference_number = "PRF-" . $header_ref;
 
 		/*$files 	= $fields['receipt'];
-							 $extension1 =  time(). '.' .$files->getClientOriginalExtension();
-							 $filename = $extension1;
-							 $files->move('vendor/crudbooster/',$filename);
-							 $images ='vendor/crudbooster/'.$filename;
-								 
-							 $postdata['receipt'] = $images;*/
+																						 $extension1 =  time(). '.' .$files->getClientOriginalExtension();
+																						 $filename = $extension1;
+																						 $files->move('vendor/crudbooster/',$filename);
+																						 $images ='vendor/crudbooster/'.$filename;
+																							 
+																						 $postdata['receipt'] = $images;*/
 
 		$files = $fields['receipt'];
 
@@ -456,12 +456,12 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 	}
 
 	/* 
-			 | ---------------------------------------------------------------------- 
-			 | Hook for execute command after add public static function called 
-			 | ---------------------------------------------------------------------- 
-			 | @id = last insert id
-			 | 
-			 */
+										   | ---------------------------------------------------------------------- 
+										   | Hook for execute command after add public static function called 
+										   | ---------------------------------------------------------------------- 
+										   | @id = last insert id
+										   | 
+										   */
 	public function hook_after_add($id)
 	{
 		//Your code here
@@ -513,32 +513,32 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 	}
 
 	/* 
-			 | ---------------------------------------------------------------------- 
-			 | Hook for manipulate data input before update data is execute
-			 | ---------------------------------------------------------------------- 
-			 | @postdata = input post data 
-			 | @id       = current id 
-			 | 
-			 */
+										   | ---------------------------------------------------------------------- 
+										   | Hook for manipulate data input before update data is execute
+										   | ---------------------------------------------------------------------- 
+										   | @postdata = input post data 
+										   | @id       = current id 
+										   | 
+										   */
 	public function hook_before_edit(&$postdata, $id)
 	{
 		//Your code here
 
 
 		/*$department_id 	= $fields['department_id'];
-							 $sub_department_id 	= $fields['sub_department_id'];
-							 $location_id 	= $fields['location_id'];
-							 $total_value_order 	= $fields['total_value_order'];
-							 $requestor_comments 	= $fields['requestor_comments'];
-							 
-							 $postdata['department_id'] 			= $department_id;
-							 $postdata['sub_department_id'] 		= $sub_department_id;
-							 $postdata['location_id'] 			= $location_id;
-							 $postdata['total_value_order'] 		= $total_value_order;
-							 $postdata['requestor_comments'] 	= $requestor_comments;
-							 $postdata['status_id'] 		= 1;
-							 $postdata['updated_by'] 	= CRUDBooster::myId();
-							 $postdata['updated_at'] 	= date('Y-m-d H:i:s'); */
+																						 $sub_department_id 	= $fields['sub_department_id'];
+																						 $location_id 	= $fields['location_id'];
+																						 $total_value_order 	= $fields['total_value_order'];
+																						 $requestor_comments 	= $fields['requestor_comments'];
+																						 
+																						 $postdata['department_id'] 			= $department_id;
+																						 $postdata['sub_department_id'] 		= $sub_department_id;
+																						 $postdata['location_id'] 			= $location_id;
+																						 $postdata['total_value_order'] 		= $total_value_order;
+																						 $postdata['requestor_comments'] 	= $requestor_comments;
+																						 $postdata['status_id'] 		= 1;
+																						 $postdata['updated_by'] 	= CRUDBooster::myId();
+																						 $postdata['updated_at'] 	= date('Y-m-d H:i:s'); */
 
 		$fields = Input::all();
 		$customer_location_id = $fields['customer_location_id'];
@@ -593,12 +593,12 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 	}
 
 	/* 
-			 | ---------------------------------------------------------------------- 
-			 | Hook for execute command after edit public static function called
-			 | ----------------------------------------------------------------------     
-			 | @id       = current id 
-			 | 
-			 */
+										   | ---------------------------------------------------------------------- 
+										   | Hook for execute command after edit public static function called
+										   | ----------------------------------------------------------------------     
+										   | @id       = current id 
+										   | 
+										   */
 	public function hook_after_edit($id)
 	{
 		//Your code here 
@@ -684,12 +684,12 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 	}
 
 	/* 
-			 | ---------------------------------------------------------------------- 
-			 | Hook for execute command before delete public static function called
-			 | ----------------------------------------------------------------------     
-			 | @id       = current id 
-			 | 
-			 */
+										   | ---------------------------------------------------------------------- 
+										   | Hook for execute command before delete public static function called
+										   | ----------------------------------------------------------------------     
+										   | @id       = current id 
+										   | 
+										   */
 	public function hook_before_delete($id)
 	{
 		//Your code here
@@ -697,12 +697,12 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 	}
 
 	/* 
-			 | ---------------------------------------------------------------------- 
-			 | Hook for execute command after delete public static function called
-			 | ----------------------------------------------------------------------     
-			 | @id       = current id 
-			 | 
-			 */
+										   | ---------------------------------------------------------------------- 
+										   | Hook for execute command after delete public static function called
+										   | ----------------------------------------------------------------------     
+										   | @id       = current id 
+										   | 
+										   */
 	public function hook_after_delete($id)
 	{
 		//Your code here
@@ -754,48 +754,48 @@ class AdminPrfHeaderController extends \crocodicstudio\crudbooster\controllers\C
 
 		//dd($data['SubDepartments']);
 		/*
-							 $approval_search = ApprovalMatrix::where('cms_users_id', CRUDBooster::myId())->get();
+																						 $approval_search = ApprovalMatrix::where('cms_users_id', CRUDBooster::myId())->get();
 
-							 foreach($approval_search as $approval_value){
+																						 foreach($approval_search as $approval_value){
 
-								 if(!in_array($approval_value->department_id,$department_array)){
-									 array_push($department_array, $approval_value->department_id);
-								 }
-							 }
+																							 if(!in_array($approval_value->department_id,$department_array)){
+																								 array_push($department_array, $approval_value->department_id);
+																							 }
+																						 }
 
-							 $approval_string = implode(",",$department_array);
-							 $department_list = array_map('intval',explode(",",$approval_string));
-
-
-							 $data['Departments'] = Department::whereIn('id', $department_list)->where('status', 'ACTIVE')->orderby('department_name', 'ASC')->get();
-
-							 foreach($data['Departments'] as $approval_value){
-
-								 if(!in_array($approval_value->id, $sub_department_array)){
-									 array_push($sub_department_array, $approval_value->id);
-								 }
-
-							 }
-
-							 $approval_string1 = implode(",",$sub_department_array);
-							 $sub_department_list = array_map('intval',explode(",",$approval_string1));
+																						 $approval_string = implode(",",$department_array);
+																						 $department_list = array_map('intval',explode(",",$approval_string));
 
 
-							 $data['SubDepartments'] = SubDepartment::whereIn('department_id', $sub_department_list)->where('status', 'ACTIVE')->orderby('sub_department_name', 'ASC')->get();
-							 
+																						 $data['Departments'] = Department::whereIn('id', $department_list)->where('status', 'ACTIVE')->orderby('department_name', 'ASC')->get();
 
-							 foreach($approval_search as $approval_value){
+																						 foreach($data['Departments'] as $approval_value){
 
-								 if(!in_array($approval_value->store_list,$location_array)){
-									 array_push($location_array, $approval_value->store_list);
-								 }
-							 }
+																							 if(!in_array($approval_value->id, $sub_department_array)){
+																								 array_push($sub_department_array, $approval_value->id);
+																							 }
 
-							 $approval_string2 = implode(",",$location_array);
-							 $location_list = array_map('intval',explode(",",$approval_string2));
+																						 }
 
-							 $data['Locations'] = Store::whereIn('id', $location_list)->where('store_status', 'ACTIVE')->orderby('store_name', 'ASC')->get();
-							 */
+																						 $approval_string1 = implode(",",$sub_department_array);
+																						 $sub_department_list = array_map('intval',explode(",",$approval_string1));
+
+
+																						 $data['SubDepartments'] = SubDepartment::whereIn('department_id', $sub_department_list)->where('status', 'ACTIVE')->orderby('sub_department_name', 'ASC')->get();
+																						 
+
+																						 foreach($approval_search as $approval_value){
+
+																							 if(!in_array($approval_value->store_list,$location_array)){
+																								 array_push($location_array, $approval_value->store_list);
+																							 }
+																						 }
+
+																						 $approval_string2 = implode(",",$location_array);
+																						 $location_list = array_map('intval',explode(",",$approval_string2));
+
+																						 $data['Locations'] = Store::whereIn('id', $location_list)->where('store_status', 'ACTIVE')->orderby('store_name', 'ASC')->get();
+																						 */
 
 
 		$data['Categories'] = category::where('status', 'ACTIVE')->orderby('category_name', 'ASC')->get();
