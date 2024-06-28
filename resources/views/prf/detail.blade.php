@@ -1,6 +1,7 @@
 @extends('crudbooster::admin_template')
 @section('content')
     @push('head')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
         <style type="text/css">
             * {
                 box-sizing: border-box
@@ -270,6 +271,11 @@
                 margin: -10px;
                 margin-bottom: 20px;
             }
+
+            .downloadPdfBtn {
+                width: auto;
+                margin-top: 20px;
+            }
         </style>
     @endpush
     @if (g('return_url'))
@@ -398,6 +404,10 @@
                                         <a class="prev" onclick="plusSlides(-1, 0)">&#10094;</a>
                                         <a class="next" onclick="plusSlides(1, 0)">&#10095;</a>
                                     </div>
+                                    <div>
+                                        <button type="button" class="downloadPdfBtn btn btn-primary"
+                                            onclick="downloadImageAsPDF(0)">Download as PDF</button>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -459,16 +469,16 @@
 
 
                 <!--
-                                                                                                                                                                                                                                                                                                    <tr>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <tr>
 
-                                                                                                                                                                                                                                                                                                        <td  width="17%"><label>{{ trans('message.form-label.location_id') }}:</label></td>
-                                                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                                                        <td width="34%">  <p>{{ $Header->store_name }}</p></td>
-                                                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                                                        <td width="17%"> </td>
-                                                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                                                        <td></td>
-                                                                                                                                                                                                                                                                                                    </tr> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <td  width="17%"><label>{{ trans('message.form-label.location_id') }}:</label></td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <td width="34%">  <p>{{ $Header->store_name }}</p></td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <td width="17%"> </td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <td></td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </tr> -->
 
                 {{-- <tr>
                             <td width="17%"><label>{{ trans('message.form-label.department_id') }}:</label></td>
@@ -924,8 +934,16 @@
                                         <a class="prev" onclick="plusSlides(-1, 1)">&#10094;</a>
                                         <a class="next" onclick="plusSlides(1, 1)">&#10095;</a>
                                     </div>
+                                    <div>
+                                        <button type="button" class="downloadPdfBtn btn btn-primary"
+                                            onclick="downloadImageAsPDF(1)">Download as
+                                            PDF</button>
+                                    </div>
+
 
                                 </div>
+
+                            </div>
                         @endif
                     </div>
 
@@ -1078,7 +1096,71 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
     <script>
+        function downloadImageAsPDF(id) {
+
+            window.jsPDF = window.jspdf.jsPDF;
+
+            // Get all image elements with class 'mySlides2'
+            if (id === 0) var slides = document.getElementsByClassName("mySlides1");
+            else var slides = document.getElementsByClassName("mySlides2");
+
+            if (!slides.length) {
+                console.error("No image elements found with class 'mySlides2'.");
+                return;
+            }
+
+            if (typeof jsPDF !== 'undefined') {
+                var pdf = new jsPDF();
+                var counter = 0;
+
+
+                Array.prototype.forEach.call(slides, function(slide) {
+                    var image = slide.querySelector('img');
+
+                    if (!image) {
+                        console.error("Image element not found in slide.");
+                        return;
+                    }
+
+                    var imageURL = image.src;
+
+                    // Create new Image object to get dimensions
+                    var img = new Image();
+                    img.onload = function() {
+                        var pdfWidth = pdf.internal.pageSize.getWidth();
+                        var pdfHeight = pdf.internal.pageSize.getHeight();
+
+                        // Calculate dimensions to maintain aspect ratio
+                        var imgWidth = pdfWidth - 20; // Adjusted based on margins or padding
+                        var imgHeight = img.height * (imgWidth / img.width);
+
+                        // Add a new page for each image, except the first one
+                        if (counter > 0) {
+                            pdf.addPage();
+                        }
+
+                        // Add the image to the PDF document on the new page
+                        pdf.addImage(img, 'JPEG', 10, 10, imgWidth, imgHeight);
+
+                        // Increment counter for next image ID
+                        counter++;
+
+                        // Save the PDF document after all images are processed
+                        if (counter === slides.length) {
+                            pdf.save('images_download.pdf');
+                        }
+                    };
+                    img.src = imageURL;
+                });
+            } else {
+                console.error("jsPDF library is not loaded or available.");
+            }
+        }
+
+
         $(document).ready(function() {
             $('.view-details-btn').click(function() {
                 var invoiceNumber = $(this).data('invoice-number');
