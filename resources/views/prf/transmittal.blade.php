@@ -307,14 +307,15 @@
                 <div class="container-fluid mt-4">
                     <div class="row">
 
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label
                                     class="control-label require">*{{ trans('message.form-label.transmittal_date') }}</label>
                                 <div class="input-group date">
                                     <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                                    <input type='input' name='transmittal_date' id="datepicker" onkeydown="return false"
-                                        required autocomplete="off" class='form-control' placeholder="yyyy-mm-dd" />
+                                    <input type='date' name='transmittal_date' id="transmittalDate"
+                                        onkeydown="return false" required autocomplete="off" class='form-control'
+                                        placeholder="yyyy-mm-dd" />
                                 </div>
                             </div>
 
@@ -843,25 +844,25 @@
                     </div>
                 </div> --}}
                 <!--
-                                                                                                                    <div class="row">
-                                                                                                                        <label class="control-label col-md-2">{{ trans('message.form-label.invoice_type_id') }}:</label>
-                                                                                                                        <div class="col-md-4">
-                                                                                                                                <p>{{ $Header->invoice_type_name }}</p>
-                                                                                                                        </div>
+                                                                                                                                                            <div class="row">
+                                                                                                                                                                <label class="control-label col-md-2">{{ trans('message.form-label.invoice_type_id') }}:</label>
+                                                                                                                                                                <div class="col-md-4">
+                                                                                                                                                                        <p>{{ $Header->invoice_type_name }}</p>
+                                                                                                                                                                </div>
 
-                                                                                                                        <label class="control-label col-md-2">{{ trans('message.form-label.payment_status_id') }}:</label>
-                                                                                                                        <div class="col-md-4">
-                                                                                                                                <p>{{ $Header->payment_status_name }}</p>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                    <div class="row">
-                                                                                                                        <label class="control-label col-md-2">{{ trans('message.form-label.vat_type_id') }}:</label>
-                                                                                                                        <div class="col-md-4">
-                                                                                                                                <p>{{ $Header->vat_type_name }}</p>
-                                                                                                                        </div>
+                                                                                                                                                                <label class="control-label col-md-2">{{ trans('message.form-label.payment_status_id') }}:</label>
+                                                                                                                                                                <div class="col-md-4">
+                                                                                                                                                                        <p>{{ $Header->payment_status_name }}</p>
+                                                                                                                                                                </div>
+                                                                                                                                                            </div>
+                                                                                                                                                            <div class="row">
+                                                                                                                                                                <label class="control-label col-md-2">{{ trans('message.form-label.vat_type_id') }}:</label>
+                                                                                                                                                                <div class="col-md-4">
+                                                                                                                                                                        <p>{{ $Header->vat_type_name }}</p>
+                                                                                                                                                                </div>
 
-                                                                                                                        
-                                                                                                                    </div> -->
+                                                                                                                                                                
+                                                                                                                                                            </div> -->
 
             </div>
 
@@ -876,6 +877,27 @@
 
 @push('bottom')
     <script type="text/javascript">
+        // calendar with no previous date
+        document.addEventListener('DOMContentLoaded', (event) => {
+            console.log("DOM fully loaded and parsed");
+
+            const setDatePickerMinDate = (elementId) => {
+                const datePicker = document.getElementById(elementId);
+
+                if (!datePicker) {
+                    return;
+                }
+
+                const today = new Date();
+                const todayStr = today.toISOString().split('T')[0];
+
+                // Set the min date to today
+                datePicker.setAttribute('min', todayStr);
+            };
+
+            setDatePickerMinDate('transmittalDate');
+        });
+
         function preventBack() {
             window.history.forward();
         }
@@ -891,7 +913,7 @@
 
         $('#btnConfirm').click(function() {
 
-            var selectedDate = $('#datepicker').val();
+            var selectedDate = $('#transmittalDate').val();
 
             if (!selectedDate) {
                 alert("Please select a date.");
