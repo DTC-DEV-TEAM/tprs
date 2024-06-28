@@ -406,7 +406,7 @@
                                     </div>
                                     <div>
                                         <button type="button" class="downloadPdfBtn btn btn-primary"
-                                            onclick="downloadImageAsPDF(0)">Download as PDF</button>
+                                            onclick="downloadImageAsPDF(0)">Print as PDF</button>
                                     </div>
                                 @endif
                             </div>
@@ -469,16 +469,16 @@
 
 
                 <!--
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <tr>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <tr>
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <td  width="17%"><label>{{ trans('message.form-label.location_id') }}:</label></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <td width="34%">  <p>{{ $Header->store_name }}</p></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <td width="17%"> </td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <td></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </tr> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <td  width="17%"><label>{{ trans('message.form-label.location_id') }}:</label></td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <td width="34%">  <p>{{ $Header->store_name }}</p></td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <td width="17%"> </td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <td></td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </tr> -->
 
                 {{-- <tr>
                             <td width="17%"><label>{{ trans('message.form-label.department_id') }}:</label></td>
@@ -936,7 +936,7 @@
                                     </div>
                                     <div>
                                         <button type="button" class="downloadPdfBtn btn btn-primary"
-                                            onclick="downloadImageAsPDF(1)">Download as
+                                            onclick="downloadImageAsPDF(1)">Printed as
                                             PDF</button>
                                     </div>
 
@@ -1100,15 +1100,14 @@
 
     <script>
         function downloadImageAsPDF(id) {
-
             window.jsPDF = window.jspdf.jsPDF;
 
-            // Get all image elements with class 'mySlides2'
-            if (id === 0) var slides = document.getElementsByClassName("mySlides1");
-            else var slides = document.getElementsByClassName("mySlides2");
+            // Get all image elements with class 'mySlides1' or 'mySlides2'
+            var slides = id === 0 ? document.getElementsByClassName("mySlides1") : document.getElementsByClassName(
+                "mySlides2");
 
             if (!slides.length) {
-                console.error("No image elements found with class 'mySlides2'.");
+                console.error("No image elements found with specified class.");
                 return;
             }
 
@@ -1116,44 +1115,81 @@
                 var pdf = new jsPDF();
                 var counter = 0;
 
+                function processSlide(slide) {
+                    return new Promise((resolve, reject) => {
+                        var image = slide.querySelector('img');
 
-                Array.prototype.forEach.call(slides, function(slide) {
-                    var image = slide.querySelector('img');
+                        if (!image) {
+                            console.error("Image element not found in slide.");
+                            reject("Image element not found in slide.");
+                            return;
+                        }
 
-                    if (!image) {
-                        console.error("Image element not found in slide.");
+                        var imageURL = image.src;
+
+                        // Load image as base64
+                        var img = new Image();
+                        img.crossOrigin = "Anonymous";
+                        img.onload = function() {
+                            var canvas = document.createElement('canvas');
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            var ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0);
+
+                            var imgData = canvas.toDataURL('image/jpeg');
+
+                            var pdfWidth = pdf.internal.pageSize.getWidth();
+                            var pdfHeight = pdf.internal.pageSize.getHeight();
+
+                            // Calculate dimensions to maintain aspect ratio
+                            var imgWidth = pdfWidth - 20; // Adjusted based on margins or padding
+                            var imgHeight = img.height * (imgWidth / img.width);
+
+                            // Add a new page for each image, except the first one
+                            if (counter > 0) {
+                                pdf.addPage();
+                            }
+
+                            // Add the image to the PDF document on the new page
+                            pdf.addImage(imgData, 'JPEG', 10, 10, imgWidth, imgHeight);
+
+                            // Increment counter for next image ID
+                            counter++;
+
+                            resolve();
+                        };
+                        img.onerror = function() {
+                            console.error("Failed to load image:", imageURL);
+                            reject("Failed to load image.");
+                        };
+                        img.src = imageURL;
+                    });
+                }
+
+                var slidePromises = Array.prototype.map.call(slides, processSlide);
+
+                Promise.all(slidePromises).then(() => {
+                    // After all images are loaded into the PDF, open print window
+                    var pdfDataUri = pdf.output('datauristring');
+                    var printWindow = window.open('', '_blank');
+                    if (!printWindow) {
+                        console.error("Failed to open new window for printing.");
                         return;
                     }
+                    printWindow.document.write('<html><head><title>Print Preview</title></head><body>');
+                    printWindow.document.write('<embed width="100%" height="100%" name="plugin" src="' +
+                        pdfDataUri + '" type="application/pdf" />');
+                    printWindow.document.write('</body></html>');
+                    printWindow.document.close();
 
-                    var imageURL = image.src;
-
-                    // Create new Image object to get dimensions
-                    var img = new Image();
-                    img.onload = function() {
-                        var pdfWidth = pdf.internal.pageSize.getWidth();
-                        var pdfHeight = pdf.internal.pageSize.getHeight();
-
-                        // Calculate dimensions to maintain aspect ratio
-                        var imgWidth = pdfWidth - 20; // Adjusted based on margins or padding
-                        var imgHeight = img.height * (imgWidth / img.width);
-
-                        // Add a new page for each image, except the first one
-                        if (counter > 0) {
-                            pdf.addPage();
-                        }
-
-                        // Add the image to the PDF document on the new page
-                        pdf.addImage(img, 'JPEG', 10, 10, imgWidth, imgHeight);
-
-                        // Increment counter for next image ID
-                        counter++;
-
-                        // Save the PDF document after all images are processed
-                        if (counter === slides.length) {
-                            pdf.save('images_download.pdf');
-                        }
-                    };
-                    img.src = imageURL;
+                    // Allow user to print manually
+                    setTimeout(function() {
+                        printWindow.print();
+                        printWindow.focus(); // Ensure the print dialog is in focus
+                    }, 1000); // Adjust timing as needed
+                }).catch(error => {
+                    console.error("Error processing slides:", error);
                 });
             } else {
                 console.error("jsPDF library is not loaded or available.");
