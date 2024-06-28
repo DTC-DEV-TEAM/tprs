@@ -337,6 +337,26 @@
 
 @push('bottom')
     <script type="text/javascript">
+        //Calendar with no previous date
+        document.addEventListener('DOMContentLoaded', (event) => {
+            console.log("DOM fully loaded and parsed");
+
+            const setDatePickerMinDate = (elementId) => {
+                const datePicker = document.getElementById(elementId);
+
+                if (!datePicker) {
+                    return;
+                }
+
+                const today = new Date();
+                const todayStr = today.toISOString().split('T')[0];
+
+                // Set the min date to today
+                datePicker.setAttribute('min', todayStr);
+            };
+
+            setDatePickerMinDate('need_by_date');
+        });
         $('#pdf').hide();
 
         $('#customer_location_id').change(function() {

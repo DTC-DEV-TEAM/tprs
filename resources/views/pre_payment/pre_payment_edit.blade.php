@@ -620,6 +620,7 @@
 
         });
 
+        // calendar with no previous date
         document.addEventListener('DOMContentLoaded', (event) => {
             console.log("DOM fully loaded and parsed");
 
