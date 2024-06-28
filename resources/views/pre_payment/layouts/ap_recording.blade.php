@@ -130,8 +130,7 @@
                             </div>
                             <div class="total_amount_content">
                                 <label for="date">Date Recorded: <span class="required">*</span></label>
-                                <input type="date" id="date" name="ap_checker_date_recorded"
-                                    value="{{ date('Y-m-d') }}" required>
+                                <input type="date" id="dateRecorded" name="ap_checker_date_recorded" required>
                             </div>
 
                             {{-- <div class="total_amount_content">

@@ -265,7 +265,8 @@
                           </div>
                           <div class="total_amount_content receipts_total_amount">
                               <label for="">Received Transmittal Date:</label>
-                              <input type="date" name="r_transmittal_date" required>
+                              <input type="date" id="received_transmittal_date" name="r_transmittal_date"
+                                  required>
                           </div>
                       </div>
                       <div class="receipts_amount_contents">

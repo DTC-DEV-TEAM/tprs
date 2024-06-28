@@ -250,7 +250,8 @@
                         <div class="total_amount_content receipts_total_amount">
                             <label for="">Date transmitted: <span style="color: red; font-weight: bold;">*
                                 </span></label>
-                            <input type="date" name="transmit_date" style="padding: 5px;" required>
+                            <input type="date" id="dateTransmitted" name="transmit_date" style="padding: 5px;"
+                                required>
                         </div>
                         <div class="total_amount_content receipts_total_amount" style="width: 500px;">
                             <label for="">Receiver Name: <span style="color: red; font-weight: bold;">*

@@ -135,7 +135,8 @@
                             </div>
                             <div class="total_amount_content">
                                 <label for="">Transmittal Date: <span class="required">*</span></label>
-                                <input type="date" name="ap_transmittal_date" style="padding: 5px;" required>
+                                <input type="date" id="transmittalDate" name="ap_transmittal_date"
+                                    style="padding: 5px;" required>
                             </div>
                         </div>
                     </div>
@@ -182,7 +183,7 @@
                             <div class="request_information">
                                 <label for="">Date Recorded:</label>
                                 <span>
-                                    {{ $row->ap_checker_date_recorded }}
+                                    {{ $row->approver_note }}
                                 </span>
                             </div>
                         </div>
