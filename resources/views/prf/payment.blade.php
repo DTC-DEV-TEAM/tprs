@@ -754,25 +754,25 @@
                     </div>
                 </div> --}}
                     <!--
-                                                                                                <div class="row">
-                                                                                                    <label class="control-label col-md-2">{{ trans('message.form-label.invoice_type_id') }}:</label>
-                                                                                                    <div class="col-md-4">
-                                                                                                            <p>{{ $Header->invoice_type_name }}</p>
-                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                        <label class="control-label col-md-2">{{ trans('message.form-label.invoice_type_id') }}:</label>
+                                                                                                        <div class="col-md-4">
+                                                                                                                <p>{{ $Header->invoice_type_name }}</p>
+                                                                                                        </div>
 
-                                                                                                    <label class="control-label col-md-2">{{ trans('message.form-label.payment_status_id') }}:</label>
-                                                                                                    <div class="col-md-4">
-                                                                                                            <p>{{ $Header->payment_status_name }}</p>
+                                                                                                        <label class="control-label col-md-2">{{ trans('message.form-label.payment_status_id') }}:</label>
+                                                                                                        <div class="col-md-4">
+                                                                                                                <p>{{ $Header->payment_status_name }}</p>
+                                                                                                        </div>
                                                                                                     </div>
-                                                                                                </div>
-                                                                                                <div class="row">
-                                                                                                    <label class="control-label col-md-2">{{ trans('message.form-label.vat_type_id') }}:</label>
-                                                                                                    <div class="col-md-4">
-                                                                                                            <p>{{ $Header->vat_type_name }}</p>
-                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                        <label class="control-label col-md-2">{{ trans('message.form-label.vat_type_id') }}:</label>
+                                                                                                        <div class="col-md-4">
+                                                                                                                <p>{{ $Header->vat_type_name }}</p>
+                                                                                                        </div>
 
-                                                                                                    
-                                                                                                </div> -->
+                                                                                                        
+                                                                                                    </div> -->
 
                 </div>
 
