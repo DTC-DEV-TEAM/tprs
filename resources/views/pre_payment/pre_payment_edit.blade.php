@@ -602,21 +602,52 @@
 
     <script>
         //calendar that can only select current date and 4 previous dates
+        // document.addEventListener('DOMContentLoaded', (event) => {
+        //     const datePicker = document.getElementById('received_transmittal_date');
+        //     const today = new Date();
+        //     const todayStr = today.toISOString().split('T')[0];
+
+        //     // Set the max date to today
+        //     datePicker.setAttribute('max', todayStr);
+
+        //     // Calculate the min date (4 days before today)
+        //     const minDate = new Date();
+        //     minDate.setDate(today.getDate() - 4);
+        //     const minDateStr = minDate.toISOString().split('T')[0];
+
+        //     // Set the min date to 4 days before today
+        //     datePicker.setAttribute('min', minDateStr);
+
+        // });
+
+        //calendar that can only select current date and 4 previous dates
         document.addEventListener('DOMContentLoaded', (event) => {
-            const datePicker = document.getElementById('received_transmittal_date');
-            const today = new Date();
-            const todayStr = today.toISOString().split('T')[0];
 
-            // Set the max date to today
-            datePicker.setAttribute('max', todayStr);
+            const setDatePickerMinDate = (elementId) => {
+                const datePicker = document.getElementById(elementId);
 
-            // Calculate the min date (4 days before today)
-            const minDate = new Date();
-            minDate.setDate(today.getDate() - 4);
-            const minDateStr = minDate.toISOString().split('T')[0];
+                if (!datePicker) {
+                    return;
+                }
 
-            // Set the min date to 4 days before today
-            datePicker.setAttribute('min', minDateStr);
+                const today = new Date();
+                const todayStr = today.toISOString().split('T')[0];
+
+                // Set the max date to today
+                datePicker.setAttribute('max', todayStr);
+
+                // Calculate the min date (4 days before today)
+                const minDate = new Date();
+                minDate.setDate(today.getDate() - 4);
+                const minDateStr = minDate.toISOString().split('T')[0];
+
+                // Set the min date to 4 days before today
+                datePicker.setAttribute('min', minDateStr);
+            };
+
+            setDatePickerMinDate('received_transmittal_date');
+            setDatePickerMinDate('released_date');
+
 
         });
 

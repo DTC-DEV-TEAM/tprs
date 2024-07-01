@@ -118,7 +118,8 @@
                         </div>
                         <div class="request_department total_amount_content">
                             <label for="">Released Date: <span class="required">*</span></label>
-                            <input type="date" name="release_date" style="padding: 5px;" required>
+                            <input id="released_date" type="date" name="release_date" style="padding: 5px;"
+                                required>
                         </div>
                     </div>
 
